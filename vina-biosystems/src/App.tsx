@@ -1,8 +1,11 @@
-import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { Injector } from './core/Injector';
 
 function App() {
+  const injector = Injector.getInstance();
+  const authenticationUsecases = injector.getAuthenticationUsecases();
+  const user = authenticationUsecases.doLogin();
   return (
     <div className="App">
       <header className="App-header">
@@ -16,7 +19,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          User: {user.getName()} / Login: {user.getLogin()}
         </a>
       </header>
     </div>
