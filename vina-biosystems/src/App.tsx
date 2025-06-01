@@ -1,11 +1,22 @@
 import logo from './logo.svg';
 import './App.css';
 import { Injector } from './core/Injector';
+import { DoLoginUsecase } from './features/authentication/domain/usecases/authentication/doLoginUsecase';
+
+let doLoginUsecase: DoLoginUsecase;
+
+function onClick() {
+  try {
+    doLoginUsecase.doLogin("joao", "123");
+    console.log("Login bem sucedido!");
+  } catch(error) {
+    throw error;
+  }
+}
 
 function App() {
   const injector = Injector.getInstance();
-  const authenticationUsecases = injector.getAuthenticationUsecases();
-  const user = authenticationUsecases.doLogin();
+  doLoginUsecase = injector.getDoLoginUsecase();
   return (
     <div className="App">
       <header className="App-header">
@@ -15,11 +26,11 @@ function App() {
         </p>
         <a
           className="App-link"
-          href="https://reactjs.org"
           target="_blank"
           rel="noopener noreferrer"
+          onClick={onClick}
         >
-          User: {user.getName()} / Login: {user.getLogin()}
+          User
         </a>
       </header>
     </div>
