@@ -1,6 +1,7 @@
 import { UserDataContract } from "../features/authentication/data/authentication/userDataContract";
 import { UserDataMock } from "../features/authentication/data/authentication/userDataMock";
 import { DoLoginUsecase } from "../features/authentication/domain/usecases/authentication/doLoginUsecase";
+import { ViewRegisteredUsersListUsecase } from "../features/authentication/domain/usecases/authentication/viewRegisteredUsersListUsecase";
 import { CriptographyContract } from "../utils/criptography/criptographyContract";
 import { CriptographyMock } from "../utils/criptography/criptographyMock";
 import { SessionManagerContract } from "./session/sessionManagerContract";
@@ -13,6 +14,7 @@ export class Injector
     private userData: UserDataContract;
     private criptography: CriptographyContract;
     private sessionManager: SessionManagerContract;
+    private viewRegisteredUsersListUsecase: ViewRegisteredUsersListUsecase;
 
     private constructor()
     {
@@ -20,6 +22,7 @@ export class Injector
         this.criptography = new CriptographyMock();
         this.sessionManager = new SessionManagerMock();
         this.doLoginUsecase = new DoLoginUsecase(this.userData, this.criptography, this.sessionManager);
+        this.viewRegisteredUsersListUsecase = new ViewRegisteredUsersListUsecase(this.userData);
     }
 
     public static getInstance(): Injector
@@ -30,6 +33,10 @@ export class Injector
 
     public getDoLoginUsecase() : DoLoginUsecase {
         return this.doLoginUsecase;
+    }
+
+    public getViewRegisteredUsersListUsecase(): ViewRegisteredUsersListUsecase {
+        return this.viewRegisteredUsersListUsecase;
     }
 }
 
