@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import { Injector } from './core/Injector';
-import { DoLoginUsecase } from './features/authentication/domain/usecases/authentication/doLoginUsecase';
+import { DoLoginUsecase } from './features/domain/usecases/authentication/doLoginUsecase';
 
 let doLoginUsecase: DoLoginUsecase;
 

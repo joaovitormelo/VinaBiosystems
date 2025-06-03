@@ -1,3 +1,4 @@
+
 import { UserModel } from "../../domain/models/userModel";
 import { UserDataContract } from "./userDataContract";
 
