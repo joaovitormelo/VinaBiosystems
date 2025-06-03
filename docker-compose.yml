@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: .  # Uses Dockerfile in root directory
+    ports:
+      - "9000:9000"  # Container port mapping
+
+    # Volume configuration
+    volumes:
+      - ./vina-biosystems:/vina-biosystems  # Syncs local code to container
+      - /vina-biosystems/node_modules  # Prevents local node_modules override
+
+    # Required for reliable file watching in containers:
+    environment:
+      - CHOKIDAR_USEPOLLING=true  # Forces file change detection
+      - WATCHPACK_POLLING=true  # Additional filesystem watcher
+      - NODE_ENV=development  # Optimizes React for dev mode
+
+    # Container settings:
+    stdin_open: true  # Keeps STDIN open
+    tty: true  # Allocates pseudo-TTY
