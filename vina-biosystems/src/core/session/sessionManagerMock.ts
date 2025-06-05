@@ -1,4 +1,5 @@
-import { UserModel } from "../../features/authentication/domain/models/userModel";
+
+import { UserModel } from "../../features/domain/models/userModel";
 import { SessionManagerContract } from "./sessionManagerContract";
 
 export class SessionManagerMock implements SessionManagerContract {

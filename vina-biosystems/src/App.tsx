@@ -5,9 +5,9 @@ import { DoLoginUsecase } from './features/domain/usecases/authentication/doLogi
 
 let doLoginUsecase: DoLoginUsecase;
 
-function onClick() {
+async function onClick() {
   try {
-    doLoginUsecase.doLogin("joao", "123");
+    await doLoginUsecase.doLogin("joao", "123");
     console.log("Login bem sucedido!");
   } catch(error) {
     throw error;

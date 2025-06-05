@@ -19,8 +19,8 @@ export class DoLoginUsecase {
         this.sessionManager = sessionManager;
     }
 
-    doLogin(login: string, password: string) {
-        const user = this.userData.searchUserByLogin(login);
+    async doLogin(login: string, password: string): Promise<void> {
+        const user = await this.userData.searchUserByLogin(login);
         if (!user) {
             throw new UserNotFoundException(login);
         }

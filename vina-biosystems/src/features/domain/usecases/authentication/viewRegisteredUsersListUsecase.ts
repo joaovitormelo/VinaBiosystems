@@ -9,7 +9,7 @@ export class ViewRegisteredUsersListUsecase {
         this.userData = userData;
     }
 
-    viewRegisteredUsersList(): Array<UserModel> {
-        return this.userData.fetchUsers();
+    async viewRegisteredUsersList(): Promise<Array<UserModel>> {
+        return await this.userData.fetchUsers();
     }
 }
