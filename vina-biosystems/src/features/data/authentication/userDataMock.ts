@@ -19,4 +19,8 @@ export class UserDataMock implements UserDataContract {
     async updateUser(user: UserModel): Promise<void> {
         //
     }
+
+    async deleteUser(user: UserModel): Promise<void> {
+        //
+    }
 }

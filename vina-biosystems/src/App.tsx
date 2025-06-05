@@ -4,13 +4,16 @@ import { Injector } from './core/Injector';
 import { DoLoginUsecase } from './features/domain/usecases/authentication/doLoginUsecase';
 import { EditUserUsecase } from './features/domain/usecases/authentication/editUserUsecase';
 import { UserModel } from './features/domain/models/userModel';
+import { ExcludeUserUsecase } from './features/domain/usecases/authentication/excludeUserUsercase';
 
 let doLoginUsecase: DoLoginUsecase;
 let editUserUsecase: EditUserUsecase;
+let excludeUserUsecase: ExcludeUserUsecase;
 
 async function onClick() {
   //testLoginUsecase();
-  testEditUserUsecase();
+  //testEditUserUsecase();
+  //testExcludeUserUsecase();
 }
 
 async function testLoginUsecase() {
@@ -32,10 +35,22 @@ async function testEditUserUsecase() {
   }
 }
 
+async function testExcludeUserUsecase() {
+  try {
+    const userToExclude = UserModel.getMock();
+    userToExclude.setId(null);
+    await excludeUserUsecase.excludeUser(userToExclude);
+    console.log("Usuário excluído!");
+  } catch(error) {
+    throw error;
+  }
+}
+
 function App() {
   const injector = Injector.getInstance();
   doLoginUsecase = injector.getDoLoginUsecase();
   editUserUsecase = injector.getEditUserUsecase();
+  excludeUserUsecase = injector.getExcludeUserUsecase();
   testLoginUsecase();
   return (
     <div className="App">

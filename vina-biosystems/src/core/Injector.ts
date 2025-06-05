@@ -2,6 +2,7 @@ import { UserDataContract } from "../features/data/authentication/userDataContra
 import { UserDataMock } from "../features/data/authentication/userDataMock";
 import { DoLoginUsecase } from "../features/domain/usecases/authentication/doLoginUsecase";
 import { EditUserUsecase } from "../features/domain/usecases/authentication/editUserUsecase";
+import { ExcludeUserUsecase } from "../features/domain/usecases/authentication/excludeUserUsercase";
 import { ViewRegisteredUsersListUsecase } from "../features/domain/usecases/authentication/viewRegisteredUsersListUsecase";
 import { CriptographyContract } from "../utils/criptography/criptographyContract";
 import { CriptographyMock } from "../utils/criptography/criptographyMock";
@@ -18,6 +19,7 @@ export class Injector
     private sessionManager: SessionManagerContract;
     private viewRegisteredUsersListUsecase: ViewRegisteredUsersListUsecase;
     private editUserUsecase: EditUserUsecase;
+    private excludeUserUsecase: ExcludeUserUsecase;
 
     private constructor()
     {
@@ -27,6 +29,7 @@ export class Injector
         this.doLoginUsecase = new DoLoginUsecase(this.userData, this.criptography, this.sessionManager);
         this.viewRegisteredUsersListUsecase = new ViewRegisteredUsersListUsecase(this.userData);
         this.editUserUsecase = new EditUserUsecase(this.userData, this.sessionManager);
+        this.excludeUserUsecase = new ExcludeUserUsecase(this.userData);
     }
 
     static getInstance(): Injector
@@ -45,6 +48,10 @@ export class Injector
 
     getEditUserUsecase(): EditUserUsecase {
         return this.editUserUsecase;
+    }
+
+    getExcludeUserUsecase(): ExcludeUserUsecase {
+        return this.excludeUserUsecase
     }
 }
 

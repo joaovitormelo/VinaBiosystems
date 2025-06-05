@@ -17,7 +17,7 @@ export class EditUserUsecase {
 
     async editUser(user: UserModel): Promise<void> {
         if (!user.getId()) {
-            throw new Error("O Id do usuário editado deve ser informado!");
+            throw new Error("O usuário deve possuir ID!");
         }
         const currentUser: UserModel = this.sessionManager.getSessionUser() as UserModel;
         if (!currentUser.getIsAdmin() && user.getPassword() != null) {
