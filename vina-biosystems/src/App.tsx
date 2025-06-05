@@ -5,20 +5,23 @@ import { DoLoginUsecase } from './features/domain/usecases/authentication/doLogi
 import { EditUserUsecase } from './features/domain/usecases/authentication/editUserUsecase';
 import { UserModel } from './features/domain/models/userModel';
 import { ExcludeUserUsecase } from './features/domain/usecases/authentication/excludeUserUsercase';
+import { RegisterNewUserUsecase } from './features/domain/usecases/authentication/registerNewUserUsecase';
 
 let doLoginUsecase: DoLoginUsecase;
 let editUserUsecase: EditUserUsecase;
 let excludeUserUsecase: ExcludeUserUsecase;
+let registerNewUserUsecase: RegisterNewUserUsecase;
 
 async function onClick() {
   //testLoginUsecase();
   //testEditUserUsecase();
   //testExcludeUserUsecase();
+  //testRegisterNewUserUsecase();
 }
 
-async function testLoginUsecase() {
+async function testLoginUsecase(login: string, password: string) {
   try {
-    await doLoginUsecase.doLogin("joao", "123");
+    await doLoginUsecase.doLogin(login, password);
     console.log("Login bem sucedido!");
   } catch(error) {
     throw error;
@@ -46,12 +49,26 @@ async function testExcludeUserUsecase() {
   }
 }
 
+async function testRegisterNewUserUsecase() {
+  try {
+    const newUser = UserModel.getMock();
+    newUser.setLogin("novoUsuario");
+    newUser.setPassword("senhaSegura");
+    await registerNewUserUsecase.registerNewUser(newUser);
+    console.log("Usuário registrado com sucesso!");
+    testLoginUsecase(newUser.getLogin(), newUser.getPassword() || "");
+  } catch(error) {
+    throw error;
+  }
+}
+
 function App() {
   const injector = Injector.getInstance();
   doLoginUsecase = injector.getDoLoginUsecase();
   editUserUsecase = injector.getEditUserUsecase();
   excludeUserUsecase = injector.getExcludeUserUsecase();
-  testLoginUsecase();
+  registerNewUserUsecase = injector.getRegisterNewUserUsecase();
+  testLoginUsecase("joao", "123");
   return (
     <div className="App">
       <header className="App-header">

@@ -5,4 +5,5 @@ export interface UserDataContract {
     fetchUsers(): Promise<Array<UserModel>>;
     updateUser(user: UserModel): Promise<void>;
     deleteUser(user: UserModel): Promise<void>;
+    createUser(user: UserModel): Promise<void>;
 };

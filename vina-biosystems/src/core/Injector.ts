@@ -3,12 +3,12 @@ import { UserDataMock } from "../features/data/authentication/userDataMock";
 import { DoLoginUsecase } from "../features/domain/usecases/authentication/doLoginUsecase";
 import { EditUserUsecase } from "../features/domain/usecases/authentication/editUserUsecase";
 import { ExcludeUserUsecase } from "../features/domain/usecases/authentication/excludeUserUsercase";
+import { RegisterNewUserUsecase } from "../features/domain/usecases/authentication/registerNewUserUsecase";
 import { ViewRegisteredUsersListUsecase } from "../features/domain/usecases/authentication/viewRegisteredUsersListUsecase";
 import { CriptographyContract } from "../utils/criptography/criptographyContract";
 import { CriptographyMock } from "../utils/criptography/criptographyMock";
 import { SessionManager } from "./session/sessionManager";
 import { SessionManagerContract } from "./session/sessionManagerContract";
-import { SessionManagerMock } from "./session/sessionManagerMock";
 
 export class Injector
 {
@@ -20,6 +20,7 @@ export class Injector
     private viewRegisteredUsersListUsecase: ViewRegisteredUsersListUsecase;
     private editUserUsecase: EditUserUsecase;
     private excludeUserUsecase: ExcludeUserUsecase;
+    private registerNewUserUsecase: RegisterNewUserUsecase;
 
     private constructor()
     {
@@ -30,6 +31,7 @@ export class Injector
         this.viewRegisteredUsersListUsecase = new ViewRegisteredUsersListUsecase(this.userData);
         this.editUserUsecase = new EditUserUsecase(this.userData, this.sessionManager);
         this.excludeUserUsecase = new ExcludeUserUsecase(this.userData);
+        this.registerNewUserUsecase = new RegisterNewUserUsecase(this.userData, this.criptography, this.sessionManager);
     }
 
     static getInstance(): Injector
@@ -52,6 +54,10 @@ export class Injector
 
     getExcludeUserUsecase(): ExcludeUserUsecase {
         return this.excludeUserUsecase
+    }
+
+    getRegisterNewUserUsecase(): RegisterNewUserUsecase {
+        return this.registerNewUserUsecase;
     }
 }
 

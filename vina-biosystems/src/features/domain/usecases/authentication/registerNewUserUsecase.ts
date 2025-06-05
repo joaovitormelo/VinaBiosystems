@@ -1,11 +1,13 @@
 import { IncorrectPasswordException } from "../../../../core/exceptions/incorrectPasswordException";
+import { UsecaseException } from "../../../../core/exceptions/usecaseException";
 import { UserNotFoundException } from "../../../../core/exceptions/userNotFoundException";
 import { SessionManagerContract } from "../../../../core/session/sessionManagerContract";
 import { CriptographyContract } from "../../../../utils/criptography/criptographyContract";
 import { UserDataContract } from "../../../data/authentication/userDataContract";
+import { UserModel } from "../../models/userModel";
 
 
-export class RegisterNewUser {
+export class RegisterNewUserUsecase {
     private userData: UserDataContract;
     private criptography: CriptographyContract;
     private sessionManager: SessionManagerContract;
@@ -19,15 +21,11 @@ export class RegisterNewUser {
         this.sessionManager = sessionManager;
     }
 
-    async doLogin(login: string, password: string): Promise<void> {
-        const user = await this.userData.searchUserByLogin(login);
-        if (!user) {
-            throw new UserNotFoundException(login);
+    async registerNewUser(user: UserModel): Promise<void> {
+        let userInDB = await this.userData.searchUserByLogin(user.getLogin());
+        if (userInDB) {
+            throw new UsecaseException("Já existe um usuário com este login.");
         }
-        const match = this.criptography.checkIfPasswordsMatch(user.getPassword(), password);
-        if (!match) {
-            throw new IncorrectPasswordException(login);
-        }
-        this.sessionManager.saveSession(user);
+        return await this.userData.createUser(user);
     }
 }

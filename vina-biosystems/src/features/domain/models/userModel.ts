@@ -78,7 +78,7 @@ export class UserModel {
 
     static getMock(): UserModel {
         return new UserModel(
-            1, "Usuário Teste", "joao.teste@gmail", "17/04/2003", "teste", false, "123"
+            1, "Usuário Teste", "joao", "joao.teste@gmail", "17/04/2003", false, "123"
         );
     }
 }
