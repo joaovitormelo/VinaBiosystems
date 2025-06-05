@@ -1,3 +1,3 @@
 export interface CriptographyContract {
-    checkIfPasswordsMatch(hash: string, password: string) : boolean;
+    checkIfPasswordsMatch(hash: string | null, password: string | null) : boolean;
 }

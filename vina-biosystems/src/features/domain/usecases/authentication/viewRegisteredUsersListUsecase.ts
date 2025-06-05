@@ -10,6 +10,10 @@ export class ViewRegisteredUsersListUsecase {
     }
 
     async viewRegisteredUsersList(): Promise<Array<UserModel>> {
-        return await this.userData.fetchUsers();
+        const userList = await this.userData.fetchUsers();
+        return userList.map((user) => {
+            user.setPassword(null);
+            return user;
+        });
     }
 }

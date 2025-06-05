@@ -5,12 +5,18 @@ import { UserDataContract } from "./userDataContract";
 export class UserDataMock implements UserDataContract {
     async fetchUsers(): Promise<Array<UserModel>> {
         return [
-            new UserModel("Usuário Teste", "teste", "123"),
-            new UserModel("Usuário Teste 2", "teste2", "1234")
+            UserModel.getMock(),
+            UserModel.getMock()
         ];
     }
 
     async searchUserByLogin(login: string): Promise<UserModel | null> {
-        return new UserModel("Usuário Teste", "teste", "123");
+        const returnedUser = UserModel.getMock();
+        returnedUser.setIsAdmin(true);
+        return returnedUser;
+    }
+
+    async updateUser(user: UserModel): Promise<void> {
+        //
     }
 }

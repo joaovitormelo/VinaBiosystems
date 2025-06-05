@@ -1,9 +1,11 @@
 import { UserDataContract } from "../features/data/authentication/userDataContract";
 import { UserDataMock } from "../features/data/authentication/userDataMock";
 import { DoLoginUsecase } from "../features/domain/usecases/authentication/doLoginUsecase";
+import { EditUserUsecase } from "../features/domain/usecases/authentication/editUserUsecase";
 import { ViewRegisteredUsersListUsecase } from "../features/domain/usecases/authentication/viewRegisteredUsersListUsecase";
 import { CriptographyContract } from "../utils/criptography/criptographyContract";
 import { CriptographyMock } from "../utils/criptography/criptographyMock";
+import { SessionManager } from "./session/sessionManager";
 import { SessionManagerContract } from "./session/sessionManagerContract";
 import { SessionManagerMock } from "./session/sessionManagerMock";
 
@@ -15,28 +17,34 @@ export class Injector
     private criptography: CriptographyContract;
     private sessionManager: SessionManagerContract;
     private viewRegisteredUsersListUsecase: ViewRegisteredUsersListUsecase;
+    private editUserUsecase: EditUserUsecase;
 
     private constructor()
     {
         this.userData = new UserDataMock();
         this.criptography = new CriptographyMock();
-        this.sessionManager = new SessionManagerMock();
+        this.sessionManager = new SessionManager();
         this.doLoginUsecase = new DoLoginUsecase(this.userData, this.criptography, this.sessionManager);
         this.viewRegisteredUsersListUsecase = new ViewRegisteredUsersListUsecase(this.userData);
+        this.editUserUsecase = new EditUserUsecase(this.userData, this.sessionManager);
     }
 
-    public static getInstance(): Injector
+    static getInstance(): Injector
     {
         if (this.instance) return this.instance;
         return this.instance = new Injector();
     }
 
-    public getDoLoginUsecase() : DoLoginUsecase {
+    getDoLoginUsecase() : DoLoginUsecase {
         return this.doLoginUsecase;
     }
 
-    public getViewRegisteredUsersListUsecase(): ViewRegisteredUsersListUsecase {
+    getViewRegisteredUsersListUsecase(): ViewRegisteredUsersListUsecase {
         return this.viewRegisteredUsersListUsecase;
+    }
+
+    getEditUserUsecase(): EditUserUsecase {
+        return this.editUserUsecase;
     }
 }
 

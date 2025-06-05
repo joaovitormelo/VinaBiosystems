@@ -6,4 +6,7 @@ export class SessionManagerMock implements SessionManagerContract {
     saveSession(user: UserModel): void {
         //throw new Error("Method not implemented.");
     }
+    getSessionUser(): UserModel {
+        return UserModel.getMock();
+    }
 }
