@@ -1,10 +1,13 @@
 import { UserDataContract } from "../features/data/authentication/userDataContract";
 import { UserDataMock } from "../features/data/authentication/userDataMock";
+import { InventoryDataContract } from "../features/data/inventory/inventoryDataContract";
+import { InventoryDataMock } from "../features/data/inventory/inventoryDataMock";
 import { DoLoginUsecase } from "../features/domain/usecases/authentication/doLoginUsecase";
 import { EditUserUsecase } from "../features/domain/usecases/authentication/editUserUsecase";
 import { ExcludeUserUsecase } from "../features/domain/usecases/authentication/excludeUserUsercase";
 import { RegisterNewUserUsecase } from "../features/domain/usecases/authentication/registerNewUserUsecase";
 import { ViewRegisteredUsersListUsecase } from "../features/domain/usecases/authentication/viewRegisteredUsersListUsecase";
+import { ViewRawMaterialInventoryUsecase } from "../features/domain/usecases/inventory/viewRawMaterialInventoryUsecase";
 import { CriptographyContract } from "../utils/criptography/criptographyContract";
 import { CriptographyMock } from "../utils/criptography/criptographyMock";
 import { SessionManager } from "./session/sessionManager";
@@ -17,21 +20,25 @@ export class Injector
     private userData: UserDataContract;
     private criptography: CriptographyContract;
     private sessionManager: SessionManagerContract;
+    private inventoryData: InventoryDataContract;
     private viewRegisteredUsersListUsecase: ViewRegisteredUsersListUsecase;
     private editUserUsecase: EditUserUsecase;
     private excludeUserUsecase: ExcludeUserUsecase;
     private registerNewUserUsecase: RegisterNewUserUsecase;
+    private viewRawMaterialInventoryUsecase: ViewRawMaterialInventoryUsecase;
 
     private constructor()
     {
         this.userData = new UserDataMock();
         this.criptography = new CriptographyMock();
         this.sessionManager = new SessionManager();
+        this.inventoryData = new InventoryDataMock();
         this.doLoginUsecase = new DoLoginUsecase(this.userData, this.criptography, this.sessionManager);
         this.viewRegisteredUsersListUsecase = new ViewRegisteredUsersListUsecase(this.userData);
         this.editUserUsecase = new EditUserUsecase(this.userData, this.sessionManager);
         this.excludeUserUsecase = new ExcludeUserUsecase(this.userData);
         this.registerNewUserUsecase = new RegisterNewUserUsecase(this.userData, this.criptography, this.sessionManager);
+        this.viewRawMaterialInventoryUsecase = new ViewRawMaterialInventoryUsecase(this.inventoryData);
     }
 
     static getInstance(): Injector
@@ -58,6 +65,10 @@ export class Injector
 
     getRegisterNewUserUsecase(): RegisterNewUserUsecase {
         return this.registerNewUserUsecase;
+    }
+
+    getViewRawMaterialInventoryUsecase(): ViewRawMaterialInventoryUsecase {
+        return this.viewRawMaterialInventoryUsecase;
     }
 }
 

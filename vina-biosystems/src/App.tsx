@@ -17,6 +17,7 @@ async function onClick() {
   //testEditUserUsecase();
   //testExcludeUserUsecase();
   //testRegisterNewUserUsecase();
+  //testViewInventoryUsecase();
 }
 
 async function testLoginUsecase(login: string, password: string) {
@@ -59,6 +60,16 @@ async function testRegisterNewUserUsecase() {
     testLoginUsecase(newUser.getLogin(), newUser.getPassword() || "");
   } catch(error) {
     throw error;
+  }
+}
+
+async function testViewInventoryUsecase() {
+  try {
+    const viewRawMaterialInventoryUsecase = Injector.getInstance().getViewRawMaterialInventoryUsecase();
+    const inventory = await viewRawMaterialInventoryUsecase.viewRawMaterialInventory();
+    console.log("Inventário de Matérias-Primas:", inventory);
+  } catch(error) {
+    console.error("Erro ao visualizar o inventário:", error);
   }
 }
 
