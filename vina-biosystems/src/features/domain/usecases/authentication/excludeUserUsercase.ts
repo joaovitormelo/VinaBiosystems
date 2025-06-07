@@ -1,3 +1,4 @@
+import { DatabaseException } from "../../../../core/exceptions/databaseException";
 import { UsecaseException } from "../../../../core/exceptions/usecaseException";
 import { UserDataContract } from "../../../data/authentication/userDataContract";
 import { UserModel } from "../../models/userModel";
@@ -19,6 +20,11 @@ export class ExcludeUserUsecase {
         if (user.getIsAdmin()) {
             throw new UsecaseException("Não é possível remover um admin!");
         }
-        await this.userData.deleteUser(user);
+        try {
+            await this.userData.deleteUser(user);
+        } catch(error) {
+            console.error(error);
+            throw new DatabaseException("Não foi possível excluir o usuário " + user.getLogin());
+        }
     }
 }

@@ -1,4 +1,5 @@
 
+import { DatabaseException } from "../../../../core/exceptions/databaseException";
 import { UserDataContract } from "../../../data/authentication/userDataContract";
 import { UserModel } from "../../models/userModel";
 
@@ -10,7 +11,13 @@ export class ViewRegisteredUsersListUsecase {
     }
 
     async viewRegisteredUsersList(): Promise<Array<UserModel>> {
-        const userList = await this.userData.fetchUsers();
+        let userList: Array<UserModel> = [];
+        try {
+            userList = await this.userData.fetchUsers();
+        } catch(error) {
+            console.error(error);
+            throw new DatabaseException("Não foi possível buscar a lista de usuários!");
+        }
         return userList.map((user) => {
             user.setPassword(null);
             return user;

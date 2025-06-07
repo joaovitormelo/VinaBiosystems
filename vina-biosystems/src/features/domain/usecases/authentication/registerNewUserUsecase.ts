@@ -1,3 +1,4 @@
+import { DatabaseException } from "../../../../core/exceptions/databaseException";
 import { IncorrectPasswordException } from "../../../../core/exceptions/incorrectPasswordException";
 import { UsecaseException } from "../../../../core/exceptions/usecaseException";
 import { UserNotFoundException } from "../../../../core/exceptions/userNotFoundException";
@@ -26,6 +27,11 @@ export class RegisterNewUserUsecase {
         if (userInDB) {
             throw new UsecaseException("Já existe um usuário com este login.");
         }
-        return await this.userData.createUser(user);
+        try {
+            return await this.userData.createUser(user);
+        } catch(error) {
+            console.error(error);
+            throw new DatabaseException("Não foi possível cadastrar o usuário " + user.getLogin());
+        }
     }
 }

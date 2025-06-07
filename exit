@@ -1,0 +1,116 @@
+[33mcommit ff83c87fe25a5ac995bd436db29d9e98f1f8036b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: joaovitormelo <joao.galo.2014@gmail.com>
+Date:   Fri Jun 6 20:07:23 2025 -0300
+
+    Criado caso de uso 'Visualizar estoque de insumos'
+
+[33mcommit d30dedba10f5e0a9714dc1cf2c6847983dd4408c[m
+Author: joaovitormelo <joao.galo.2014@gmail.com>
+Date:   Fri Jun 6 19:43:11 2025 -0300
+
+    Removido index.tsx duplicado
+
+[33mcommit 17cd6f9d02e245355f47e43c3b54e6ca75dfa2df[m
+Author: laixrsales <laisrsales@outlook.com>
+Date:   Fri Jun 6 17:51:27 2025 -0300
+
+    Instalando dependências antD e styled-components
+
+[33mcommit a5ad554097929ee2a06254e15eaf4c58342b5901[m
+Author: wendersonline <wenderson.rodrigues@ufv.br>
+Date:   Fri Jun 6 15:22:39 2025 -0300
+
+    Criação da pasta para iniciar telas
+
+[33mcommit a5fc2765e20cffca7d85dda2439bfd8712b6d1e3[m
+Author: joaovitormelo <joao.galo.2014@gmail.com>
+Date:   Thu Jun 5 20:32:37 2025 -0300
+
+    Adaptado caso de uso de Editar Usuário para atender ao caso de Alterar Dados Pessoais
+
+[33mcommit ec5b1bc80b7f9b52ea1144cacbdbf796e6e8ca8c[m
+Author: joaovitormelo <joao.galo.2014@gmail.com>
+Date:   Thu Jun 5 20:18:11 2025 -0300
+
+    Implementado caso de uso de Cadastrar Novo Usuário
+
+[33mcommit f410906679950363f452a4c9c22e9ebd81666d2d[m
+Author: joaovitormelo <joao.galo.2014@gmail.com>
+Date:   Thu Jun 5 19:48:55 2025 -0300
+
+    Created Exclude User usecase
+
+[33mcommit 6841f2f0143073202c5b306f6c372bd293d69c99[m
+Author: joaovitormelo <joao.galo.2014@gmail.com>
+Date:   Thu Jun 5 15:46:31 2025 -0300
+
+    Implementado caso de uso de Editar Usuário
+
+[33mcommit 22f90765d425feb3d5781c40c99b582eefae6ccb[m
+Author: joaovitormelo <joao.galo.2014@gmail.com>
+Date:   Thu Jun 5 14:57:48 2025 -0300
+
+    Usecases made async
+
+[33mcommit 96bb32343e53c0110c4911bc63c59b63485e95b3[m
+Author: joaovitormelo <joao.galo.2014@gmail.com>
+Date:   Tue Jun 3 19:35:25 2025 -0300
+
+    More merge conflicts solving
+
+[33mcommit 155fd769ecf0327df51af76d588f8651a1a46a8a[m
+Merge: a3a0024 06d9aa3
+Author: joaovitormelo <joao.galo.2014@gmail.com>
+Date:   Tue Jun 3 19:31:13 2025 -0300
+
+    Merge conflicts
+
+[33mcommit a3a0024d53835955d5945e2e769530ff9b0bf671[m
+Author: joaovitormelo <joao.galo.2014@gmail.com>
+Date:   Tue Jun 3 19:22:16 2025 -0300
+
+    UserDataMock
+
+[33mcommit 06d9aa372929c3002a9cbb7fe9cf7998b588df5e[m
+Author: Raianny <raianny@Raianny>
+Date:   Mon Jun 2 22:58:10 2025 -0300
+
+    Aplicando Docker
+
+[33mcommit bc10daba6780a04c94c93b447deba9c08f47a02d[m
+Merge: a11237d 85584d8
+Author: joaovitormelo <joao.galo.2014@gmail.com>
+Date:   Sun Jun 1 15:06:52 2025 -0300
+
+    Merge branch 'main' of https://github.com/joaovitormelo/VinaBiosystems
+    Porque sim
+
+[33mcommit a11237db9058b55474b6a2c3ccd1b962d5676d6d[m
+Author: joaovitormelo <joao.galo.2014@gmail.com>
+Date:   Sun Jun 1 15:06:16 2025 -0300
+
+    DoLoginUsecase
+
+[33mcommit 85584d893929ede807dc78e59b102a675c72f7a1[m
+Author: joaovitormelo <49257395+joaovitormelo@users.noreply.github.com>
+Date:   Sun Jun 1 14:17:42 2025 -0300
+
+    Adicionado Diagrama de Classes
+
+[33mcommit 0d48683f30de1aeb930c38b170b03bfdd0ce25a4[m
+Author: joaovitormelo <joao.galo.2014@gmail.com>
+Date:   Wed May 28 21:18:18 2025 -0300
+
+    Criado Injector e caso de uso de teste
+
+[33mcommit 018108612586596388b089d7cd1cb034df3c27a7[m
+Author: joaovitormelo <joao.galo.2014@gmail.com>
+Date:   Tue May 27 21:22:04 2025 -0300
+
+    Initial
+
+[33mcommit 6fb392f021374271009c2a86340f5a71ee0665ca[m
+Author: joaovitormelo <49257395+joaovitormelo@users.noreply.github.com>
+Date:   Tue May 27 20:57:52 2025 -0300
+
+    Initial commit

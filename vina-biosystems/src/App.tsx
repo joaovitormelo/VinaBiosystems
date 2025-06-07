@@ -6,6 +6,7 @@ import { EditUserUsecase } from './features/domain/usecases/authentication/editU
 import { UserModel } from './features/domain/models/userModel';
 import { ExcludeUserUsecase } from './features/domain/usecases/authentication/excludeUserUsercase';
 import { RegisterNewUserUsecase } from './features/domain/usecases/authentication/registerNewUserUsecase';
+import { RawMaterialModel } from './features/domain/models/rawMaterialModel';
 
 let doLoginUsecase: DoLoginUsecase;
 let editUserUsecase: EditUserUsecase;
@@ -18,6 +19,7 @@ async function onClick() {
   //testExcludeUserUsecase();
   //testRegisterNewUserUsecase();
   //testViewInventoryUsecase();
+  //testRegisterRawMaterialUsecase();
 }
 
 async function testLoginUsecase(login: string, password: string) {
@@ -60,6 +62,20 @@ async function testRegisterNewUserUsecase() {
     testLoginUsecase(newUser.getLogin(), newUser.getPassword() || "");
   } catch(error) {
     throw error;
+  }
+}
+
+async function testRegisterRawMaterialUsecase() {
+  try {
+    const registerRawMaterialUsecase = Injector.getInstance().getRegisterRawMaterialUsecase();
+    const rawMaterial = RawMaterialModel.getMock();
+    rawMaterial.setName("Novo Insumo");
+    rawMaterial.setQuantity(100);
+    rawMaterial.setUnit("kg");
+    await registerRawMaterialUsecase.registerRawMaterial(rawMaterial);
+    console.log("Matéria-prima registrada com sucesso!");
+  } catch(error) {
+    console.error("Erro ao registrar matéria-prima:", error);
   }
 }
 

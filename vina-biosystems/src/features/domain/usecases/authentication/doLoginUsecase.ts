@@ -1,3 +1,4 @@
+import { DatabaseException } from "../../../../core/exceptions/databaseException";
 import { IncorrectPasswordException } from "../../../../core/exceptions/incorrectPasswordException";
 import { UserNotFoundException } from "../../../../core/exceptions/userNotFoundException";
 import { SessionManagerContract } from "../../../../core/session/sessionManagerContract";
@@ -20,7 +21,13 @@ export class DoLoginUsecase {
     }
 
     async doLogin(login: string, password: string): Promise<void> {
-        const user = await this.userData.searchUserByLogin(login);
+        let user;
+        try {
+            user = await this.userData.searchUserByLogin(login);
+        } catch(error) {
+            console.error(error);
+            throw new DatabaseException("Não foi possível buscar o usuário " + login);
+        }
         if (!user) {
             throw new UserNotFoundException(login);
         }

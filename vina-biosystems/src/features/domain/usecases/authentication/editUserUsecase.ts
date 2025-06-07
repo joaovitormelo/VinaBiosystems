@@ -1,3 +1,4 @@
+import { DatabaseException } from "../../../../core/exceptions/databaseException";
 import { ExistentUserException } from "../../../../core/exceptions/existentUserException";
 import { PermissionException } from "../../../../core/exceptions/permissionException";
 import { UsecaseException } from "../../../../core/exceptions/usecaseException";
@@ -21,8 +22,14 @@ export class EditUserUsecase {
         if (!user.getId()) {
             throw new UsecaseException("O usuário deve possuir ID!");
         }
-        let userInDB = await this.userData.searchUserByLogin(user.getLogin());
-        if (userInDB && userInDB.getId() !== user.getId()) {
+        let userInDb: UserModel | null;
+        try {
+            userInDb = await this.userData.searchUserByLogin(user.getLogin());
+        } catch(error) {
+            console.error(error);
+            throw new DatabaseException("Não foi possível buscar o usuário " + user.getLogin());
+        }
+        if (userInDb && userInDb.getId() !== user.getId()) {
             throw new ExistentUserException(user.getLogin());
         }
         const currentUser: UserModel = this.sessionManager.getSessionUser() as UserModel;
@@ -33,6 +40,11 @@ export class EditUserUsecase {
                 throw new PermissionException(currentUser.getLogin(), "Somente admins podem redefinir senhas!");
             }
         }
-        await this.userData.updateUser(user);
+        try {
+            await this.userData.updateUser(user);
+        } catch(error) {
+            console.error(error);
+            throw new DatabaseException("Não foi possível atualizar o usuário " + user.getLogin());
+        }
     }
 }
