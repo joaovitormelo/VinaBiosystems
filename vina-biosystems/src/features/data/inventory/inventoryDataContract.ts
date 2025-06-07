@@ -5,4 +5,6 @@ export interface InventoryDataContract {
     createRawMaterial(rawMaterial: RawMaterialModel): Promise<RawMaterialModel>;
     fetchInventory(): Promise<Array<RawMaterialModel>>;
     updateRawMaterial(rawMaterial: RawMaterialModel): Promise<void>;
+    isRawMaterialBeingUsedInABatch(rawMaterialId: number): Promise<boolean>;
+    removeRawMaterial(rawMaterialId: number): Promise<void>;
 }

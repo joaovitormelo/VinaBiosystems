@@ -28,4 +28,19 @@ export class InventoryDataMock implements InventoryDataContract {
             throw new DatabaseException(`Raw material with ID "${rawMaterial.getId()}" not found.`);
         }
     }
+
+    async isRawMaterialBeingUsedInABatch(rawMaterialId: number): Promise<boolean> {
+        // Mock implementation: always returns false (not being used)
+        // You can enhance this logic if you have batch data available
+        return false;
+    }
+
+    async removeRawMaterial(rawMaterialId: number): Promise<void> {
+        const index = this.inventory.findIndex(item => item.getId() === rawMaterialId);
+        if (index !== -1) {
+            this.inventory.splice(index, 1);
+        } else {
+            throw new DatabaseException(`Raw material with ID "${rawMaterialId}" not found.`);
+        }
+    }
 }

@@ -21,6 +21,8 @@ async function onClick() {
   //testViewInventoryUsecase();
   //testRegisterRawMaterialUsecase();
   //testEditRawMaterialUsecase();
+  testRemoveRawMaterialUsecase();
+  testEditRawMaterialUsecase();
 }
 
 async function testLoginUsecase(login: string, password: string) {
@@ -102,6 +104,16 @@ async function testEditRawMaterialUsecase() {
     console.log("Matéria-prima editada com sucesso!");
   } catch(error) {
     console.error("Erro ao editar matéria-prima:", error);
+  }
+}
+
+async function testRemoveRawMaterialUsecase() {
+  try {
+    const removeRawMaterialUsecase = Injector.getInstance().getRemoveRawMaterialUsecase();
+    await removeRawMaterialUsecase.execute(1);
+    console.log("Matéria-prima removida com sucesso!");
+  } catch(error) {
+    console.error("Erro ao remover matéria-prima:", error);
   }
 }
 
