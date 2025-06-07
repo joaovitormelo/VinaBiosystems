@@ -22,7 +22,7 @@ export class RegisterNewUserUsecase {
         this.sessionManager = sessionManager;
     }
 
-    async registerNewUser(user: UserModel): Promise<void> {
+    async execute(user: UserModel): Promise<void> {
         let userInDB = await this.userData.searchUserByLogin(user.getLogin());
         if (userInDB) {
             throw new UsecaseException("Já existe um usuário com este login.");

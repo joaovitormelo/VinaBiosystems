@@ -1,11 +1,11 @@
 export class RawMaterialModel {
-    private id: string;
+    private id: number;
     private name: string;
     private quantity: number;
     private unit: string;
     private minQuantity: number;
 
-    constructor(id: string, name: string, quantity: number, unit: string, minQuantity: number) {
+    constructor(id: number, name: string, quantity: number, unit: string, minQuantity: number) {
         this.id = id;
         this.name = name;
         this.quantity = quantity;
@@ -13,10 +13,10 @@ export class RawMaterialModel {
         this.minQuantity = minQuantity;
     }
 
-    public getId(): string {
+    public getId(): number {
         return this.id;
     }
-    public setId(id: string): void {
+    public setId(id: number): void {
         this.id = id;
     }
     public getName(): string {
@@ -46,7 +46,7 @@ export class RawMaterialModel {
 
     public static getMock(): RawMaterialModel {
         return new RawMaterialModel(
-            "1",
+            1,
             "Mock Material",
             100,
             "kg",

@@ -20,7 +20,7 @@ export class DoLoginUsecase {
         this.sessionManager = sessionManager;
     }
 
-    async doLogin(login: string, password: string): Promise<void> {
+    async execute(login: string, password: string): Promise<void> {
         let user;
         try {
             user = await this.userData.searchUserByLogin(login);

@@ -20,11 +20,12 @@ async function onClick() {
   //testRegisterNewUserUsecase();
   //testViewInventoryUsecase();
   //testRegisterRawMaterialUsecase();
+  //testEditRawMaterialUsecase();
 }
 
 async function testLoginUsecase(login: string, password: string) {
   try {
-    await doLoginUsecase.doLogin(login, password);
+    await doLoginUsecase.execute(login, password);
     console.log("Login bem sucedido!");
   } catch(error) {
     throw error;
@@ -34,7 +35,7 @@ async function testLoginUsecase(login: string, password: string) {
 async function testEditUserUsecase() {
   try {
     const editedUser = UserModel.getMock();
-    await editUserUsecase.editUser(editedUser);
+    await editUserUsecase.execute(editedUser);
     console.log("Usuário editado!");
   } catch(error) {
     throw error;
@@ -45,7 +46,7 @@ async function testExcludeUserUsecase() {
   try {
     const userToExclude = UserModel.getMock();
     userToExclude.setId(null);
-    await excludeUserUsecase.excludeUser(userToExclude);
+    await excludeUserUsecase.execute(userToExclude);
     console.log("Usuário excluído!");
   } catch(error) {
     throw error;
@@ -57,7 +58,7 @@ async function testRegisterNewUserUsecase() {
     const newUser = UserModel.getMock();
     newUser.setLogin("novoUsuario");
     newUser.setPassword("senhaSegura");
-    await registerNewUserUsecase.registerNewUser(newUser);
+    await registerNewUserUsecase.execute(newUser);
     console.log("Usuário registrado com sucesso!");
     testLoginUsecase(newUser.getLogin(), newUser.getPassword() || "");
   } catch(error) {
@@ -72,7 +73,7 @@ async function testRegisterRawMaterialUsecase() {
     rawMaterial.setName("Novo Insumo");
     rawMaterial.setQuantity(100);
     rawMaterial.setUnit("kg");
-    await registerRawMaterialUsecase.registerRawMaterial(rawMaterial);
+    await registerRawMaterialUsecase.execute(rawMaterial);
     console.log("Matéria-prima registrada com sucesso!");
   } catch(error) {
     console.error("Erro ao registrar matéria-prima:", error);
@@ -82,10 +83,25 @@ async function testRegisterRawMaterialUsecase() {
 async function testViewInventoryUsecase() {
   try {
     const viewRawMaterialInventoryUsecase = Injector.getInstance().getViewRawMaterialInventoryUsecase();
-    const inventory = await viewRawMaterialInventoryUsecase.viewRawMaterialInventory();
+    const inventory = await viewRawMaterialInventoryUsecase.execute();
     console.log("Inventário de Matérias-Primas:", inventory);
   } catch(error) {
     console.error("Erro ao visualizar o inventário:", error);
+  }
+}
+
+async function testEditRawMaterialUsecase() {
+  try {
+    const editRawMaterialUsecase = Injector.getInstance().getEditRawMaterialUsecase();
+    const rawMaterial = RawMaterialModel.getMock();
+    rawMaterial.setId(1);
+    rawMaterial.setName("Cerva");
+    rawMaterial.setQuantity(200);
+    rawMaterial.setUnit("litros");
+    await editRawMaterialUsecase.execute(rawMaterial);
+    console.log("Matéria-prima editada com sucesso!");
+  } catch(error) {
+    console.error("Erro ao editar matéria-prima:", error);
   }
 }
 

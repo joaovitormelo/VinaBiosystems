@@ -7,6 +7,7 @@ import { EditUserUsecase } from "../features/domain/usecases/authentication/edit
 import { ExcludeUserUsecase } from "../features/domain/usecases/authentication/excludeUserUsercase";
 import { RegisterNewUserUsecase } from "../features/domain/usecases/authentication/registerNewUserUsecase";
 import { ViewRegisteredUsersListUsecase } from "../features/domain/usecases/authentication/viewRegisteredUsersListUsecase";
+import { EditRawMaterialUsecase } from "../features/domain/usecases/inventory/editRawMaterialUsecase";
 import { RegisterRawMaterialUsecase } from "../features/domain/usecases/inventory/registerRawMaterialUsecase";
 import { ViewRawMaterialInventoryUsecase } from "../features/domain/usecases/inventory/viewRawMaterialInventoryUsecase";
 import { CriptographyContract } from "../utils/criptography/criptographyContract";
@@ -28,6 +29,7 @@ export class Injector
     private registerNewUserUsecase: RegisterNewUserUsecase;
     private viewRawMaterialInventoryUsecase: ViewRawMaterialInventoryUsecase;
     private registerRawMaterialUsecase: RegisterRawMaterialUsecase;
+    private editRawMaterialUsecase: EditRawMaterialUsecase;
 
     private constructor()
     {
@@ -42,6 +44,7 @@ export class Injector
         this.registerNewUserUsecase = new RegisterNewUserUsecase(this.userData, this.criptography, this.sessionManager);
         this.viewRawMaterialInventoryUsecase = new ViewRawMaterialInventoryUsecase(this.inventoryData);
         this.registerRawMaterialUsecase = new RegisterRawMaterialUsecase(this.inventoryData);
+        this.editRawMaterialUsecase = new EditRawMaterialUsecase(this.inventoryData);
     }
 
     static getInstance(): Injector
@@ -76,6 +79,10 @@ export class Injector
 
     getRegisterRawMaterialUsecase(): RegisterRawMaterialUsecase {
         return this.registerRawMaterialUsecase;
+    }
+
+    getEditRawMaterialUsecase(): EditRawMaterialUsecase {
+        return this.editRawMaterialUsecase;
     }
 }
 

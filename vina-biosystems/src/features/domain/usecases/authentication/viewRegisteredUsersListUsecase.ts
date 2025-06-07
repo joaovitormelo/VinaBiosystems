@@ -10,7 +10,7 @@ export class ViewRegisteredUsersListUsecase {
         this.userData = userData;
     }
 
-    async viewRegisteredUsersList(): Promise<Array<UserModel>> {
+    async execute(): Promise<Array<UserModel>> {
         let userList: Array<UserModel> = [];
         try {
             userList = await this.userData.fetchUsers();

@@ -13,7 +13,7 @@ export class ExcludeUserUsecase {
         this.userData = userData;
     }
 
-    async excludeUser(user: UserModel): Promise<void> {
+    async execute(user: UserModel): Promise<void> {
         if (!user.getId()) {
             throw new UsecaseException("O usuário deve possuir ID!");
         }

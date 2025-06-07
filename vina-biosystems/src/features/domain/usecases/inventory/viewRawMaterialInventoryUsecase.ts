@@ -9,7 +9,7 @@ export class ViewRawMaterialInventoryUsecase {
         this.inventoryData = inventoryData;
     }
 
-    async viewRawMaterialInventory(): Promise<Array<RawMaterialModel>> {
+    async execute(): Promise<Array<RawMaterialModel>> {
         try {
             return await this.inventoryData.fetchInventory();
         } catch(error) {

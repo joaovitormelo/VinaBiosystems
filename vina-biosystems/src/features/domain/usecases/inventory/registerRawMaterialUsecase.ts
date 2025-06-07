@@ -10,7 +10,7 @@ export class RegisterRawMaterialUsecase {
         this.inventoryData = inventoryData;
     }
 
-    async registerRawMaterial(rawMaterial: RawMaterialModel): Promise<void> {
+    async execute(rawMaterial: RawMaterialModel): Promise<void> {
         const existingRawMaterial = await this.inventoryData.getRawMaterialByName(rawMaterial.getName());
         if (existingRawMaterial) {
             throw new UsecaseException("Já existe um insumo cadastrado com o nome " + rawMaterial.getName() + "!");
