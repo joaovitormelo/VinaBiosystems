@@ -2,6 +2,8 @@ import { UserDataContract } from "../features/data/authentication/userDataContra
 import { UserDataMock } from "../features/data/authentication/userDataMock";
 import { InventoryDataContract } from "../features/data/inventory/inventoryDataContract";
 import { InventoryDataMock } from "../features/data/inventory/inventoryDataMock";
+import { BatchDataContract } from "../features/data/production/batchDataContract";
+import { BatchDataMock } from "../features/data/production/batchDataMock";
 import { NotificationManagerContract } from "../features/data/system/notificationManagerContract";
 import { NotificationManagerMock } from "../features/data/system/notificationManagerMock";
 import { DoLoginUsecase } from "../features/domain/usecases/authentication/doLoginUsecase";
@@ -15,6 +17,7 @@ import { EditRawMaterialUsecase } from "../features/domain/usecases/inventory/ed
 import { RegisterRawMaterialUsecase } from "../features/domain/usecases/inventory/registerRawMaterialUsecase";
 import { RemoveRawMaterialUsecase } from "../features/domain/usecases/inventory/removeRawMaterialUsecase";
 import { ViewRawMaterialInventoryUsecase } from "../features/domain/usecases/inventory/viewRawMaterialInventoryUsecase";
+import { ViewProductionBatchesUsecase } from "../features/domain/usecases/production/viewProductionBatchesUsecase";
 import { CriptographyContract } from "../utils/criptography/criptographyContract";
 import { CriptographyMock } from "../utils/criptography/criptographyMock";
 import { SessionManager } from "./session/sessionManager";
@@ -29,6 +32,7 @@ export class Injector
     private sessionManager: SessionManagerContract;
     private inventoryData: InventoryDataContract;
     private notificationManager: NotificationManagerContract;
+    private batchData: BatchDataContract;
     private viewRegisteredUsersListUsecase: ViewRegisteredUsersListUsecase;
     private editUserUsecase: EditUserUsecase;
     private excludeUserUsecase: ExcludeUserUsecase;
@@ -39,6 +43,7 @@ export class Injector
     private removeRawMaterialUsecase: RemoveRawMaterialUsecase;
     private checkInRawMaterialUsecase: CheckInRawMaterialUsecase;
     private checkOutRawMaterialUsecase: CheckOutRawMaterialUsecase;
+    private viewProductionBatchesUsecase: ViewProductionBatchesUsecase;
 
     private constructor()
     {
@@ -47,6 +52,7 @@ export class Injector
         this.sessionManager = new SessionManager();
         this.inventoryData = new InventoryDataMock();
         this.notificationManager = new NotificationManagerMock();
+        this.batchData = new BatchDataMock();
         this.doLoginUsecase = new DoLoginUsecase(this.userData, this.criptography, this.sessionManager);
         this.viewRegisteredUsersListUsecase = new ViewRegisteredUsersListUsecase(this.userData);
         this.editUserUsecase = new EditUserUsecase(this.userData, this.sessionManager);
@@ -58,6 +64,7 @@ export class Injector
         this.removeRawMaterialUsecase = new RemoveRawMaterialUsecase(this.inventoryData);
         this.checkInRawMaterialUsecase = new CheckInRawMaterialUsecase(this.inventoryData);
         this.checkOutRawMaterialUsecase = new CheckOutRawMaterialUsecase(this.inventoryData, this.notificationManager);
+        this.viewProductionBatchesUsecase = new ViewProductionBatchesUsecase(this.batchData);
     }
 
     static getInstance(): Injector
@@ -108,6 +115,10 @@ export class Injector
 
     getCheckOutRawMaterialUsecase(): CheckOutRawMaterialUsecase {
         return this.checkOutRawMaterialUsecase;
+    }
+
+    getViewProductionBatchesUsecase(): ViewProductionBatchesUsecase {
+        return this.viewProductionBatchesUsecase;
     }
 }
 

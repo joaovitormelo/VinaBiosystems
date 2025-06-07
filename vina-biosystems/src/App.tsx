@@ -22,8 +22,9 @@ async function onClick() {
   //testRegisterRawMaterialUsecase();
   //testEditRawMaterialUsecase();
   //await testRemoveRawMaterialUsecase();
-  await testCheckOutRawMaterialUsecase();
-  await testViewInventoryUsecase();
+  // await testCheckOutRawMaterialUsecase();
+  // await testViewInventoryUsecase();
+  await testViewProductionBatchesUsecase();
 }
 
 async function testLoginUsecase(login: string, password: string) {
@@ -141,6 +142,16 @@ async function testCheckOutRawMaterialUsecase() {
     console.log(`Saída de matéria-prima registrada com sucesso! Quantidade removida: ${quantityToRemove}`);
   } catch(error) {
     console.error("Erro ao registrar saída de matéria-prima:", error);
+  }
+}
+
+async function testViewProductionBatchesUsecase() {
+  try {
+    const viewProductionBatchesUsecase = Injector.getInstance().getViewProductionBatchesUsecase();
+    const batches = await viewProductionBatchesUsecase.execute();
+    console.log("Lotes de Produção:", batches);
+  } catch(error) {
+    console.error("Erro ao visualizar lotes de produção:", error);
   }
 }
 
