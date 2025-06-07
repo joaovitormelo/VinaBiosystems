@@ -21,8 +21,9 @@ async function onClick() {
   //testViewInventoryUsecase();
   //testRegisterRawMaterialUsecase();
   //testEditRawMaterialUsecase();
-  testRemoveRawMaterialUsecase();
-  testEditRawMaterialUsecase();
+  //await testRemoveRawMaterialUsecase();
+  await testCheckOutRawMaterialUsecase();
+  await testViewInventoryUsecase();
 }
 
 async function testLoginUsecase(login: string, password: string) {
@@ -114,6 +115,32 @@ async function testRemoveRawMaterialUsecase() {
     console.log("Matéria-prima removida com sucesso!");
   } catch(error) {
     console.error("Erro ao remover matéria-prima:", error);
+  }
+}
+
+async function testCheckInRawMaterialUsecase() {
+  try {
+    const checkInRawMaterialUsecase = Injector.getInstance().getCheckInRawMaterialUsecase();
+    const rawMaterial = RawMaterialModel.getMock();
+    rawMaterial.setId(1);
+    const quantityToAdd = 50;
+    await checkInRawMaterialUsecase.execute(rawMaterial, quantityToAdd);
+    console.log(`Entrada de matéria-prima registrada com sucesso! Quantidade adicionada: ${quantityToAdd}`);
+  } catch(error) {
+    console.error("Erro ao registrar entrada de matéria-prima:", error);
+  }
+}
+
+async function testCheckOutRawMaterialUsecase() {
+  try {
+    const checkOutRawMaterialUsecase = Injector.getInstance().getCheckOutRawMaterialUsecase();
+    const rawMaterial = RawMaterialModel.getMock();
+    rawMaterial.setId(1);
+    const quantityToRemove = 200;
+    await checkOutRawMaterialUsecase.execute(rawMaterial, quantityToRemove);
+    console.log(`Saída de matéria-prima registrada com sucesso! Quantidade removida: ${quantityToRemove}`);
+  } catch(error) {
+    console.error("Erro ao registrar saída de matéria-prima:", error);
   }
 }
 

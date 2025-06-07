@@ -33,22 +33,20 @@ export class EditRawMaterialUsecase {
     }
 
     validateFields(rawMaterial: RawMaterialModel) {
-        // Validate raw material
         if (!rawMaterial.getId()) {
-            throw new ValidationException("ID do material não pode ser vazio.");
+            throw new ValidationException("id", "ID do material não pode ser vazio.");
         }
         if (!rawMaterial.getName()) {
-            throw new ValidationException("Nome do material não pode ser vazio.");
+            throw new ValidationException("name", "Nome do material não pode ser vazio.");
         }
         if (rawMaterial.getQuantity() < 0) {
-            throw new ValidationException("Quantidade do material não pode ser negativa.");
+            throw new ValidationException("quantity", "Quantidade do material não pode ser negativa.");
         }
         if (!rawMaterial.getUnit()) {
-            throw new ValidationException("Unidade do material não pode ser vazia.");
+            throw new ValidationException("unit", "Unidade do material não pode ser vazia.");
         }
         if (rawMaterial.getMinQuantity() < 0) {
-            throw new ValidationException("Quantidade mínima do material não pode ser negativa.");
+            throw new ValidationException("minQuantity", "Quantidade mínima do material não pode ser negativa.");
         }
-
     }
 }
