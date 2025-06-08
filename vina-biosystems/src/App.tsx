@@ -12,6 +12,10 @@ import moment from 'moment';
 import { RawMaterialInBatch } from './features/domain/types/rawMaterialInBatch';
 import { ViewSamplingResultsUsecase } from './features/domain/usecases/production/viewSamplingResultsUsecase';
 import { SamplingResultModel } from './features/domain/models/samplingResultModel';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import HomePage from './features/presentation/pages/HomePage/HomePage';
+import LoginPage from './features/presentation/pages/LoginPage/LoginPage';
+import ResetPasswordPage from './features/presentation/pages/ResetPasswordPage/ResetPasswordPage';
 
 let doLoginUsecase: DoLoginUsecase;
 let editUserUsecase: EditUserUsecase;
@@ -19,11 +23,14 @@ let excludeUserUsecase: ExcludeUserUsecase;
 let registerNewUserUsecase: RegisterNewUserUsecase;
 let viewSamplingResultsUsecase: ViewSamplingResultsUsecase;
 
-async function onClick() {
+async function runTests() {
+  await testLoginUsecase("joao", "123");
+  testAttachSamplingResultUsecase();
+  testViewSamplingResultsUsecase();
   //testLoginUsecase();
   //testEditUserUsecase();
   //testExcludeUserUsecase();
-  testRegisterNewUserUsecase();
+  //testRegisterNewUserUsecase();
   //testViewInventoryUsecase();
   //testRegisterRawMaterialUsecase();
   //testEditRawMaterialUsecase();
@@ -32,7 +39,7 @@ async function onClick() {
   // await testViewInventoryUsecase();
  //testRegisterProductionBatchUsecase();
  // testViewProductionBatchesUsecase();
- testAttachSamplingResultUsecase();
+ //testAttachSamplingResultUsecase();
 }
 
 async function testAttachSamplingResultUsecase() {
@@ -209,22 +216,19 @@ function App() {
   excludeUserUsecase = injector.getExcludeUserUsecase();
   registerNewUserUsecase = injector.getRegisterNewUserUsecase();
   viewSamplingResultsUsecase = injector.getViewSamplingResultsUsecase();
-  testLoginUsecase("joao", "123");
+  runTests();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <button
-          className="App-link"
-          onClick={onClick}
-        >
-          Testar!
-        </button>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

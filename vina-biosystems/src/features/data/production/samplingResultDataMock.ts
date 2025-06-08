@@ -19,9 +19,6 @@ export class SamplingResultDataMock implements SamplingResultDataContract {
         // Simulating a delay to mimic database call
         await new Promise(resolve => setTimeout(resolve, 2000));
 
-        // Filter mock results by batchId if the model has a batchId property
-        return this.samplingResults.filter(
-            (result: any) => result.batchId === batchId
-        );
+        return this.samplingResults;
     }
 }
