@@ -10,11 +10,14 @@ import { RawMaterialModel } from './features/domain/models/rawMaterialModel';
 import { BatchModel } from './features/domain/models/batchModel';
 import moment from 'moment';
 import { RawMaterialInBatch } from './features/domain/types/rawMaterialInBatch';
+import { ViewSamplingResultsUsecase } from './features/domain/usecases/production/viewSamplingResultsUsecase';
+import { SamplingResultModel } from './features/domain/models/samplingResultModel';
 
 let doLoginUsecase: DoLoginUsecase;
 let editUserUsecase: EditUserUsecase;
 let excludeUserUsecase: ExcludeUserUsecase;
 let registerNewUserUsecase: RegisterNewUserUsecase;
+let viewSamplingResultsUsecase: ViewSamplingResultsUsecase;
 
 async function onClick() {
   //testLoginUsecase();
@@ -29,6 +32,27 @@ async function onClick() {
   // await testViewInventoryUsecase();
  //testRegisterProductionBatchUsecase();
  // testViewProductionBatchesUsecase();
+ testAttachSamplingResultUsecase();
+}
+
+async function testAttachSamplingResultUsecase() {
+    const attachSamplingResultUsecase = Injector.getInstance().getAttachSamplingResultUsecase();
+    const samplingResult = SamplingResultModel.getMock();
+    samplingResult.setFileName("sample_result.txt");
+    samplingResult.setDate(moment());
+    samplingResult.setCreationUserId(1); // Assuming you have a batch with ID 1
+    try {
+        const result = await attachSamplingResultUsecase.execute(samplingResult);
+        console.log("Resultado de coleta anexado com sucesso:", result);
+    } catch (error) {
+        console.error("Erro ao anexar resultado de coleta:", error);
+    }
+}
+
+async function testViewSamplingResultsUsecase() {
+    const results = await viewSamplingResultsUsecase.execute(1);
+    console.log(results);
+    console.log("Teste de ViewSamplingResultsUsecase executado com sucesso!");
 }
 
 async function testLoginUsecase(login: string, password: string) {
@@ -184,6 +208,7 @@ function App() {
   editUserUsecase = injector.getEditUserUsecase();
   excludeUserUsecase = injector.getExcludeUserUsecase();
   registerNewUserUsecase = injector.getRegisterNewUserUsecase();
+  viewSamplingResultsUsecase = injector.getViewSamplingResultsUsecase();
   testLoginUsecase("joao", "123");
   return (
     <div className="App">
