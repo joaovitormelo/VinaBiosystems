@@ -8,6 +8,11 @@ import { ExcludeUserUsecase } from './features/domain/usecases/authentication/ex
 import { RegisterNewUserUsecase } from './features/domain/usecases/authentication/registerNewUserUsecase';
 import { RawMaterialModel } from './features/domain/models/rawMaterialModel';
 
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import HomePage from './features/presentation/pages/HomePage/HomePage';
+import LoginPage from './features/presentation/pages/LoginPage/LoginPage';
+import ResetPasswordPage from './features/presentation/pages/ResetPasswordPage/ResetPasswordPage';
+
 let doLoginUsecase: DoLoginUsecase;
 let editUserUsecase: EditUserUsecase;
 let excludeUserUsecase: ExcludeUserUsecase;
@@ -162,21 +167,18 @@ function App() {
   excludeUserUsecase = injector.getExcludeUserUsecase();
   registerNewUserUsecase = injector.getRegisterNewUserUsecase();
   testLoginUsecase("joao", "123");
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <button
-          className="App-link"
-          onClick={onClick}
-        >
-          Testar!
-        </button>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
