@@ -3,8 +3,9 @@ import { Header, SidebarMenu } from "../../components";
 import { Home } from "./styles";
 import { Image } from "antd";
 import cafeBordoIniciar from "../../utils/cafeBordoIniciar.png"
-
+import { useNavigate } from "react-router-dom";
 function HomePage(){
+
     return(
         <Home>
             <SidebarMenu />

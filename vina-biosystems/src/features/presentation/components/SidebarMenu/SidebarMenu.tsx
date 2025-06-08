@@ -3,18 +3,21 @@ import { Menu, Typography } from 'antd';
 import { IdcardOutlined, InboxOutlined, ReconciliationOutlined, TeamOutlined } from "@ant-design/icons";
 import { Sidebar, Logo, ExitButton } from "./styles";
 import logoVinaVertical from '../../utils/logoVinaVertical.png'
+import { useNavigate } from "react-router-dom";
+
 
 const { Link } = Typography;
 
 function SidebarMenu(){
     const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+    const navigate = useNavigate();
     const handleMenuClick = useCallback(() => {
         //LÓGICA
     }, []);
 
     const handleExit = useCallback(() => {
-        //LÓGICA
-    }, []);
+        navigate('/login');
+    }, [navigate]);
 
     return (
       <Sidebar>
