@@ -7,4 +7,5 @@ export interface InventoryDataContract {
     updateRawMaterial(rawMaterial: RawMaterialModel): Promise<void>;
     isRawMaterialBeingUsedInABatch(rawMaterialId: number): Promise<boolean>;
     removeRawMaterial(rawMaterialId: number): Promise<void>;
+    getRawMaterialById(rawMaterialId: number): Promise<RawMaterialModel | undefined>;
 }

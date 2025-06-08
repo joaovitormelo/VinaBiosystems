@@ -7,6 +7,9 @@ import { UserModel } from './features/domain/models/userModel';
 import { ExcludeUserUsecase } from './features/domain/usecases/authentication/excludeUserUsercase';
 import { RegisterNewUserUsecase } from './features/domain/usecases/authentication/registerNewUserUsecase';
 import { RawMaterialModel } from './features/domain/models/rawMaterialModel';
+import { BatchModel } from './features/domain/models/batchModel';
+import moment from 'moment';
+import { RawMaterialInBatch } from './features/domain/types/rawMaterialInBatch';
 
 let doLoginUsecase: DoLoginUsecase;
 let editUserUsecase: EditUserUsecase;
@@ -17,14 +20,15 @@ async function onClick() {
   //testLoginUsecase();
   //testEditUserUsecase();
   //testExcludeUserUsecase();
-  //testRegisterNewUserUsecase();
+  testRegisterNewUserUsecase();
   //testViewInventoryUsecase();
   //testRegisterRawMaterialUsecase();
   //testEditRawMaterialUsecase();
   //await testRemoveRawMaterialUsecase();
   // await testCheckOutRawMaterialUsecase();
   // await testViewInventoryUsecase();
-  await testViewProductionBatchesUsecase();
+ //testRegisterProductionBatchUsecase();
+ // testViewProductionBatchesUsecase();
 }
 
 async function testLoginUsecase(login: string, password: string) {
@@ -61,7 +65,7 @@ async function testRegisterNewUserUsecase() {
   try {
     const newUser = UserModel.getMock();
     newUser.setLogin("novoUsuario");
-    newUser.setPassword("senhaSegura");
+    newUser.setPassword("123456");
     await registerNewUserUsecase.execute(newUser);
     console.log("Usuário registrado com sucesso!");
     testLoginUsecase(newUser.getLogin(), newUser.getPassword() || "");
@@ -74,6 +78,7 @@ async function testRegisterRawMaterialUsecase() {
   try {
     const registerRawMaterialUsecase = Injector.getInstance().getRegisterRawMaterialUsecase();
     const rawMaterial = RawMaterialModel.getMock();
+    rawMaterial.setId(2);
     rawMaterial.setName("Novo Insumo");
     rawMaterial.setQuantity(100);
     rawMaterial.setUnit("kg");
@@ -152,6 +157,24 @@ async function testViewProductionBatchesUsecase() {
     console.log("Lotes de Produção:", batches);
   } catch(error) {
     console.error("Erro ao visualizar lotes de produção:", error);
+  }
+}
+
+async function testRegisterProductionBatchUsecase() {
+  try {
+    const registerProductionBatchUsecase = Injector.getInstance().getRegisterProductionBatchUsecase();
+    const batch = BatchModel.getMock();
+    batch.setLabel("Lote de Teste");
+    batch.setStartDate(moment("2023-10-01"));
+    batch.setEndDate(moment("2023-10-31"));
+    batch.setRawMaterialList([
+      new RawMaterialInBatch(1, 1000),
+      new RawMaterialInBatch(2, 30)
+    ]);
+    await registerProductionBatchUsecase.execute(batch);
+    console.log("Lote de produção registrado com sucesso!");
+  } catch(error) {
+    console.error("Erro ao registrar lote de produção:", error);
   }
 }
 

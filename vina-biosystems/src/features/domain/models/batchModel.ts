@@ -9,6 +9,11 @@ export class BatchModel {
     private rawMaterialList: Array<RawMaterialInBatch>;
     private situation: string;
 
+    public static SITUATION = class {
+        static readonly EM_ABERTO = "open";
+        static readonly FECHADO = "closed";
+    };
+
     constructor(
         id: number | null, label: string, startDate: Moment, endDate: Moment,
         rawMaterialList: Array<RawMaterialInBatch>, situation: string
