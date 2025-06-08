@@ -11,6 +11,10 @@ export class InventoryDataMock implements InventoryDataContract {
         return this.inventory;
     }
 
+    async getRawMaterialById(rawMaterialId: number): Promise<RawMaterialModel | undefined> {
+        return this.inventory.find(item => item.getId() === rawMaterialId);
+    }
+
     async getRawMaterialByName(name: string): Promise<RawMaterialModel | undefined> {
         return this.inventory.find(item => item.getName() === name);
     }

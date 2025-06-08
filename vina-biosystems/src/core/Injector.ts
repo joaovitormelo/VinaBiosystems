@@ -17,6 +17,7 @@ import { EditRawMaterialUsecase } from "../features/domain/usecases/inventory/ed
 import { RegisterRawMaterialUsecase } from "../features/domain/usecases/inventory/registerRawMaterialUsecase";
 import { RemoveRawMaterialUsecase } from "../features/domain/usecases/inventory/removeRawMaterialUsecase";
 import { ViewRawMaterialInventoryUsecase } from "../features/domain/usecases/inventory/viewRawMaterialInventoryUsecase";
+import { RegisterProductionBatchUsecase } from "../features/domain/usecases/production/registerProductionBatchUsecase";
 import { ViewProductionBatchesUsecase } from "../features/domain/usecases/production/viewProductionBatchesUsecase";
 import { CriptographyContract } from "../utils/criptography/criptographyContract";
 import { CriptographyMock } from "../utils/criptography/criptographyMock";
@@ -44,6 +45,7 @@ export class Injector
     private checkInRawMaterialUsecase: CheckInRawMaterialUsecase;
     private checkOutRawMaterialUsecase: CheckOutRawMaterialUsecase;
     private viewProductionBatchesUsecase: ViewProductionBatchesUsecase;
+    private registerProductionBatchUsecase: RegisterProductionBatchUsecase;
 
     private constructor()
     {
@@ -65,6 +67,7 @@ export class Injector
         this.checkInRawMaterialUsecase = new CheckInRawMaterialUsecase(this.inventoryData);
         this.checkOutRawMaterialUsecase = new CheckOutRawMaterialUsecase(this.inventoryData, this.notificationManager);
         this.viewProductionBatchesUsecase = new ViewProductionBatchesUsecase(this.batchData);
+        this.registerProductionBatchUsecase = new RegisterProductionBatchUsecase(this.batchData, this.inventoryData);
     }
 
     static getInstance(): Injector
@@ -119,6 +122,10 @@ export class Injector
 
     getViewProductionBatchesUsecase(): ViewProductionBatchesUsecase {
         return this.viewProductionBatchesUsecase;
+    }
+
+    getRegisterProductionBatchUsecase(): RegisterProductionBatchUsecase {
+        return this.registerProductionBatchUsecase;
     }
 }
 
