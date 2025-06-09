@@ -4,9 +4,12 @@ import { InventoryDataContract } from "../features/data/inventory/inventoryDataC
 import { InventoryDataMock } from "../features/data/inventory/inventoryDataMock";
 import { BatchDataContract } from "../features/data/production/batchDataContract";
 import { BatchDataMock } from "../features/data/production/batchDataMock";
+import { SamplingResultDataContract } from "../features/data/production/samplingResultDataContract";
+import { SamplingResultDataMock } from "../features/data/production/samplingResultDataMock";
 import { NotificationManagerContract } from "../features/data/system/notificationManagerContract";
 import { NotificationManagerMock } from "../features/data/system/notificationManagerMock";
 import { DoLoginUsecase } from "../features/domain/usecases/authentication/doLoginUsecase";
+import { DoLogoutUsecase } from "../features/domain/usecases/authentication/doLogoutUsecase";
 import { EditUserUsecase } from "../features/domain/usecases/authentication/editUserUsecase";
 import { ExcludeUserUsecase } from "../features/domain/usecases/authentication/excludeUserUsercase";
 import { RegisterNewUserUsecase } from "../features/domain/usecases/authentication/registerNewUserUsecase";
@@ -17,8 +20,13 @@ import { EditRawMaterialUsecase } from "../features/domain/usecases/inventory/ed
 import { RegisterRawMaterialUsecase } from "../features/domain/usecases/inventory/registerRawMaterialUsecase";
 import { RemoveRawMaterialUsecase } from "../features/domain/usecases/inventory/removeRawMaterialUsecase";
 import { ViewRawMaterialInventoryUsecase } from "../features/domain/usecases/inventory/viewRawMaterialInventoryUsecase";
+import { AttachSamplingResultUsecase } from "../features/domain/usecases/production/attachSamplingResultUsecase";
+import { CancelProductionBatchUsecase } from "../features/domain/usecases/production/cancelProductionBatchUsecase";
+import { ExcludeSamplingResultUsecase } from "../features/domain/usecases/production/excludeSamplingResultUsecase";
+import { FinishProductionBatchUsecase } from "../features/domain/usecases/production/finishProductionBatchUsecase";
 import { RegisterProductionBatchUsecase } from "../features/domain/usecases/production/registerProductionBatchUsecase";
 import { ViewProductionBatchesUsecase } from "../features/domain/usecases/production/viewProductionBatchesUsecase";
+import { ViewSamplingResultsUsecase } from "../features/domain/usecases/production/viewSamplingResultsUsecase";
 import { CriptographyContract } from "../utils/criptography/criptographyContract";
 import { CriptographyMock } from "../utils/criptography/criptographyMock";
 import { SessionManager } from "./session/sessionManager";
@@ -34,6 +42,7 @@ export class Injector
     private inventoryData: InventoryDataContract;
     private notificationManager: NotificationManagerContract;
     private batchData: BatchDataContract;
+    private samplingResultData: SamplingResultDataContract;
     private viewRegisteredUsersListUsecase: ViewRegisteredUsersListUsecase;
     private editUserUsecase: EditUserUsecase;
     private excludeUserUsecase: ExcludeUserUsecase;
@@ -46,6 +55,12 @@ export class Injector
     private checkOutRawMaterialUsecase: CheckOutRawMaterialUsecase;
     private viewProductionBatchesUsecase: ViewProductionBatchesUsecase;
     private registerProductionBatchUsecase: RegisterProductionBatchUsecase;
+    private viewSamplingResultsUsecase: ViewSamplingResultsUsecase;
+    private attachSamplingResultUsecase: AttachSamplingResultUsecase;
+    private excludeSamplingResultUsecase: ExcludeSamplingResultUsecase;
+    private finishProductionBatchUsecase: FinishProductionBatchUsecase;
+    private cancelProductionBatchUsecase: CancelProductionBatchUsecase;
+    private doLogoutUsecase: DoLogoutUsecase;
 
     private constructor()
     {
@@ -55,6 +70,7 @@ export class Injector
         this.inventoryData = new InventoryDataMock();
         this.notificationManager = new NotificationManagerMock();
         this.batchData = new BatchDataMock();
+        this.samplingResultData = new SamplingResultDataMock();
         this.doLoginUsecase = new DoLoginUsecase(this.userData, this.criptography, this.sessionManager);
         this.viewRegisteredUsersListUsecase = new ViewRegisteredUsersListUsecase(this.userData);
         this.editUserUsecase = new EditUserUsecase(this.userData, this.sessionManager);
@@ -68,6 +84,14 @@ export class Injector
         this.checkOutRawMaterialUsecase = new CheckOutRawMaterialUsecase(this.inventoryData, this.notificationManager);
         this.viewProductionBatchesUsecase = new ViewProductionBatchesUsecase(this.batchData);
         this.registerProductionBatchUsecase = new RegisterProductionBatchUsecase(this.batchData, this.inventoryData);
+        this.viewSamplingResultsUsecase = new ViewSamplingResultsUsecase(this.samplingResultData);
+        this.attachSamplingResultUsecase = new AttachSamplingResultUsecase(this.samplingResultData, this.sessionManager);
+        this.excludeSamplingResultUsecase = new ExcludeSamplingResultUsecase(this.samplingResultData);
+        this.finishProductionBatchUsecase = new FinishProductionBatchUsecase(this.batchData);
+        this.cancelProductionBatchUsecase = new CancelProductionBatchUsecase(
+            this.batchData, this.samplingResultData, this.inventoryData
+        );
+        this.doLogoutUsecase = new DoLogoutUsecase(this.sessionManager);
     }
 
     static getInstance(): Injector
@@ -126,6 +150,34 @@ export class Injector
 
     getRegisterProductionBatchUsecase(): RegisterProductionBatchUsecase {
         return this.registerProductionBatchUsecase;
+    }
+
+    getSamplingResultData(): SamplingResultDataContract {
+        return this.samplingResultData;
+    }
+
+    getViewSamplingResultsUsecase(): ViewSamplingResultsUsecase {
+        return this.viewSamplingResultsUsecase;
+    }
+
+    getAttachSamplingResultUsecase(): AttachSamplingResultUsecase {
+        return this.attachSamplingResultUsecase;
+    }
+
+    getExcludeSamplingResultUsecase(): ExcludeSamplingResultUsecase {
+        return this.excludeSamplingResultUsecase;
+    }
+
+    getFinishProductionBatchUsecase(): FinishProductionBatchUsecase {
+        return this.finishProductionBatchUsecase;
+    }
+
+    getCancelProductionBatchUsecase(): CancelProductionBatchUsecase {
+        return this.cancelProductionBatchUsecase;
+    }
+
+    getDoLogoutUsecase(): DoLogoutUsecase {
+        return this.doLogoutUsecase;
     }
 }
 

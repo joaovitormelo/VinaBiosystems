@@ -10,7 +10,8 @@ import { RawMaterialModel } from './features/domain/models/rawMaterialModel';
 import { BatchModel } from './features/domain/models/batchModel';
 import moment from 'moment';
 import { RawMaterialInBatch } from './features/domain/types/rawMaterialInBatch';
-
+import { ViewSamplingResultsUsecase } from './features/domain/usecases/production/viewSamplingResultsUsecase';
+import { SamplingResultModel } from './features/domain/models/samplingResultModel';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import HomePage from './features/presentation/pages/HomePage/HomePage';
 import LoginPage from './features/presentation/pages/LoginPage/LoginPage';
@@ -20,12 +21,17 @@ let doLoginUsecase: DoLoginUsecase;
 let editUserUsecase: EditUserUsecase;
 let excludeUserUsecase: ExcludeUserUsecase;
 let registerNewUserUsecase: RegisterNewUserUsecase;
+let viewSamplingResultsUsecase: ViewSamplingResultsUsecase;
 
-async function onClick() {
+async function runTests() {
+  await testLoginUsecase("joao", "123");
+  //testAttachSamplingResultUsecase();
+  //await testFinishProductionBatchUsecase();
+  //testViewSamplingResultsUsecase();
   //testLoginUsecase();
   //testEditUserUsecase();
   //testExcludeUserUsecase();
-  testRegisterNewUserUsecase();
+  //testRegisterNewUserUsecase();
   //testViewInventoryUsecase();
   //testRegisterRawMaterialUsecase();
   //testEditRawMaterialUsecase();
@@ -33,7 +39,73 @@ async function onClick() {
   // await testCheckOutRawMaterialUsecase();
   // await testViewInventoryUsecase();
  //testRegisterProductionBatchUsecase();
- // testViewProductionBatchesUsecase();
+ await testCancelProductionBatchUsecase();
+ testViewProductionBatchesUsecase();
+ //testAttachSamplingResultUsecase();
+ //testExcludeSamplingResultUsecase();
+ testDoLogoutUsecase();
+}
+
+async function testDoLogoutUsecase() {
+    const doLogoutUsecase = Injector.getInstance().getDoLogoutUsecase();
+    try {
+        await doLogoutUsecase.execute();
+        console.log("Logout realizado com sucesso!");
+    } catch (error) {
+        console.error("Erro ao realizar logout:", error);
+    }
+}
+
+async function testCancelProductionBatchUsecase() {
+    const cancelProductionBatchUsecase = Injector.getInstance().getCancelProductionBatchUsecase();
+    const batch = BatchModel.getMock();
+    batch.setId(1); // Assuming you have a batch with ID 1
+    try {
+        await cancelProductionBatchUsecase.execute(batch);
+        console.log("Lote de produção cancelado com sucesso!");
+    } catch (error) {
+        console.error("Erro ao cancelar lote de produção:", error);
+    }
+}
+
+async function testFinishProductionBatchUsecase() {
+    const finishProductionBatchUsecase = Injector.getInstance().getFinishProductionBatchUsecase();
+    try {
+        await finishProductionBatchUsecase.execute(1); // Assuming you have a batch with ID 1
+        console.log("Lote de produção finalizado com sucesso!");
+    } catch (error) {
+        console.error("Erro ao finalizar lote de produção:", error);
+    }
+}
+
+async function testExcludeSamplingResultUsecase() {
+    const excludeSamplingResultUsecase = Injector.getInstance().getExcludeSamplingResultUsecase();
+    try {
+        await excludeSamplingResultUsecase.execute(1); // Assuming you have a sampling result with ID 1
+        console.log("Resultado de coleta excluído com sucesso!");
+    } catch (error) {
+        console.error("Erro ao excluir resultado de coleta:", error);
+    }
+}
+
+async function testAttachSamplingResultUsecase() {
+    const attachSamplingResultUsecase = Injector.getInstance().getAttachSamplingResultUsecase();
+    const samplingResult = SamplingResultModel.getMock();
+    samplingResult.setFileName("sample_result.txt");
+    samplingResult.setDate(moment());
+    samplingResult.setCreationUserId(1); // Assuming you have a batch with ID 1
+    try {
+        const result = await attachSamplingResultUsecase.execute(samplingResult);
+        console.log("Resultado de coleta anexado com sucesso:", result);
+    } catch (error) {
+        console.error("Erro ao anexar resultado de coleta:", error);
+    }
+}
+
+async function testViewSamplingResultsUsecase() {
+    const results = await viewSamplingResultsUsecase.execute(1);
+    console.log(results);
+    console.log("Teste de ViewSamplingResultsUsecase executado com sucesso!");
 }
 
 async function testLoginUsecase(login: string, password: string) {
@@ -189,7 +261,8 @@ function App() {
   editUserUsecase = injector.getEditUserUsecase();
   excludeUserUsecase = injector.getExcludeUserUsecase();
   registerNewUserUsecase = injector.getRegisterNewUserUsecase();
-  testLoginUsecase("joao", "123");
+  viewSamplingResultsUsecase = injector.getViewSamplingResultsUsecase();
+  runTests();
 
   return (
     <Router>
