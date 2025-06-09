@@ -25,8 +25,9 @@ let viewSamplingResultsUsecase: ViewSamplingResultsUsecase;
 
 async function runTests() {
   await testLoginUsecase("joao", "123");
-  testAttachSamplingResultUsecase();
-  testViewSamplingResultsUsecase();
+  //testAttachSamplingResultUsecase();
+  //await testFinishProductionBatchUsecase();
+  //testViewSamplingResultsUsecase();
   //testLoginUsecase();
   //testEditUserUsecase();
   //testExcludeUserUsecase();
@@ -38,8 +39,42 @@ async function runTests() {
   // await testCheckOutRawMaterialUsecase();
   // await testViewInventoryUsecase();
  //testRegisterProductionBatchUsecase();
- // testViewProductionBatchesUsecase();
+ await testCancelProductionBatchUsecase();
+ testViewProductionBatchesUsecase();
  //testAttachSamplingResultUsecase();
+ //testExcludeSamplingResultUsecase();
+}
+
+async function testCancelProductionBatchUsecase() {
+    const cancelProductionBatchUsecase = Injector.getInstance().getCancelProductionBatchUsecase();
+    const batch = BatchModel.getMock();
+    batch.setId(1); // Assuming you have a batch with ID 1
+    try {
+        await cancelProductionBatchUsecase.execute(batch);
+        console.log("Lote de produção cancelado com sucesso!");
+    } catch (error) {
+        console.error("Erro ao cancelar lote de produção:", error);
+    }
+}
+
+async function testFinishProductionBatchUsecase() {
+    const finishProductionBatchUsecase = Injector.getInstance().getFinishProductionBatchUsecase();
+    try {
+        await finishProductionBatchUsecase.execute(1); // Assuming you have a batch with ID 1
+        console.log("Lote de produção finalizado com sucesso!");
+    } catch (error) {
+        console.error("Erro ao finalizar lote de produção:", error);
+    }
+}
+
+async function testExcludeSamplingResultUsecase() {
+    const excludeSamplingResultUsecase = Injector.getInstance().getExcludeSamplingResultUsecase();
+    try {
+        await excludeSamplingResultUsecase.execute(1); // Assuming you have a sampling result with ID 1
+        console.log("Resultado de coleta excluído com sucesso!");
+    } catch (error) {
+        console.error("Erro ao excluir resultado de coleta:", error);
+    }
 }
 
 async function testAttachSamplingResultUsecase() {

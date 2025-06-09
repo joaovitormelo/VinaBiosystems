@@ -12,6 +12,7 @@ export class BatchModel {
     public static SITUATION = class {
         static readonly EM_ABERTO = "open";
         static readonly FECHADO = "closed";
+        static readonly CANCELADO = "canceled";
     };
 
     constructor(
@@ -70,7 +71,7 @@ export class BatchModel {
             moment("2023-01-01"),
             moment("2023-01-10"),
             [RawMaterialInBatch.getMock()],
-            "Em Produção"
+            this.SITUATION.EM_ABERTO
         );
     }
 }

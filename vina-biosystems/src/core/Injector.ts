@@ -20,6 +20,9 @@ import { RegisterRawMaterialUsecase } from "../features/domain/usecases/inventor
 import { RemoveRawMaterialUsecase } from "../features/domain/usecases/inventory/removeRawMaterialUsecase";
 import { ViewRawMaterialInventoryUsecase } from "../features/domain/usecases/inventory/viewRawMaterialInventoryUsecase";
 import { AttachSamplingResultUsecase } from "../features/domain/usecases/production/attachSamplingResultUsecase";
+import { CancelProductionBatchUsecase } from "../features/domain/usecases/production/cancelProductionBatchUsecase";
+import { ExcludeSamplingResultUsecase } from "../features/domain/usecases/production/excludeSamplingResultUsecase";
+import { FinishProductionBatchUsecase } from "../features/domain/usecases/production/finishProductionBatchUsecase";
 import { RegisterProductionBatchUsecase } from "../features/domain/usecases/production/registerProductionBatchUsecase";
 import { ViewProductionBatchesUsecase } from "../features/domain/usecases/production/viewProductionBatchesUsecase";
 import { ViewSamplingResultsUsecase } from "../features/domain/usecases/production/viewSamplingResultsUsecase";
@@ -53,6 +56,9 @@ export class Injector
     private registerProductionBatchUsecase: RegisterProductionBatchUsecase;
     private viewSamplingResultsUsecase: ViewSamplingResultsUsecase;
     private attachSamplingResultUsecase: AttachSamplingResultUsecase;
+    private excludeSamplingResultUsecase: ExcludeSamplingResultUsecase;
+    private finishProductionBatchUsecase: FinishProductionBatchUsecase;
+    private cancelProductionBatchUsecase: CancelProductionBatchUsecase;
 
     private constructor()
     {
@@ -78,6 +84,11 @@ export class Injector
         this.registerProductionBatchUsecase = new RegisterProductionBatchUsecase(this.batchData, this.inventoryData);
         this.viewSamplingResultsUsecase = new ViewSamplingResultsUsecase(this.samplingResultData);
         this.attachSamplingResultUsecase = new AttachSamplingResultUsecase(this.samplingResultData, this.sessionManager);
+        this.excludeSamplingResultUsecase = new ExcludeSamplingResultUsecase(this.samplingResultData);
+        this.finishProductionBatchUsecase = new FinishProductionBatchUsecase(this.batchData);
+        this.cancelProductionBatchUsecase = new CancelProductionBatchUsecase(
+            this.batchData, this.samplingResultData, this.inventoryData
+        );
     }
 
     static getInstance(): Injector
@@ -148,6 +159,18 @@ export class Injector
 
     getAttachSamplingResultUsecase(): AttachSamplingResultUsecase {
         return this.attachSamplingResultUsecase;
+    }
+
+    getExcludeSamplingResultUsecase(): ExcludeSamplingResultUsecase {
+        return this.excludeSamplingResultUsecase;
+    }
+
+    getFinishProductionBatchUsecase(): FinishProductionBatchUsecase {
+        return this.finishProductionBatchUsecase;
+    }
+
+    getCancelProductionBatchUsecase(): CancelProductionBatchUsecase {
+        return this.cancelProductionBatchUsecase;
     }
 }
 

@@ -17,6 +17,13 @@ export class BatchDataMock implements BatchDataContract {
         batchB.setEndDate(moment("2024-07-08"));
         this.batches = [batchA, batchB];
     }
+    async updateSituationField(batchId: number, situation: string): Promise<void> {
+        const batch = this.batches.find(b => b.getId() === batchId);
+        if (!batch) {
+            throw new Error(`Batch com ID ${batchId} não encontrado!`);
+        }
+        batch.setSituation(situation);
+    }
 
     async createBatch(batch: BatchModel): Promise<BatchModel> {
         // Simulate auto-increment ID
