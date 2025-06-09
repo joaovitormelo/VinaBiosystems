@@ -1,23 +1,21 @@
 import React from "react";
 import { HeaderProps } from "./types";
-import { Container, Title, Subtitle, Button, PageWrapper } from "./styles";
+import { Container, Text, Title, Subtitle, Button } from "./styles";
 
-function Header({ title, subtitle, buttonName, showButton, actionButton }: HeaderProps) {
+function Header({ title, subtitle, buttonName, showButton = false, actionButton }: HeaderProps) {
   return (
-    <PageWrapper>
-      <Container>
-          <div>
-            <Title>{title}</Title>
-            {subtitle && <Subtitle>{subtitle}</Subtitle>}
-          </div>
+    <Container>
+        <Text>
+          <Title>{title}</Title>
+          {subtitle && <Subtitle>{subtitle}</Subtitle>}
+        </Text>
 
-          {showButton && (
-            <Button onClick={actionButton}>
-              {buttonName}
-            </Button>
-          )}
-      </Container>
-    </PageWrapper>
+        {showButton && (
+          <Button onClick={actionButton}>
+            {buttonName}
+          </Button>
+        )}
+    </Container>
   );
 };
 

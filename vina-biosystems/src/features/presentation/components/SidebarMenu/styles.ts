@@ -11,9 +11,9 @@ export const Sidebar = styled(Sider)`
     background-color: #0E3226;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
     z-index: 9999;
-    max-width: 420px !important;
-    min-width: 420px !important;
-    width: 420px !important;
+    max-width: 320px !important;
+    min-width: 320px !important;
+    width: 320px !important;
     
     .ant-layout-sider-children {
         display: flex;

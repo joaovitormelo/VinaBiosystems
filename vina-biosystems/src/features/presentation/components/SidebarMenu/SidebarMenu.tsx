@@ -43,7 +43,7 @@ function SidebarMenu(){
                 <Menu.Item key="3" icon={<InboxOutlined />}>
                     Estoque
                 </Menu.Item>
-                <Menu.Item key="2" icon={<ReconciliationOutlined />}>
+                <Menu.Item key="4" icon={<ReconciliationOutlined />}>
                     Lotes
                 </Menu.Item>
             </Menu>
