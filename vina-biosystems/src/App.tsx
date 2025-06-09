@@ -43,6 +43,17 @@ async function runTests() {
  testViewProductionBatchesUsecase();
  //testAttachSamplingResultUsecase();
  //testExcludeSamplingResultUsecase();
+ testDoLogoutUsecase();
+}
+
+async function testDoLogoutUsecase() {
+    const doLogoutUsecase = Injector.getInstance().getDoLogoutUsecase();
+    try {
+        await doLogoutUsecase.execute();
+        console.log("Logout realizado com sucesso!");
+    } catch (error) {
+        console.error("Erro ao realizar logout:", error);
+    }
 }
 
 async function testCancelProductionBatchUsecase() {

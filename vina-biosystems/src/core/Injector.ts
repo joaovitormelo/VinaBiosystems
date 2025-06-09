@@ -9,6 +9,7 @@ import { SamplingResultDataMock } from "../features/data/production/samplingResu
 import { NotificationManagerContract } from "../features/data/system/notificationManagerContract";
 import { NotificationManagerMock } from "../features/data/system/notificationManagerMock";
 import { DoLoginUsecase } from "../features/domain/usecases/authentication/doLoginUsecase";
+import { DoLogoutUsecase } from "../features/domain/usecases/authentication/doLogoutUsecase";
 import { EditUserUsecase } from "../features/domain/usecases/authentication/editUserUsecase";
 import { ExcludeUserUsecase } from "../features/domain/usecases/authentication/excludeUserUsercase";
 import { RegisterNewUserUsecase } from "../features/domain/usecases/authentication/registerNewUserUsecase";
@@ -59,6 +60,7 @@ export class Injector
     private excludeSamplingResultUsecase: ExcludeSamplingResultUsecase;
     private finishProductionBatchUsecase: FinishProductionBatchUsecase;
     private cancelProductionBatchUsecase: CancelProductionBatchUsecase;
+    private doLogoutUsecase: DoLogoutUsecase;
 
     private constructor()
     {
@@ -89,6 +91,7 @@ export class Injector
         this.cancelProductionBatchUsecase = new CancelProductionBatchUsecase(
             this.batchData, this.samplingResultData, this.inventoryData
         );
+        this.doLogoutUsecase = new DoLogoutUsecase(this.sessionManager);
     }
 
     static getInstance(): Injector
@@ -171,6 +174,10 @@ export class Injector
 
     getCancelProductionBatchUsecase(): CancelProductionBatchUsecase {
         return this.cancelProductionBatchUsecase;
+    }
+
+    getDoLogoutUsecase(): DoLogoutUsecase {
+        return this.doLogoutUsecase;
     }
 }
 
