@@ -10,26 +10,27 @@ export const Container = styled.header`
 `;
 
 export const Title = styled.h1`
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 48px;
+  font-weight: bold;
   margin: 0;
   position: relative;
-  left: 360px;
 `;
 
 export const Subtitle = styled.p`
-  font-size: 1rem;
-  font-weight: 400; 
+  font-size: 24px;
+  font-weight: normal; 
   margin: 2px 0 0;
   color: #6B2E2E;
   position: relative;
-  left: 360px;
 `;
 
 export const Button = styled.button`
   background-color: #6B2E2E;
+  position: relative;
+  right: 50px;
   color: #F1E7DB;
-  font-size: 1.1rem;
+  font-size: 24px;
+  font-weight: bold;
   width: 215px;
   height: 50px; 
   border: none;
@@ -39,4 +40,10 @@ export const Button = styled.button`
   &:hover {
     background-color:rgb(91, 39, 39);
   }
+`;
+
+export const PageWrapper = styled.div`
+  margin-left: 420px;
+  display: flex;
+  flex-direction: column;
 `;
