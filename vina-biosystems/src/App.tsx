@@ -16,6 +16,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import HomePage from './features/presentation/pages/HomePage/HomePage';
 import LoginPage from './features/presentation/pages/LoginPage/LoginPage';
 import ResetPasswordPage from './features/presentation/pages/ResetPasswordPage/ResetPasswordPage';
+import UsersPage from './features/presentation/pages/UsersPage/UsersPage';
 
 let doLoginUsecase: DoLoginUsecase;
 let editUserUsecase: EditUserUsecase;
@@ -272,6 +273,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/userpage" element={<UsersPage />} />
         </Routes>
       </div>
     </Router>

@@ -4,6 +4,7 @@ import { IdcardOutlined, InboxOutlined, ReconciliationOutlined, TeamOutlined } f
 import { Sidebar, Logo, ExitButton } from "./styles";
 import logoVinaVertical from '../../utils/logoVinaVertical.png'
 import { useNavigate } from "react-router-dom";
+import type { MenuInfo } from 'rc-menu/lib/interface';
 
 
 const { Link } = Typography;
@@ -11,9 +12,24 @@ const { Link } = Typography;
 function SidebarMenu(){
     const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
     const navigate = useNavigate();
-    const handleMenuClick = useCallback(() => {
-        //LÓGICA
-    }, []);
+    const handleMenuClick = useCallback(({ key }: MenuInfo) => {
+        switch(key){
+            case "1":
+                navigate('/perfil');
+                break;
+            case "2":
+                navigate('/userpage');
+                break;
+            case "3":
+                navigate('/estoque');
+                break;
+            case "4":
+                navigate('/lotes');
+                break;
+            default:
+                break;
+        }
+    }, [navigate]);
 
     const handleExit = useCallback(() => {
         navigate('/login');
