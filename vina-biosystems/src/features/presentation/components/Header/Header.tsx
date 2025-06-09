@@ -1,20 +1,20 @@
 import React from "react";
 import { HeaderProps } from "./types";
-import { Container, Title, Subtitle, Button } from "./styles";
+import { Container, Text, Title, Subtitle, Button } from "./styles";
 
-function Header({ title, subtitle, buttonName, showButton, actionButton }: HeaderProps) {
+function Header({ title, subtitle, buttonName, showButton = false, actionButton }: HeaderProps) {
   return (
     <Container>
-      <div>
-        <Title>{title}</Title>
-        {subtitle && <Subtitle>{subtitle}</Subtitle>}
-      </div>
+        <Text>
+          <Title>{title}</Title>
+          {subtitle && <Subtitle>{subtitle}</Subtitle>}
+        </Text>
 
-      {showButton && (
-        <Button onClick={actionButton}>
-          {buttonName}
-        </Button>
-      )}
+        {showButton && (
+          <Button onClick={actionButton}>
+            {buttonName}
+          </Button>
+        )}
     </Container>
   );
 };

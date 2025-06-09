@@ -1,27 +1,59 @@
 import React, { useCallback } from "react";
 
-import { Button, Form, Image, Input, Typography} from "antd";
+import { Button, Form, Image, Input, Typography, message } from "antd";
+import { useNavigate } from "react-router-dom";
 import { LoginArea, FormArea, StyledButton } from "./styles";
 
 import logoVinaHorizontal from '../../utils/logoVinaHorizontal.png';
 import cafeBordoLogin from '../../utils/cafeBordoLogin.png';
 
+import { DoLoginUsecase } from "../../../domain/usecases/authentication/doLoginUsecase";
+import { Injector } from "../../../../core/Injector";
+import ResetPasswordPage from "../ResetPasswordPage";
+import { Home } from "../HomePage/styles";
+import HomePage from "../HomePage";
+
 const { Link } = Typography;
 
 function LoginPage(){
-    const onFinish = useCallback(() => {
-        //LÓGICA
-    }, []);
+    const navigate = useNavigate();
+    const [messageApi, contextHolder] = message.useMessage();
+    const injector = Injector.getInstance();
+    const doLoginUsecase = injector.getDoLoginUsecase();
 
-    const onFinishFailed = useCallback(() => {
-        //LÓGICA
-    },[]);
+    const onFinish = useCallback(async (values: { email: string; password: string }) => {
+        try {
+            await doLoginUsecase.execute(values.email, values.password);
+            messageApi.success('Login realizado com sucesso!');
+            navigate("/home");
+        } catch (error: any) {
+            onFinishFailed(error);
+        }
+    }, [navigate, messageApi, doLoginUsecase]);
+
+   const onFinishFailed = useCallback((errorInfo: any) => {
+        if (errorInfo.message?.includes('não encontrado')) {
+            messageApi.error('Usuário não encontrado');
+        } else if (errorInfo.message?.includes('senha incorreta')) {
+            messageApi.error('Senha incorreta');
+        } else if (errorInfo.message?.includes('banco de dados')) {
+            messageApi.error('Erro ao conectar com o banco de dados');
+        } else if (errorInfo.errorFields) {
+            messageApi.error('Por favor, preencha todos os campos corretamente.');
+            console.error('Erro de validação:', errorInfo);
+        } else {
+            messageApi.error('Erro ao realizar login');
+        }
+    }, [messageApi]);
 
     const handleForgotPassword = useCallback(() => {
         //LÓGICA
-    }, []);
+        navigate('/reset-password');
+    }, [navigate]);
+
     return (
         <LoginArea>
+            {contextHolder}
             <FormArea>
                 <Image
                     src={logoVinaHorizontal}

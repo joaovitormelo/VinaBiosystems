@@ -12,7 +12,7 @@ export class UserDataMock implements UserDataContract {
     }
 
     async searchUserByLogin(login: string): Promise<UserModel | null> {
-        const user = this.userList.find(user => user.getLogin() === login);
+        const user = this.userList.find(user => user.getLogin() === login || user.getEmail() === login);
         return user || null;
     }
 
