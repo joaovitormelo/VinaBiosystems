@@ -17,6 +17,9 @@ import HomePage from './features/presentation/pages/HomePage/HomePage';
 import LoginPage from './features/presentation/pages/LoginPage/LoginPage';
 import ResetPasswordPage from './features/presentation/pages/ResetPasswordPage/ResetPasswordPage';
 import UsersPage from './features/presentation/pages/UsersPage/UsersPage';
+import { AxiosAdapter } from './features/data/utils/axiosAdapter';
+import { BackendContract } from './features/data/utils/backendContract';
+import { UserData } from './features/data/authentication/userData';
 
 let doLoginUsecase: DoLoginUsecase;
 let editUserUsecase: EditUserUsecase;
@@ -45,6 +48,36 @@ async function runTests() {
  //testAttachSamplingResultUsecase();
  //testExcludeSamplingResultUsecase();
  testDoLogoutUsecase();
+}
+
+async function testBackend() {
+  //await testCreateUserBackend();
+  //await testGetUsersBackend();
+}
+
+async function testCreateUserBackend() {
+  const backend: BackendContract = new AxiosAdapter();
+  const userData = new UserData(backend);
+  const newUser = UserModel.getMock();
+  newUser.setLogin("novoUsuario");
+  newUser.setPassword("123456");
+  try {
+    await userData.createUser(newUser);
+    console.log("Usuário criado com sucesso!");
+  } catch (error) {
+    console.error("Erro ao criar usuário:", error);
+  }
+}
+
+async function testGetUsersBackend() {
+  const backend: BackendContract = new AxiosAdapter();
+  const userData = new UserData(backend);
+  try {
+    const users = await userData.fetchUsers();
+    console.log("Usuários:", users);
+  } catch (error) {
+    console.error("Erro ao buscar usuários:", error);
+  }
 }
 
 async function testDoLogoutUsecase() {
@@ -263,7 +296,8 @@ function App() {
   excludeUserUsecase = injector.getExcludeUserUsecase();
   registerNewUserUsecase = injector.getRegisterNewUserUsecase();
   viewSamplingResultsUsecase = injector.getViewSamplingResultsUsecase();
-  runTests();
+  //runTests();
+  testBackend();
 
   return (
     <Router>
