@@ -4,7 +4,7 @@ import styled from "styled-components";
 export const LoginArea = styled.div`
     display: flex;
     justify-content: space-between;
-    alignItems: center;
+    align-items: center;
     background-color: #F1E7DB;
     
 `;
@@ -16,7 +16,6 @@ export const FormArea = styled.div`
     color: #F1E7DB;
     background-color: #0E3226;
     min-height: 100vh;
-    padding: 20px;
     font-size: 24px;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 

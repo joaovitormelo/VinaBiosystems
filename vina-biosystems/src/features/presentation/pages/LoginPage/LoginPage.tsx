@@ -107,6 +107,7 @@ function LoginPage(){
                     alt="Grãos de café espalhados"
                     preview={false}
                     className="side-image"
+                    style={{ width: '50vw', height: '100vh' }}
                 />
             </div>
         </LoginArea>

@@ -35,7 +35,7 @@ export const FormStyled = styled(Form)`
     justify-content: space-between;
 
     div {
-        width: 600px;
+        width: 500px;
     }
 `;
 
