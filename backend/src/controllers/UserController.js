@@ -25,9 +25,9 @@ export async function selectUsers(req, res){
 
 export async function insertUser(req, res){
     let user = req.body;
-    let fields = "name, login, email, birthDate, isAdmin, password";
+    let fields = "name, email, phone, birthDate, isAdmin, password";
     let placeholders = "?, ?, ?, ?, ?, ?";
-    let values = [user.name, user.login, user.email, user.birthDate, user.isAdmin, user.password];
+    let values = [user.name, user.email, user.phone, user.birthDate, user.isAdmin, user.password];
     openDb().then(db=>{
         db.run(`INSERT INTO User(${fields}) VALUES (${placeholders})`, values)
         .then(() => res.json({ statusCode: 200 }))
@@ -40,8 +40,8 @@ export async function insertUser(req, res){
 
 export async function updateUser(req, res){
     let user = req.body;
-    let fields = "name=?, login=?, email=?, birthDate=?, isAdmin=?";
-    let values = [user.name, user.login, user.email, user.birthDate, user.isAdmin];
+    let fields = "name=?, email=?, phone=?, birthDate=?, isAdmin=?";
+    let values = [user.name, user.email, user.phone, user.birthDate, user.isAdmin];
     if (user.password) {
         fields += ", password=?";
         values.push(user.password);

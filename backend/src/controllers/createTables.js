@@ -6,7 +6,14 @@ export async function createTables(){
     })
 
     openDb().then(db=>{
-        db.exec('CREATE TABLE IF NOT EXISTS User (id integer NOT NULL PRIMARY KEY, name TEXT, login TEXT, email TEXT, birthDate TEXT, isAdmin boolean, password TEXT)')
+        db.exec('CREATE TABLE IF NOT EXISTS User (id integer NOT NULL PRIMARY KEY, name TEXT, email TEXT, phone TEXT, birthDate TEXT, isAdmin boolean, password TEXT)')
+        db.all('SELECT * FROM User')
+        .then(users=>  {
+            if(users.length === 0){
+                db.run('INSERT INTO User (name, email, phone, birthDate, isAdmin, password) VALUES (?,?,?,?,?,?)', 
+                ['Teste', 'joao.teste@gmail.com', '999999999', '2000-01-01', true, '123']);
+            }
+        })
     })
 
     openDb().then(db=>{

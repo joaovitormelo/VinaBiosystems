@@ -1,20 +1,20 @@
 export class UserModel {
     private id: number | null;
     private name: string;
-    private login: string;
     private email: string;
+    private phone: string | null;
     private birthDate: string;
     private isAdmin: boolean;
     private password: string | null;
 
     constructor(
-        id: number | null, name: string, login: string, email: string, birthDate: string, isAdmin: boolean,
-        password: string | null
+        id: number | null, name: string, email: string, phone: string | null, birthDate: string,
+        isAdmin: boolean, password: string | null
     ) {
         this.id = id;
         this.name = name;
-        this.login = login;
         this.email = email;
+        this.phone = phone;
         this.birthDate = birthDate;
         this.password = password;
         this.isAdmin = isAdmin;
@@ -28,12 +28,12 @@ export class UserModel {
         return this.name;
     }
 
-    getLogin(): string {
-        return this.login;
-    }
-
     getEmail(): string {
         return this.email;
+    }
+
+    getPhone(): string | null {
+        return this.phone;
     }
 
     getBirthDate(): string {
@@ -56,12 +56,12 @@ export class UserModel {
         this.name = name;
     }
 
-    setLogin(login: string) {
-        this.login = login;
-    }
-
     setEmail(email: string) {
         this.email = email;
+    }
+
+    setPhone(phone: string | null) {
+        this.phone = phone;
     }
 
     setBirthDate(birthDate: string) {
@@ -78,7 +78,7 @@ export class UserModel {
 
     static getMock(): UserModel {
         return new UserModel(
-            1, "Usuário Teste", "joao", "joao.teste@gmail.com", "17/04/2003", false, "123"
+            1, "Usuário Teste", "joao.teste@gmail.com", "99999999", "17/04/2003", false, "123"
         );
     }
 
@@ -86,8 +86,8 @@ export class UserModel {
         return new UserModel(
             json.id || null,
             json.name || "",
-            json.login || "",
             json.email || "",
+            json.phone || null,
             json.birthDate || "",
             json.isAdmin || false,
             json.password || null
@@ -98,8 +98,8 @@ export class UserModel {
         return {
             id: this.id,
             name: this.name,
-            login: this.login,
             email: this.email,
+            phone: this.phone,
             birthDate: this.birthDate,
             isAdmin: this.isAdmin,
             password: this.password

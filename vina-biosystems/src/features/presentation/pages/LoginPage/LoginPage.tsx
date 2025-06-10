@@ -72,7 +72,6 @@ async function testCreateUserBackend() {
   const backend: BackendContract = new AxiosAdapter();
   const userData = new UserData(backend);
   const newUser = UserModel.getMock();
-  newUser.setLogin("raianny");
   newUser.setEmail("raianny");
   newUser.setPassword("123456");
   try {
@@ -169,7 +168,6 @@ async function testEditUserUsecase() {
   try {
     const editedUser = UserModel.getMock();
     editedUser.setId(2); // Assuming you have a user with ID 1
-    editedUser.setLogin("raianny");
     editedUser.setEmail("raianny.ray");
     editedUser.setPassword("123");
     editedUser.setName("Usuário Editado");
@@ -194,12 +192,11 @@ async function testExcludeUserUsecase() {
 async function testRegisterNewUserUsecase() {
   try {
     const newUser = UserModel.getMock();
-    newUser.setLogin("raianny");
     newUser.setEmail("raianny");
     newUser.setPassword("123456");
     await registerNewUserUsecase.execute(newUser);
     console.log("Usuário registrado com sucesso!");
-    testLoginUsecase(newUser.getLogin(), newUser.getPassword() || "");
+    testLoginUsecase(newUser.getEmail(), newUser.getPassword() || "");
   } catch(error) {
     throw error;
   }

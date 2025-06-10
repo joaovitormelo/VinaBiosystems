@@ -24,7 +24,7 @@ export class ExcludeUserUsecase {
             await this.userData.deleteUser(user);
         } catch(error) {
             console.error(error);
-            throw new DatabaseException("Não foi possível excluir o usuário " + user.getLogin());
+            throw new DatabaseException("Não foi possível excluir o usuário " + user.getEmail());
         }
     }
 }
