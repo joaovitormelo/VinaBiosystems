@@ -24,27 +24,27 @@ export class EditUserUsecase {
         }
         let userInDb: UserModel | null;
         try {
-            userInDb = await this.userData.searchUserByLogin(user.getLogin());
+            userInDb = await this.userData.searchUserByEmail(user.getEmail());
         } catch(error) {
             console.error(error);
-            throw new DatabaseException("Não foi possível buscar o usuário " + user.getLogin());
+            throw new DatabaseException("Não foi possível buscar o usuário " + user.getEmail());
         }
         if (userInDb && userInDb.getId() !== user.getId()) {
-            throw new ExistentUserException(user.getLogin());
+            throw new ExistentUserException(user.getEmail());
         }
         const currentUser: UserModel = this.sessionManager.getSessionUser() as UserModel;
         // Tentativa de redefinir senha
         if (user.getPassword() != null) {
             // Se o usuário atual não for admin e não for o próprio usuário, lança exceção
             if (!currentUser.getIsAdmin() && currentUser.getId() !== user.getId()) {
-                throw new PermissionException(currentUser.getLogin(), "Somente admins podem redefinir senhas!");
+                throw new PermissionException(currentUser.getEmail(), "Somente admins podem redefinir senhas!");
             }
         }
         try {
             await this.userData.updateUser(user);
         } catch(error) {
             console.error(error);
-            throw new DatabaseException("Não foi possível atualizar o usuário " + user.getLogin());
+            throw new DatabaseException("Não foi possível atualizar o usuário " + user.getEmail());
         }
     }
 }

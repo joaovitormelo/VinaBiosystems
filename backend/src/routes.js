@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { createTables } from "./controllers/createTables.js";
-import { insertUser, updateUser, selectUserById, selectUsers, deleteUser } from './controllers/UserController.js'
+import { insertUser, updateUser, selectUserByEmail, selectUsers, deleteUser } from './controllers/UserController.js'
 import { selectRawMaterialByName, selectRawMaterialById, insertRawMaterial, selecRawMaterials, updateRawMaterial, isRawMaterialBeingUsedInABatch, deleteRawMaterial } from './controllers/RawMaterialController.js'
 import { updateBatchSituation, insertBatch, selectBatches } from './controllers/BatchController.js'
 import { selectSamplingResultsByBatchId, insertSamplingResults, deleteSamplingResults} from './controllers/SamplingResultsController.js'
@@ -17,7 +17,7 @@ router.get('/', (req, res)=>{
 })
 
 router.get('/selectUsers', selectUsers);
-router.get('/selectUserById', selectUserById);
+router.get('/selectUserByEmail', selectUserByEmail);
 router.post('/insertUser', insertUser);
 router.put('/updateUser', updateUser);
 router.delete('/deleteUser', deleteUser);

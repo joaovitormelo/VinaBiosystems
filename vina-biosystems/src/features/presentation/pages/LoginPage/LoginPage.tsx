@@ -1,17 +1,13 @@
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 
-import { Button, Form, Image, Input, Typography, message } from "antd";
+import { Form, Image, Input, Typography, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { LoginArea, FormArea, StyledButton } from "./styles";
 
 import logoVinaHorizontal from '../../utils/logoVinaHorizontal.png';
 import cafeBordoLogin from '../../utils/cafeBordoLogin.png';
-
-import { DoLoginUsecase } from "../../../domain/usecases/authentication/doLoginUsecase";
 import { Injector } from "../../../../core/Injector";
-import ResetPasswordPage from "../ResetPasswordPage";
-import { Home } from "../HomePage/styles";
-import HomePage from "../HomePage";
+import { DoLoginUsecase } from "../../../domain/usecases/authentication/doLoginUsecase";
 
 const { Link } = Typography;
 
@@ -19,7 +15,7 @@ function LoginPage(){
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
     const injector = Injector.getInstance();
-    const doLoginUsecase = injector.getDoLoginUsecase();
+    const doLoginUsecase: DoLoginUsecase = injector.getDoLoginUsecase();
 
     const onFinish = useCallback(async (values: { email: string; password: string }) => {
         try {
