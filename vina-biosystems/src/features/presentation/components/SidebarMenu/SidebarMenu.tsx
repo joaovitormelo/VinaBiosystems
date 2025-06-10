@@ -18,7 +18,7 @@ function SidebarMenu(){
                 navigate('/perfil');
                 break;
             case "2":
-                navigate('/userpage');
+                navigate('/usuarios');
                 break;
             case "3":
                 navigate('/estoque');

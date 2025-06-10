@@ -81,4 +81,28 @@ export class UserModel {
             1, "Usuário Teste", "joao", "joao.teste@gmail.com", "17/04/2003", false, "123"
         );
     }
+
+    static fromJson(json: any): UserModel {
+        return new UserModel(
+            json.id || null,
+            json.name || "",
+            json.login || "",
+            json.email || "",
+            json.birthDate || "",
+            json.isAdmin || false,
+            json.password || null
+        );
+    }
+
+    toJson(): any {
+        return {
+            id: this.id,
+            name: this.name,
+            login: this.login,
+            email: this.email,
+            birthDate: this.birthDate,
+            isAdmin: this.isAdmin,
+            password: this.password
+        };
+    }
 }

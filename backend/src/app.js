@@ -11,7 +11,12 @@ app.use(cors());
 import router from './routes.js'
 app.use(router);
 
-app.listen( 3000, ()=>console.log("API running"))
+app.listen( 8000, ()=>console.log("API running"));
+
+app.use((err, req, res, next) => {
+  console.error(err.stack); // Loga o erro
+  res.status(500).json({ error: err.message || 'Internal Server Error' });
+});
 
 // https.createServer({
 //     cert: fs.readFileSync('src/SSL/code.crt'),

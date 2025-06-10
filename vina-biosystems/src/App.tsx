@@ -17,6 +17,15 @@ import HomePage from './features/presentation/pages/HomePage/HomePage';
 import LoginPage from './features/presentation/pages/LoginPage/LoginPage';
 import ResetPasswordPage from './features/presentation/pages/ResetPasswordPage/ResetPasswordPage';
 import UsersPage from './features/presentation/pages/UsersPage/UsersPage';
+import AllotmentPage from './features/presentation/pages/AllotmentPage';
+import FinishAllotmentPage from './features/presentation/pages/FinishAllotmentPage';
+import NewAllotmentPage from './features/presentation/pages/NewAllotmentPage';
+import NewUserPage from './features/presentation/pages/NewUserPage';
+import StockPage from './features/presentation/pages/StockPage';
+import ProfilePage from './features/presentation/pages/ProfilePage';
+import { AxiosAdapter } from './features/data/utils/axiosAdapter';
+import { BackendContract } from './features/data/utils/backendContract';
+import { UserData } from './features/data/authentication/userData';
 
 let doLoginUsecase: DoLoginUsecase;
 let editUserUsecase: EditUserUsecase;
@@ -45,6 +54,36 @@ async function runTests() {
  //testAttachSamplingResultUsecase();
  //testExcludeSamplingResultUsecase();
  testDoLogoutUsecase();
+}
+
+async function testBackend() {
+  //await testCreateUserBackend();
+  //await testGetUsersBackend();
+}
+
+async function testCreateUserBackend() {
+  const backend: BackendContract = new AxiosAdapter();
+  const userData = new UserData(backend);
+  const newUser = UserModel.getMock();
+  newUser.setLogin("novoUsuario");
+  newUser.setPassword("123456");
+  try {
+    await userData.createUser(newUser);
+    console.log("Usuário criado com sucesso!");
+  } catch (error) {
+    console.error("Erro ao criar usuário:", error);
+  }
+}
+
+async function testGetUsersBackend() {
+  const backend: BackendContract = new AxiosAdapter();
+  const userData = new UserData(backend);
+  try {
+    const users = await userData.fetchUsers();
+    console.log("Usuários:", users);
+  } catch (error) {
+    console.error("Erro ao buscar usuários:", error);
+  }
 }
 
 async function testDoLogoutUsecase() {
@@ -263,7 +302,8 @@ function App() {
   excludeUserUsecase = injector.getExcludeUserUsecase();
   registerNewUserUsecase = injector.getRegisterNewUserUsecase();
   viewSamplingResultsUsecase = injector.getViewSamplingResultsUsecase();
-  runTests();
+  //runTests();
+  testBackend();
 
   return (
     <Router>
@@ -273,7 +313,13 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
-          <Route path="/userpage" element={<UsersPage />} />
+          <Route path="/usuarios" element={<UsersPage />} />
+          <Route path="/perfil" element={<ProfilePage />} />
+          <Route path="/lotes" element={<AllotmentPage />} />
+          <Route path="/finalizar-lote" element={<FinishAllotmentPage />} />
+          <Route path="/novo-lote" element={<NewAllotmentPage />} />
+          <Route path="/novo-usuario" element={<NewUserPage />} />
+          <Route path="/estoque" element={<StockPage />} />
         </Routes>
       </div>
     </Router>
