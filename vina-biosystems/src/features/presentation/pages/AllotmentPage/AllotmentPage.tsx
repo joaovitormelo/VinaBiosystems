@@ -1,47 +1,56 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Header, SidebarMenu } from "../../components";
-import { GlobalStyle} from "./components/AllotmentTable/styles";
-import { Users, TableStyle, Content, Container} from "./styles";
+import { GlobalStyle } from "./components/AllotmentTable/styles";
+import { Users, TableStyle, Content, Container } from "./styles";
 import { Table } from "antd";
 import AllotmentTable from "./components/AllotmentTable/AllotmentTable";
 import { AllotmentColumns } from "./components/AllotmentTable/types";
 
-function AllotmentPage(){
-  const getAllotmentData = useCallback(() => {
-    //ALTERAR LÓGICA, APENAS UM EXEMPLO PARA NAO TER ERRO.
-    const dataSource: AllotmentColumns[] = [
-        {
-        key: '1',
-        rotulo: 'Lote 1',
-        situacao: 'Em andamento'
-        },
-        {
-        key: '2',
-        rotulo: 'Lote 2',
-        situacao: 'Finalizado'
-        }
-    ];
-    return dataSource;
-  }, []);
+import { Injector } from "../../../../core/Injector";
+import { BatchModel } from "../../../domain/models/batchModel";
 
-    return(
+
+function AllotmentPage() {
+    const [allotments, setAllotments] = useState<AllotmentColumns[]>([]);
+
+    const getAllotmentData = useCallback(async () => {
+        try {
+            const viewProductionBatchesUsecase = Injector.getInstance().getViewProductionBatchesUsecase();
+            const batches = await viewProductionBatchesUsecase.execute();
+
+            const dataSource: AllotmentColumns[] = batches.map((batch: BatchModel) => ({
+                key: batch.getId()?.toString() || '',
+                rotulo: batch.getLabel() || '',
+                situacao: batch.getSituation() || ''
+            }));
+
+            setAllotments(dataSource);
+        } catch (error) {
+            console.error('Erro ao buscar lotes:', error);
+            setAllotments([]);
+        }
+    }, []);
+
+    useEffect(() => {
+        getAllotmentData();
+    }, [getAllotmentData]);
+
+    return (
         <Users>
             <SidebarMenu />
             <Container>
-                <Header 
-                    showButton={true} 
-                    title="Lotes" 
+                <Header
+                    showButton={true}
+                    title="Lotes"
                     buttonName="Novo lote"
                 />
                 <Content>
                     <TableStyle>
-                        <GlobalStyle/>
-                        <AllotmentTable dataSource={getAllotmentData()}/>
+                        <GlobalStyle />
+                        <AllotmentTable dataSource={allotments} />
                     </TableStyle>
                 </Content>
-
             </Container>
-                
         </Users>
     )
 }
