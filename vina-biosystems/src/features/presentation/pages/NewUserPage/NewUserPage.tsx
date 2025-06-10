@@ -6,9 +6,13 @@ import { useNavigate } from "react-router-dom";
 import { Injector } from "../../../../core/Injector";
 import { UserModel } from "../../../domain/models/userModel";
 
+interface NewUserPageProp {
+    title?: string;
+}
+
 const { Option } = Select;
 
-function NewUserPage() {
+function NewUserPage({title = "Novo Usuário"}: NewUserPageProp) {
     const [form] = Form.useForm();
     const formRef = useRef<FormInstance>(null);
     const navigate = useNavigate();
@@ -72,7 +76,7 @@ function NewUserPage() {
             {contextHolder}
             <SidebarMenu />
             <Container>
-                <Header title="Novo Usuário" buttonName="Salvar" showButton={true} actionButton={() => formRef.current?.submit()} />
+                <Header title={title} buttonName="Salvar" showButton={true} actionButton={() => formRef.current?.submit()} />
                 <Content>
                     <FormStyled
                         form={form}

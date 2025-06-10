@@ -8,17 +8,18 @@ import UsersTable from "./components/UsersTable/UsersTable";
 import SearchInput from "./components/SearchInput/SearchInput";
 import { UserColumns } from "./components/UsersTable/types";
 import { ViewRegisteredUsersListUsecase } from "../../../../features/domain/usecases/authentication/viewRegisteredUsersListUsecase";
-import { UserDataMock } from "../../../../features/data/authentication/userDataMock";
 import { UserModel } from "../../../../features/domain/models/userModel";
+import { Injector } from "../../../../core/Injector";
+import { message } from "antd";
 
 function UsersPage() {
     const [users, setUsers] = useState<UserColumns[]>([]);
     const navigate = useNavigate();
+    const [messageApi, contextHolder] = message.useMessage();
 
     const getUserData = useCallback(async () => {
         try {
-            const userData = new UserDataMock();
-            const viewUsersUsecase = new ViewRegisteredUsersListUsecase(userData);
+            const viewUsersUsecase = Injector.getInstance().getViewRegisteredUsersListUsecase();
             const userList = await viewUsersUsecase.execute();
 
             const formattedUsers: UserColumns[] = userList.map((user: UserModel) => ({
@@ -30,10 +31,11 @@ function UsersPage() {
             }));
 
             setUsers(formattedUsers);
-        } catch (error) {
-            console.error('Erro ao buscar usuarios:', error);
-        }
-    }, []);
+        }catch (error: any) {
+                console.error('Erro ao buscar usuarios:', error);
+                messageApi.error('Erro ao carregar lista de usuários');
+            }
+        }, [messageApi]);
 
     useEffect(() => {
         getUserData();
@@ -44,6 +46,7 @@ function UsersPage() {
     };
     return (
         <Users>
+            {contextHolder}
             <SidebarMenu />
             <Container>
                 <Header
