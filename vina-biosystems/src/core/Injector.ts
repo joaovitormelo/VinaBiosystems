@@ -1,3 +1,4 @@
+import { UserData } from "../features/data/authentication/userData";
 import { UserDataContract } from "../features/data/authentication/userDataContract";
 import { UserDataMock } from "../features/data/authentication/userDataMock";
 import { InventoryDataContract } from "../features/data/inventory/inventoryDataContract";
@@ -8,6 +9,8 @@ import { SamplingResultDataContract } from "../features/data/production/sampling
 import { SamplingResultDataMock } from "../features/data/production/samplingResultDataMock";
 import { NotificationManagerContract } from "../features/data/system/notificationManagerContract";
 import { NotificationManagerMock } from "../features/data/system/notificationManagerMock";
+import { AxiosAdapter } from "../features/data/utils/axiosAdapter";
+import { BackendContract } from "../features/data/utils/backendContract";
 import { DoLoginUsecase } from "../features/domain/usecases/authentication/doLoginUsecase";
 import { DoLogoutUsecase } from "../features/domain/usecases/authentication/doLogoutUsecase";
 import { EditUserUsecase } from "../features/domain/usecases/authentication/editUserUsecase";
@@ -35,6 +38,7 @@ import { SessionManagerContract } from "./session/sessionManagerContract";
 export class Injector
 {
     private static instance: Injector;
+    private backend: BackendContract;
     private doLoginUsecase: DoLoginUsecase;
     private userData: UserDataContract;
     private criptography: CriptographyContract;
@@ -64,7 +68,8 @@ export class Injector
 
     private constructor()
     {
-        this.userData = new UserDataMock();
+        this.backend = new AxiosAdapter();
+        this.userData = new UserData(this.backend);
         this.criptography = new CriptographyMock();
         this.sessionManager = new SessionManager();
         this.inventoryData = new InventoryDataMock();
@@ -75,7 +80,7 @@ export class Injector
         this.viewRegisteredUsersListUsecase = new ViewRegisteredUsersListUsecase(this.userData);
         this.editUserUsecase = new EditUserUsecase(this.userData, this.sessionManager);
         this.excludeUserUsecase = new ExcludeUserUsecase(this.userData);
-        this.registerNewUserUsecase = new RegisterNewUserUsecase(this.userData, this.criptography, this.sessionManager);
+        this.registerNewUserUsecase = new RegisterNewUserUsecase(this.userData);
         this.viewRawMaterialInventoryUsecase = new ViewRawMaterialInventoryUsecase(this.inventoryData);
         this.registerRawMaterialUsecase = new RegisterRawMaterialUsecase(this.inventoryData);
         this.editRawMaterialUsecase = new EditRawMaterialUsecase(this.inventoryData);

@@ -20,20 +20,20 @@ export class DoLoginUsecase {
         this.sessionManager = sessionManager;
     }
 
-    async execute(login: string, password: string): Promise<void> {
+    async execute(email: string, password: string): Promise<void> {
         let user;
         try {
-            user = await this.userData.searchUserByLogin(login);
+            user = await this.userData.searchUserByEmail(email);
         } catch(error) {
             console.error(error);
-            throw new DatabaseException("Não foi possível buscar o usuário " + login);
+            throw new DatabaseException("Não foi possível buscar o usuário " + email);
         }
         if (!user) {
-            throw new UserNotFoundException(login);
+            throw new UserNotFoundException(email);
         }
         const match = this.criptography.checkIfPasswordsMatch(user.getPassword(), password);
         if (!match) {
-            throw new IncorrectPasswordException(login);
+            throw new IncorrectPasswordException(email);
         }
         this.sessionManager.saveSession(user);
     }

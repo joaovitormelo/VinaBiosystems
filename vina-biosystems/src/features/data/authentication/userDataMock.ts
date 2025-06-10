@@ -11,8 +11,8 @@ export class UserDataMock implements UserDataContract {
         return this.userList;
     }
 
-    async searchUserByLogin(login: string): Promise<UserModel | null> {
-        const user = this.userList.find(user => user.getLogin() === login || user.getEmail() === login);
+    async searchUserByEmail(email: string): Promise<UserModel | null> {
+        const user = this.userList.find(user => user.getEmail() === email);
         return user || null;
     }
 

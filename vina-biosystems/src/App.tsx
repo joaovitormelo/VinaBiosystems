@@ -34,13 +34,14 @@ let registerNewUserUsecase: RegisterNewUserUsecase;
 let viewSamplingResultsUsecase: ViewSamplingResultsUsecase;
 
 async function runTests() {
-  await testLoginUsecase("joao", "123");
+  await testLoginUsecase("joao.teste@gmail.com", "123");
+  //testViewUsers();
   //testAttachSamplingResultUsecase();
   //await testFinishProductionBatchUsecase();
   //testViewSamplingResultsUsecase();
   //testLoginUsecase();
   //testEditUserUsecase();
-  //testExcludeUserUsecase();
+  testExcludeUserUsecase();
   //testRegisterNewUserUsecase();
   //testViewInventoryUsecase();
   //testRegisterRawMaterialUsecase();
@@ -49,11 +50,22 @@ async function runTests() {
   // await testCheckOutRawMaterialUsecase();
   // await testViewInventoryUsecase();
  //testRegisterProductionBatchUsecase();
- await testCancelProductionBatchUsecase();
- testViewProductionBatchesUsecase();
+ //await testCancelProductionBatchUsecase();
+ //testViewProductionBatchesUsecase();
  //testAttachSamplingResultUsecase();
  //testExcludeSamplingResultUsecase();
- testDoLogoutUsecase();
+ //testDoLogoutUsecase();
+}
+
+async function testViewUsers() {
+  const viewRegisteredUsersUsecase = Injector.getInstance().getViewRegisteredUsersListUsecase();
+  try {
+    const users = await viewRegisteredUsersUsecase.execute();
+    console.log("Usuários registrados:", users);
+  }
+  catch (error) {
+    console.error("Erro ao buscar usuários:", error);
+  }
 }
 
 async function testBackend() {
@@ -65,7 +77,8 @@ async function testCreateUserBackend() {
   const backend: BackendContract = new AxiosAdapter();
   const userData = new UserData(backend);
   const newUser = UserModel.getMock();
-  newUser.setLogin("novoUsuario");
+  newUser.setLogin("raianny");
+  newUser.setEmail("raianny");
   newUser.setPassword("123456");
   try {
     await userData.createUser(newUser);
@@ -148,9 +161,9 @@ async function testViewSamplingResultsUsecase() {
     console.log("Teste de ViewSamplingResultsUsecase executado com sucesso!");
 }
 
-async function testLoginUsecase(login: string, password: string) {
+async function testLoginUsecase(email: string, password: string) {
   try {
-    await doLoginUsecase.execute(login, password);
+    await doLoginUsecase.execute(email, password);
     console.log("Login bem sucedido!");
   } catch(error) {
     throw error;
@@ -160,6 +173,11 @@ async function testLoginUsecase(login: string, password: string) {
 async function testEditUserUsecase() {
   try {
     const editedUser = UserModel.getMock();
+    editedUser.setId(2); // Assuming you have a user with ID 1
+    editedUser.setLogin("raianny");
+    editedUser.setEmail("raianny.ray");
+    editedUser.setPassword("123");
+    editedUser.setName("Usuário Editado");
     await editUserUsecase.execute(editedUser);
     console.log("Usuário editado!");
   } catch(error) {
@@ -170,7 +188,7 @@ async function testEditUserUsecase() {
 async function testExcludeUserUsecase() {
   try {
     const userToExclude = UserModel.getMock();
-    userToExclude.setId(null);
+    userToExclude.setId(3);
     await excludeUserUsecase.execute(userToExclude);
     console.log("Usuário excluído!");
   } catch(error) {
@@ -181,7 +199,8 @@ async function testExcludeUserUsecase() {
 async function testRegisterNewUserUsecase() {
   try {
     const newUser = UserModel.getMock();
-    newUser.setLogin("novoUsuario");
+    newUser.setLogin("raianny");
+    newUser.setEmail("raianny");
     newUser.setPassword("123456");
     await registerNewUserUsecase.execute(newUser);
     console.log("Usuário registrado com sucesso!");
@@ -302,8 +321,8 @@ function App() {
   excludeUserUsecase = injector.getExcludeUserUsecase();
   registerNewUserUsecase = injector.getRegisterNewUserUsecase();
   viewSamplingResultsUsecase = injector.getViewSamplingResultsUsecase();
-  //runTests();
-  testBackend();
+  runTests();
+  //testBackend();
 
   return (
     <Router>

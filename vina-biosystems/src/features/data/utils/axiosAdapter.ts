@@ -11,8 +11,8 @@ export class AxiosAdapter implements BackendContract {
         this.axiosInstance = axios.create({ baseURL: this.baseURL });
     }
 
-    async fetchData(route: string, data: any): Promise<any> {
-        const response = await this.axiosInstance.get(route, data);
+    async fetchData(route: string, params: any): Promise<any> {
+        const response = await this.axiosInstance.get(route, {params});
         if (response.status !== 200) {
             throw new DatabaseException(response.statusText);
         }
