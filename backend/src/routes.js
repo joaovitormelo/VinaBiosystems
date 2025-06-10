@@ -3,6 +3,7 @@ import { createTables } from "./controllers/createTables.js";
 import { insertUser, updateUser, selectUserById, selectUsers, deleteUser } from './controllers/UserController.js'
 import { selectRawMaterialByName, selectRawMaterialById, insertRawMaterial, selecRawMaterials, updateRawMaterial, isRawMaterialBeingUsedInABatch, deleteRawMaterial } from './controllers/RawMaterialController.js'
 import { updateBatchSituation, insertBatch, selectBatches } from './controllers/BatchController.js'
+import { selectSamplingResultsByBatchId, insertSamplingResults, deleteSamplingResults} from './controllers/SamplingResultsController.js'
 
 createTables();
 
@@ -32,5 +33,9 @@ router.delete('/deleteRawMaterial', deleteRawMaterial);
 router.put('/updateBatchSituation', updateBatchSituation);
 router.post('/insertBatch', insertBatch);
 router.get('/selectBatches', selectBatches);
+
+router.get('/selectSamplingResultsByBatchId', selectSamplingResultsByBatchId);
+router.post('/insertSamplingResults', insertSamplingResults);
+router.delete('/deleteSamplingResults', deleteSamplingResults);
 
 export default router;

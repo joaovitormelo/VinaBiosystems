@@ -12,4 +12,8 @@ export async function createTables(){
     openDb().then(db=>{
         db.exec('CREATE TABLE IF NOT EXISTS Batch (id integer NOT NULL PRIMARY KEY, label TEXT, startDate TEXT, endDate TEXT, rawMaterialList TEXT, situation TEXT)')
     })
+
+    openDb().then(db=>{
+        db.exec('CREATE TABLE IF NOT EXISTS SamplingResults (id integer NOT NULL PRIMARY KEY, fileName TEXT, date TEXT, creationUserId INTEGER, batchId INTEGER)')
+    })
 }
