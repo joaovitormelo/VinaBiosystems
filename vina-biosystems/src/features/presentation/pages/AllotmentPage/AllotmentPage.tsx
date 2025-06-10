@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Header, SidebarMenu } from "../../components";
 import { GlobalStyle } from "./components/AllotmentTable/styles";
 import { Users, TableStyle, Content, Container } from "./styles";
@@ -12,6 +13,7 @@ import { BatchModel } from "../../../domain/models/batchModel";
 
 function AllotmentPage() {
     const [allotments, setAllotments] = useState<AllotmentColumns[]>([]);
+    const navigate = useNavigate();
 
     const getAllotmentData = useCallback(async () => {
         try {
@@ -35,6 +37,9 @@ function AllotmentPage() {
         getAllotmentData();
     }, [getAllotmentData]);
 
+    const handleNewAllotment = () => {
+        navigate('/novo-lote');
+    };
     return (
         <Users>
             <SidebarMenu />
@@ -43,6 +48,7 @@ function AllotmentPage() {
                     showButton={true}
                     title="Lotes"
                     buttonName="Novo lote"
+                    actionButton={handleNewAllotment}
                 />
                 <Content>
                     <TableStyle>
