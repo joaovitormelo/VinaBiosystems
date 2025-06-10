@@ -3,9 +3,11 @@ import { Header, SidebarMenu } from "../../components";
 import { Form, FormInstance, Select } from "antd";
 import { Container, Content, FormStyled, SelectStyled, InputStyled, NewSupply, InputNumberStyled } from "./styles";
 
-const { Option } = Select;
+interface NewSupplyPageProp {
+    title?: string;
+}
 
-function NewSupplyPage(){
+function NewSupplyPage({title = "Novo Insumo"} : NewSupplyPageProp){
     const chemicalUnits = [
         { value: 'g', label: 'Gramas (g)' },
         { value: 'mg', label: 'Miligramas (mg)' },
@@ -50,7 +52,7 @@ function NewSupplyPage(){
         <NewSupply>
             <SidebarMenu />
             <Container>
-                <Header title="Novo Insumo" buttonName="Salvar" showButton={true} actionButton={() => formRef.current?.submit()} />
+                <Header title={title} buttonName="Salvar" showButton={true} actionButton={() => formRef.current?.submit()} />
                 <Content>
                     <FormStyled
                         form={form}
