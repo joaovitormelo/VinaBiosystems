@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Header, SidebarMenu } from "../../components";
 import { GlobalStyle } from "./components/UsersTable/styles";
 import { Users, TableStyle, Content, Container } from "./styles";
@@ -12,6 +13,7 @@ import { UserModel } from "../../../../features/domain/models/userModel";
 
 function UsersPage() {
     const [users, setUsers] = useState<UserColumns[]>([]);
+    const navigate = useNavigate();
 
     const getUserData = useCallback(async () => {
         try {
@@ -37,6 +39,9 @@ function UsersPage() {
         getUserData();
     }, [getUserData]);
 
+    const handleNewUser = () => {
+        navigate('/novo-usuario');
+    };
     return (
         <Users>
             <SidebarMenu />
@@ -45,6 +50,7 @@ function UsersPage() {
                     showButton={true}
                     title="Usuários"
                     buttonName="Novo usuário"
+                    actionButton={handleNewUser}
                 />
                 <Content>
                     <SearchInput />
