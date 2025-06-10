@@ -17,6 +17,12 @@ import HomePage from './features/presentation/pages/HomePage/HomePage';
 import LoginPage from './features/presentation/pages/LoginPage/LoginPage';
 import ResetPasswordPage from './features/presentation/pages/ResetPasswordPage/ResetPasswordPage';
 import UsersPage from './features/presentation/pages/UsersPage/UsersPage';
+import AllotmentPage from './features/presentation/pages/AllotmentPage';
+import FinishAllotmentPage from './features/presentation/pages/FinishAllotmentPage';
+import NewAllotmentPage from './features/presentation/pages/NewAllotmentPage';
+import NewUserPage from './features/presentation/pages/NewUserPage';
+import StockPage from './features/presentation/pages/StockPage';
+import ProfilePage from './features/presentation/pages/ProfilePage';
 import { AxiosAdapter } from './features/data/utils/axiosAdapter';
 import { BackendContract } from './features/data/utils/backendContract';
 import { UserData } from './features/data/authentication/userData';
@@ -307,7 +313,13 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
-          <Route path="/userpage" element={<UsersPage />} />
+          <Route path="/usuarios" element={<UsersPage />} />
+          <Route path="/perfil" element={<ProfilePage />} />
+          <Route path="/lotes" element={<AllotmentPage />} />
+          <Route path="/finalizar-lote" element={<FinishAllotmentPage />} />
+          <Route path="/novo-lote" element={<NewAllotmentPage />} />
+          <Route path="/novo-usuario" element={<NewUserPage />} />
+          <Route path="/estoque" element={<StockPage />} />
         </Routes>
       </div>
     </Router>
