@@ -1,33 +1,64 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Header, SidebarMenu } from "../../components";
-import { Form, FormInstance, Select } from "antd";
+import { Form, FormInstance, Select, message } from "antd";
 import { Container, Content, DatePickerStyled, FormStyled, SelectStyled, InputStyled, NewAllotment } from "./styles";
+import { useNavigate } from "react-router-dom";
+import { Injector } from "../../../../core/Injector";
+import { BatchModel } from "../../../domain/models/batchModel";
+import { RawMaterialModel } from "../../../domain/models/rawMaterialModel";
+import { RawMaterialInBatch } from "../../../domain/types/rawMaterialInBatch";
+import moment from "moment";
 
 const { Option } = Select;
 
 function NewAllotmentPage(){
     const [form] = Form.useForm();
     const formRef = useRef<FormInstance>(null);
+    const navigate = useNavigate();
+    const [options, setOptions] = useState<Array<{label: string, value: string}>>([]);
 
-    //BUSCAR ISSO NO BANCO
-    const options = [
-    { label: 'Álcool', value: 'alcool' },
-    { label: 'Vinagre', value: 'vinagre' },
-    { label: 'Café Verde', value: 'cafe_verde' },
-    { label: 'Fruta Macerada', value: 'fruta_macerada' },
-  ];
-
-    const onFinish = useCallback(() => {
-        //LÓGICA
+    const loadInitialData = useCallback(async () => {
+        try {
+            const viewRawMaterialInventoryUsecase = Injector.getInstance().getViewRawMaterialInventoryUsecase();
+            const rawMaterials = await viewRawMaterialInventoryUsecase.execute();
+            
+            const formattedOptions = rawMaterials.map((material: RawMaterialModel) => ({
+                label: material.getName(),
+                value: material.getId()?.toString() || ''
+            }));
+            
+            setOptions(formattedOptions);
+        } catch (error) {
+            console.error('Erro ao carregar insumos:', error);
+            message.error('Erro ao carregar insumos. Tente novamente.');
+        }
     }, []);
 
-    // const loadInitialData = useCallback(() => {
-    //     //BUSCAR VALORES NO BANCO
-    //     //DEPOIS DAR
-    //     //form.setFieldsValue(DADOS)
-    // }, []);
-
-
+    const onFinish = useCallback(async (values: any) => {
+        try {
+            const registerProductionBatchUsecase = Injector.getInstance().getRegisterProductionBatchUsecase();
+            
+            const rawMaterialList: RawMaterialInBatch[] = values.insumos.map((insumoId: string) => {
+                return new RawMaterialInBatch(parseInt(insumoId), 0); 
+            });
+            
+            const batch = new BatchModel(
+                null, 
+                values.rotulo, 
+                moment(values.dataInicio), 
+                moment(), 
+                rawMaterialList, 
+                BatchModel.SITUATION.EM_ABERTO 
+            );
+            
+            await registerProductionBatchUsecase.execute(batch);
+            message.success('Lote criado com sucesso!');
+            navigate('/lotes');
+        } catch (error: any) {
+            console.error('Erro ao criar lote:', error);
+            message.error(error.message || 'Erro ao criar lote. Tente novamente.');
+        }
+    }, [navigate]);
 
     useEffect(() => {
         if (form) {
@@ -35,9 +66,9 @@ function NewAllotmentPage(){
         }
     }, [form]);
 
-    // useEffect(() => {
-    //     loadInitialData
-    // }, []);
+    useEffect(() => {
+        loadInitialData();
+    }, [loadInitialData]);
 
     return (
         <NewAllotment>
