@@ -1,19 +1,42 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { Header, SidebarMenu } from "../../components";
-import { Form, FormInstance, Select } from "antd";
+import { Form, FormInstance, Select, message } from "antd";
 import { Container, Content, DatePickerStyled, FormStyled, SelectStyled, InputStyled, NewUser } from "./styles";
+import { useNavigate } from "react-router-dom";
+import { Injector } from "../../../../core/Injector";
+import { UserModel } from "../../../domain/models/userModel";
 
 const { Option } = Select;
 
-function NewUserPage(){
+function NewUserPage() {
     const [form] = Form.useForm();
     const formRef = useRef<FormInstance>(null);
+    const navigate = useNavigate();
+    const [messageApi, contextHolder] = message.useMessage();
 
     const options = ['Administrador', 'Colaborador'];
 
-    const onFinish = useCallback(() => {
-        //LÓGICA
-    }, []);
+    const onFinish = useCallback(async (values: any) => {
+        try {
+            const registerNewUserUsecase = Injector.getInstance().getRegisterNewUserUsecase();
+
+            const user = new UserModel(
+                null,
+                values.nomeCompleto,
+                values.telefone, // no user model pede o login, mas no formulario o telefone... vamo mudar o user model ou o formulario?
+                values.email,
+                values.dataNascimento?.format('YYYY-MM-DD') || '',
+                values.tipoPerfil === 'Administrador',
+                values.senhaAtual
+            );
+
+            await registerNewUserUsecase.execute(user);
+            messageApi.success('Usuário cadastrado com sucesso!');
+            navigate('/usuarios', { replace: true });
+        } catch (error: any) {
+            onFinishFailed(error);
+        }
+    }, [navigate, messageApi]);
 
     // const loadInitialData = useCallback(() => {
     //     //BUSCAR VALORES NO BANCO
@@ -21,7 +44,18 @@ function NewUserPage(){
     //     //form.setFieldsValue(DADOS)
     // }, []);
 
-
+    const onFinishFailed = useCallback((errorInfo: any) => {
+        if (errorInfo.message?.includes('já existe')) {
+            messageApi.error('Usuário já cadastrado');
+        } else if (errorInfo.message?.includes('banco de dados')) {
+            messageApi.error('Erro ao conectar com o banco de dados');
+        } else if (errorInfo.errorFields) {
+            messageApi.error('Por favor, preencha todos os campos corretamente.');
+            console.error('Erro de validação:', errorInfo);
+        } else {
+            messageApi.error('Erro ao cadastrar usuário');
+        }
+    }, [messageApi]);
 
     useEffect(() => {
         if (form) {
@@ -35,6 +69,7 @@ function NewUserPage(){
 
     return (
         <NewUser>
+            {contextHolder}
             <SidebarMenu />
             <Container>
                 <Header title="Novo Usuário" buttonName="Salvar" showButton={true} actionButton={() => formRef.current?.submit()} />
@@ -44,13 +79,14 @@ function NewUserPage(){
                         name="novoUsuarioForm"
                         layout="vertical"
                         onFinish={onFinish}
+                        onFinishFailed={onFinishFailed}
                         autoComplete="off"
                     >
                         <div>
                             <Form.Item
                                 label="Perfil"
                                 name="tipoPerfil"
-                                rules={[{ required: true, message:"Por favor, selecione um tipo de usuário!"}]}
+                                rules={[{ required: true, message: "Por favor, selecione um tipo de usuário!" }]}
                             >
                                 <SelectStyled
                                     placeholder="Selecione uma opção"
@@ -59,7 +95,7 @@ function NewUserPage(){
                                 >
                                     {options.map((o) => (
                                         <Option key={o} value={o}>
-                                        {o}
+                                            {o}
                                         </Option>
                                     ))}
                                 </SelectStyled>
@@ -67,7 +103,7 @@ function NewUserPage(){
                             <Form.Item
                                 label="Nome Completo"
                                 name="nomeCompleto"
-                                rules={[{ required: true, message: "Por favor, insira seu nome completo!"}]}
+                                rules={[{ required: true, message: "Por favor, insira seu nome completo!" }]}
                             >
                                 <InputStyled size="large" />
                             </Form.Item>
@@ -76,14 +112,19 @@ function NewUserPage(){
                                 name="email"
                                 rules={[
                                     { required: true, message: 'Campo obrigatório!' },
-                                    { type: 'email', message: 'E-mail inválido!'}
+                                    { type: 'email', message: 'E-mail inválido!' }
                                 ]}
                             >
-                                <InputStyled size="large"/>
+                                <InputStyled size="large" />
                             </Form.Item>
                             <Form.Item
                                 label="Senha atual"
                                 name="senhaAtual"
+                                help="A senha deve ter pelo menos 6 caracteres"
+                                rules={[
+                                    { required: true, message: 'Campo obrigatório!' },
+                                    { min: 6, message: 'A senha deve ter pelo menos 6 caracteres!' }
+                                ]}
                             >
                                 <InputStyled.Password />
                             </Form.Item>
@@ -102,7 +143,7 @@ function NewUserPage(){
                                 label="Telefone"
                                 name="telefone"
                             >
-                                <InputStyled size="large"/>
+                                <InputStyled size="large" />
                             </Form.Item>
                         </div>
                     </FormStyled>
