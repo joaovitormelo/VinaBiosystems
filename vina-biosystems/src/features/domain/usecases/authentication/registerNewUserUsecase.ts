@@ -17,26 +17,23 @@ export class RegisterNewUserUsecase {
         this.validateFields(user);
         let userInDB: UserModel | null;
         try {
-            userInDB = await this.userData.searchUserByEmail(user.getLogin());
+            userInDB = await this.userData.searchUserByEmail(user.getEmail());
         } catch (error) {
             console.error(error);
-            throw new DatabaseException("Não foi possível buscar o usuário " + user.getLogin());
+            throw new DatabaseException("Não foi possível buscar o usuário " + user.getEmail());
         }
         if (userInDB) {
-            throw new ValidationException("login", "Já existe um usuário com este login.");
+            throw new ValidationException("email", "Já existe um usuário com este e-mail.");
         }
         try {
             return await this.userData.createUser(user);
         } catch(error) {
             console.error(error);
-            throw new DatabaseException("Não foi possível cadastrar o usuário " + user.getLogin());
+            throw new DatabaseException("Não foi possível cadastrar o usuário " + user.getEmail());
         }
     }
 
     validateFields(user: UserModel) {
-        if (!user.getLogin()) {
-            throw new ValidationException("login", "Login não pode ser vazio.");
-        }
         if (!user.getEmail()) {
             throw new ValidationException("email", "E-mail não pode ser vazio.");
         }

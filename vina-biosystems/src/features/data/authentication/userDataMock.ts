@@ -35,8 +35,8 @@ export class UserDataMock implements UserDataContract {
     }
 
     async createUser(user: UserModel): Promise<void> {
-        if (this.userList.some(u => u.getLogin() === user.getLogin())) {
-            throw new Error("User with this login already exists");
+        if (this.userList.some(u => u.getEmail() === user.getEmail())) {
+            throw new Error("User with this email already exists");
         }
         user.setId(this.userList.length + 1); // Simple ID assignment for mock
         this.userList.push(user);
