@@ -2,13 +2,12 @@ import { openDb } from '../configDB.js';
 
 export async function selectUserByEmail(req, res){
     let email = req.query.email;
-    console.log(req.query.email);
     openDb().then(db=>{
          db.get('SELECT * FROM User WHERE email=?', [email])
         .then(users=>  res.json(users))
         .catch(err => {
             console.error(err);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ error: err.message })
         });
     });
 }
@@ -19,7 +18,7 @@ export async function selectUsers(req, res){
         .then(users=>  res.json(users))
         .catch(err => {
             console.error(err);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ error: err.message })
         });
     });
 }
@@ -34,7 +33,7 @@ export async function insertUser(req, res){
         .then(() => res.json({ statusCode: 200 }))
         .catch(err => {
             console.error(err);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ error: err.message })
         });
     });
 }
@@ -53,7 +52,7 @@ export async function updateUser(req, res){
         .then(() => res.json({ statusCode: 200 }))
         .catch(err => {
             console.error(err);
-            res.status(500).json({ error: err.message || "Internal Server Error" });
+            res.status(500).json({ error: err.message })
         });
     });
 }
@@ -65,7 +64,7 @@ export async function deleteUser(req, res){
         .then(res=>  res.json({ statusCode: 200 }))
         .catch(err => {
             console.error(err);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ error: err.message })
         });
     });
 }

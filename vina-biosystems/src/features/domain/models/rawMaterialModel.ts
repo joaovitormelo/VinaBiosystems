@@ -53,4 +53,24 @@ export class RawMaterialModel {
             10
         );
     }
+
+    static fromJson(json: any): RawMaterialModel {
+        return new RawMaterialModel(
+            json.id,
+            json.name,
+            json.quantity,
+            json.unit,
+            json.minQuantity
+        );
+    }
+
+    toJson(): any {
+        return {
+            id: this.id,
+            name: this.name,
+            quantity: this.quantity,
+            unit: this.unit,
+            minQuantity: this.minQuantity
+        };
+    }
 }

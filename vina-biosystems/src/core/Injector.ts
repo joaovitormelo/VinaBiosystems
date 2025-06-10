@@ -1,6 +1,7 @@
 import { UserData } from "../features/data/authentication/userData";
 import { UserDataContract } from "../features/data/authentication/userDataContract";
 import { UserDataMock } from "../features/data/authentication/userDataMock";
+import { InventoryData } from "../features/data/inventory/inventoryData";
 import { InventoryDataContract } from "../features/data/inventory/inventoryDataContract";
 import { InventoryDataMock } from "../features/data/inventory/inventoryDataMock";
 import { BatchDataContract } from "../features/data/production/batchDataContract";
@@ -72,7 +73,7 @@ export class Injector
         this.userData = new UserData(this.backend);
         this.criptography = new CriptographyMock();
         this.sessionManager = new SessionManager();
-        this.inventoryData = new InventoryDataMock();
+        this.inventoryData = new InventoryData(this.backend);
         this.notificationManager = new NotificationManagerMock();
         this.batchData = new BatchDataMock();
         this.samplingResultData = new SamplingResultDataMock();
