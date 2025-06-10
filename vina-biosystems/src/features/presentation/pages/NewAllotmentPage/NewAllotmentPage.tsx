@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { Header, SidebarMenu } from "../../components";
 import { Form, FormInstance, Select } from "antd";
-import { Container, Content, DatePickerStyled, FormStyled, SelectStyled, InputStyled, Profile } from "./styles";
+import { Container, Content, DatePickerStyled, FormStyled, SelectStyled, InputStyled, NewAllotment } from "./styles";
 
 const { Option } = Select;
 
@@ -40,7 +40,7 @@ function NewAllotmentPage(){
     // }, []);
 
     return (
-        <Profile>
+        <NewAllotment>
             <SidebarMenu />
             <Container>
                 <Header title="Novo Lote" buttonName="Salvar" showButton={true} actionButton={() => formRef.current?.submit()} />
@@ -90,7 +90,7 @@ function NewAllotmentPage(){
                 </Content>
 
             </Container>
-        </Profile>
+        </NewAllotment>
     )
 }
 export default NewAllotmentPage;

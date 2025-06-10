@@ -1,7 +1,7 @@
 import { DatePicker, Form, Input, Select } from "antd";
 import styled from "styled-components";
 
-export const Profile = styled.div`
+export const NewUser = styled.div`
     background-color: #F1E7DB;
     min-height: 100vh;
     position: relative;

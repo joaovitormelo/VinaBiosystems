@@ -1,7 +1,7 @@
-import { DatePicker, Form, Input, Select } from "antd";
+import { DatePicker, Form, Input, InputNumber, Select } from "antd";
 import styled from "styled-components";
 
-export const NewAllotment = styled.div`
+export const FinishAllotment = styled.div`
     background-color: #F1E7DB;
     min-height: 100vh;
     position: relative;
@@ -46,38 +46,7 @@ export const SelectStyled = styled(Select)`
 
   &.ant-select-focused .ant-select-selector {
     border-color: #0E3226 !important;
-    box-shadow: #0E3226 !important;
-  }
-
-  .ant-select-selector {
-    min-height: 40px;
-    border-radius: 8px !important;
-    padding: 4px 8px !important;
-  }
-
-  .ant-select-selection-item {
-    background-color: #0E3226 !important;
-    color: #F1E7DB !important;
-    padding: 2px 10px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-  }
-
-  .ant-select-selection-item-remove {
-    color: #F1E7DB !important;
-
-    &:hover {
-      color: #F1E7DB !important;
-    }
-  }
-
-  .ant-select-arrow {
-    color: #0E3226;
-  }
-
-  .ant-select-dropdown {
-    border-radius: 8px;
+    box-shadow: #0E3226;
   }
 `;
 
@@ -98,5 +67,47 @@ export const DatePickerStyled = styled(DatePicker)`
   &.ant-picker-focused {
     border-color: #0E3226 !important;
     box-shadow: #0E3226 !important;
+  }
+`;
+
+export const Line = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+`;
+
+export const Label = styled.label`
+  width: 150px;
+  font-weight: 600;
+  color: #6B2E2E;
+`;
+
+export const InputNumberStyled = styled(InputNumber)`
+  flex: 1;
+  border-radius: 8px !important;
+  padding: 6px 12px;
+
+  &.ant-input-number {
+    border: 1px solid transparent;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      border-color: #0E3226 !important;
+    }
+
+    &:focus-within {
+      border-color: #0E3226 !important;
+    }
+  }
+
+  input {
+    color: #0E3226 !important;
+    font-weight: 500;
+    border: none;
+    outline: none;
+  }
+
+  .ant-input-number-handler-wrap {
+    display: none;
   }
 `;
