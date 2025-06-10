@@ -6,6 +6,16 @@ export class ROUTES {
         static readonly UPDATE_USER = "/updateUser";
         static readonly DELETE_USER = "/deleteUser";
     }
+
+    public static RAW_MATERIAL = class {
+        static readonly SELECT_RAW_MATERIALS = "/selectRawMaterials";
+        static readonly SELECT_RAW_MATERIAL_BY_NAME = "/selectRawMaterialByName";
+        static readonly SELECT_RAW_MATERIAL_BY_ID = "/selectRawMaterialById";
+        static readonly INSERT_RAW_MATERIAL = "/insertRawMaterial";
+        static readonly UPDATE_RAW_MATERIAL = "/updateRawMaterial";
+        static readonly DELETE_RAW_MATERIAL = "/deleteRawMaterial";
+        static readonly IS_RAW_MATERIAL_BEING_USED_IN_BATCH = "/isRawMaterialBeingUsedInABatch";
+    };
 };
 
 export interface BackendContract {

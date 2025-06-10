@@ -1,25 +1,25 @@
 import { openDb } from '../configDB.js';
 
 export async function selectRawMaterialByName(req, res){
-    let name = req.body.name;
+    let name = req.params.name;
     openDb().then(db=>{
          db.get('SELECT * FROM RawMaterial WHERE name=?', [name])
         .then(rawMaterial=>  res.json(rawMaterial))
         .catch(err => {
             console.error(err);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ error: err.message })
         });
     });
 }
 
 export async function selectRawMaterialById(req, res){
-    let id = req.body.id;
+    let id = req.params.id;
     openDb().then(db=>{
          db.get('SELECT * FROM RawMaterial WHERE id=?', [id])
         .then(rawMaterial=>  res.json(rawMaterial))
         .catch(err => {
             console.error(err);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ error: err.message })
         });
     });
 }
@@ -27,16 +27,16 @@ export async function selectRawMaterialById(req, res){
 export async function insertRawMaterial(req, res){
     let rawMaterial = req.body;
     openDb().then(db=>{
-        db.run('INSERT INTO RawMaterial (id, name, quantity, unit, minQuantity) VALUES (?,?,?,?,?)', 
-            [rawMaterial.id, rawMaterial.name, rawMaterial.quantity, rawMaterial.unit, rawMaterial.minQuantity])
-            .catch(err => {
+        db.run(
+            'INSERT INTO RawMaterial (name, quantity, unit, minQuantity) VALUES (?,?,?,?)', 
+            [rawMaterial.name, rawMaterial.quantity, rawMaterial.unit, rawMaterial.minQuantity]
+        )
+        .then(() => res.json({"statusCode": 200}))
+        .catch(err => {
             console.error(err);
-            res.status(500).json({ error: "Internal Server Error" });
-        });;
+            res.status(500).json({ error: err.message })
+        });
     });
-    res.json({
-        "statusCode": 200
-    })
 }
 
 
@@ -46,7 +46,7 @@ export async function selecRawMaterials(req, res){
         .then(rawMaterial=>  res.json(rawMaterial))
         .catch(err => {
             console.error(err);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ error: err.message })
         });
     });
 }
@@ -54,28 +54,29 @@ export async function selecRawMaterials(req, res){
 export async function updateRawMaterial(req, res){
     let rawMaterial = req.body;
     openDb().then(db=>{
-        db.run('UPDATE rawMaterial SET name=?, quantity=?, unit=?, minQuantity=? WHERE id=?', 
-            [rawMaterial.name, rawMaterial.login, rawMaterial.unit, rawMaterial.minQuantity, rawMaterial.id])
-            .catch(err => {
+        db.run(
+            'UPDATE rawMaterial SET name=?, quantity=?, unit=?, minQuantity=? WHERE id=?', 
+            [rawMaterial.name, rawMaterial.quantity, rawMaterial.unit, rawMaterial.minQuantity, rawMaterial.id]
+        )
+        .then(() => res.json({"statusCode": 200}))
+        .catch(err => {
             console.error(err);
-            res.status(500).json({ error: "Internal Server Error" });
-        });;
+            res.status(500).json({ error: err.message })
+        });
     });
-    res.json({
-        "statusCode": 200
-    })
 }
 
 // TODO: INNER JOIN - boolean return 
 export async function isRawMaterialBeingUsedInABatch(req, res){
-    let id = req.body.id;
+    let id = req.params.id;
     openDb().then(db=>{
-        db.all('SELECT * FROM RawMaterial')
-        .then(users=>  res.json(users))
-        .catch(err => {
-            console.error(err);
-            res.status(500).json({ error: "Internal Server Error" });
-        });
+        res.json({"isBeingUsed": false});
+        // db.all('SELECT * FROM RawMaterial')
+        // .then(users=>  res.json(users))
+        // .catch(err => {
+        //     console.error(err);
+        //     res.status(500).json({ error: err.message })
+        // });
     });
 }
 
@@ -84,12 +85,10 @@ export async function deleteRawMaterial(req, res){
     openDb().then(db=>{
         db.get('DELETE FROM RawMaterial WHERE id=?', [id])
         .then(res=>res)
+        .then(() => res.json({"statusCode": 200}))
         .catch(err => {
             console.error(err);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ error: err.message })
         });
     });
-    res.json({
-        "statusCode": 200
-    })
 }

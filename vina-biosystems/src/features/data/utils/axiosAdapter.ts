@@ -7,7 +7,6 @@ export class AxiosAdapter implements BackendContract {
     private axiosInstance: AxiosInstance;
 
     constructor() {
-        console.log(this.baseURL);
         this.axiosInstance = axios.create({ baseURL: this.baseURL });
     }
 
