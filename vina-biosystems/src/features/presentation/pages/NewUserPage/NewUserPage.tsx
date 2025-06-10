@@ -41,7 +41,7 @@ function NewUserPage(){
                 <Content>
                     <FormStyled
                         form={form}
-                        name="perfilForm"
+                        name="novoUsuarioForm"
                         layout="vertical"
                         onFinish={onFinish}
                         autoComplete="off"
