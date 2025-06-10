@@ -11,7 +11,7 @@ app.use(cors());
 import router from './routes.js'
 app.use(router);
 
-app.listen( 8000, ()=>console.log("API running"));
+app.listen(8000, ()=>console.log("API running"));
 
 app.use((err, req, res, next) => {
   console.error(err.stack); // Loga o erro
