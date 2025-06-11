@@ -70,13 +70,21 @@ export async function updateRawMaterial(req, res){
 export async function isRawMaterialBeingUsedInABatch(req, res){
     let id = req.query.id;
     openDb().then(db=>{
-        res.json({"isBeingUsed": false});
-        // db.all('SELECT * FROM RawMaterial')
-        // .then(users=>  res.json(users))
-        // .catch(err => {
-        //     console.error(err);
-        //     res.status(500).json({ error: err.message })
-        // });
+        db.get(
+            'SELECT COUNT(*) as count FROM RawMaterialOfBatch WHERE rawMaterialId=?', 
+            [id]
+        )
+        .then(result => {
+            if (result.count > 0) {
+                res.json({"statusCode": 200, "isUsed": true});
+            } else {
+                res.json({"statusCode": 200, "isUsed": false});
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({ error: err.message })
+        });
     });
 }
 
