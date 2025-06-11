@@ -7,6 +7,8 @@ import { Injector } from '../../../../../../core/Injector';
 import { BatchModel } from '../../../../../domain/models/batchModel';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
+import { render } from '@testing-library/react';
+import { UtilityFunctions } from '../../../../utils/UtilityFunctions';
 
 function AllotmentTable({ dataSource }: AllotmentTableProp) {
   const navigate = useNavigate();
@@ -72,7 +74,13 @@ function AllotmentTable({ dataSource }: AllotmentTableProp) {
 
   const columns = [
     { title: 'Rótulo', dataIndex: 'rotulo', key: 'rotulo' },
-    { title: 'Situação', dataIndex: 'situacao', key: 'situacao' },
+    { 
+      title: 'Situação', dataIndex: 'situacao', key: 'situacao',
+      render: (text: string) => {
+        const color = text === 'canceled' ?  'red' : text === 'closed' ? 'grey' : 'green';
+        return <span style={{ color }}>{UtilityFunctions.getSituationLabel(text)}</span>;
+      }
+    },
     {
       title: 'Ações',
       key: 'acoes',
@@ -120,8 +128,8 @@ function AllotmentTable({ dataSource }: AllotmentTableProp) {
         {recordToUpdate && (
           <>
             <p>Registro: {recordToUpdate.rotulo}</p>
-            <p>Situação atual: {recordToUpdate.situacao}</p>
-            <p>Nova situação: CANCELADO</p>
+            <p>Situação atual: {UtilityFunctions.getSituationLabel(recordToUpdate.situacao)}</p>
+            <p>Nova situação: {UtilityFunctions.getSituationLabel("canceled")}</p>
           </>
         )}
       </Modal>
