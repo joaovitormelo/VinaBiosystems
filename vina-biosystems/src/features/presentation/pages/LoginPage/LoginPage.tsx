@@ -37,16 +37,17 @@ async function runTests() {
   //testEditUserUsecase();
   //testExcludeUserUsecase();
   //testRegisterNewUserUsecase();
-  testViewInventoryUsecase();
+  //testViewInventoryUsecase();
   //testRegisterRawMaterialUsecase();
   //testEditRawMaterialUsecase();
   //await testRemoveRawMaterialUsecase();
   //testCheckInRawMaterialUsecase();
-  await testCheckOutRawMaterialUsecase();
+  //await testCheckOutRawMaterialUsecase();
   // await testViewInventoryUsecase();
- //testRegisterProductionBatchUsecase();
+ //
  //await testCancelProductionBatchUsecase();
- //testViewProductionBatchesUsecase();
+ //await testRegisterProductionBatchUsecase();
+ //await testViewProductionBatchesUsecase();
  //testAttachSamplingResultUsecase();
  //testExcludeSamplingResultUsecase();
  //testDoLogoutUsecase();
@@ -106,7 +107,7 @@ async function testDoLogoutUsecase() {
 async function testCancelProductionBatchUsecase() {
     const cancelProductionBatchUsecase = Injector.getInstance().getCancelProductionBatchUsecase();
     const batch = BatchModel.getMock();
-    batch.setId(1); // Assuming you have a batch with ID 1
+    batch.setId(1);
     try {
         await cancelProductionBatchUsecase.execute(batch);
         console.log("Lote de produção cancelado com sucesso!");
@@ -296,8 +297,8 @@ async function testRegisterProductionBatchUsecase() {
     batch.setStartDate(moment("2023-10-01"));
     batch.setEndDate(moment("2023-10-31"));
     batch.setRawMaterialList([
-      new RawMaterialInBatch(1, 1000),
-      new RawMaterialInBatch(2, 30)
+      new RawMaterialInBatch(1, 30),
+      new RawMaterialInBatch(2, 300)
     ]);
     await registerProductionBatchUsecase.execute(batch);
     console.log("Lote de produção registrado com sucesso!");

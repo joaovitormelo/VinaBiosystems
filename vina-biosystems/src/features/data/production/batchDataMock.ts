@@ -50,14 +50,13 @@ export class BatchDataMock implements BatchDataContract {
         batch.setSituation(situation);
     }
 
-    async createBatch(batch: BatchModel): Promise<BatchModel> {
-        // Simulate auto-increment ID
+    async createBatch(batch: BatchModel): Promise<number> {
         const newId = this.batches.length > 0
             ? Math.max(...this.batches.map(b => b.getId() ?? 0)) + 1
             : 1;
         batch.setId(newId);
         this.batches.push(batch);
-        return batch;
+        return batch.getId() as number;
     }
 
     async getAllBatches(): Promise<Array<BatchModel>> {

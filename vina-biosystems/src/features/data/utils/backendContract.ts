@@ -15,6 +15,7 @@ export class ROUTES {
         static readonly UPDATE_RAW_MATERIAL = "/updateRawMaterial";
         static readonly DELETE_RAW_MATERIAL = "/deleteRawMaterial";
         static readonly IS_RAW_MATERIAL_BEING_USED_IN_BATCH = "/isRawMaterialBeingUsedInABatch";
+        static readonly REMOVE_RAW_MATERIAL_QUANTITY_FROM_INVENTORY = "/removeRawMaterialQuantityFromInventory";
     };
 
     public static BATCH = class {

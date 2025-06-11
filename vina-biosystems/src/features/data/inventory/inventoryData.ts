@@ -8,6 +8,12 @@ export class InventoryData implements InventoryDataContract {
     constructor(backend: BackendContract) {
         this.backend = backend;
     }
+    async removeRawMaterialQuantityFromInventory(rawMaterialId: number, quantityToRemove: number): Promise<void> {
+        await this.backend.putData(
+            ROUTES.RAW_MATERIAL.REMOVE_RAW_MATERIAL_QUANTITY_FROM_INVENTORY,
+            { id: rawMaterialId, quantityToRemove }
+        );
+    }
     async isRawMaterialBeingUsedInABatch(rawMaterialId: number): Promise<boolean> {
         const result = await this.backend.fetchData(
             ROUTES.RAW_MATERIAL.IS_RAW_MATERIAL_BEING_USED_IN_BATCH,

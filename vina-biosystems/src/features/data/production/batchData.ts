@@ -17,26 +17,26 @@ export class BatchData implements BatchDataContract {
         return results.map((item: any) => RawMaterialInBatch.fromJson(item));
     }
 
-    async addRawMaterialToBatch(batchId: number, rawNaterialId: number, quantity: number) {
-        return await this.backend.postData(
+    async addRawMaterialToBatch(batchId: number, rawMaterialId: number, quantity: number) {
+        return await this.backend.putData(
             ROUTES.BATCH.ADD_RAW_MATERIAL_TO_BATCH,
-            { batchId, rawNaterialId, quantity }
+            { batchId, rawMaterialId, quantity }
         );
     }
 
     async updateSituationField(batchId: number, situation: string): Promise<void> {
         await this.backend.putData(
             ROUTES.BATCH.UPDATE_BATCH_SITUATION,
-            { batchId, situation }
+            { id: batchId, situation }
         );
     }
 
-    async createBatch(batch: BatchModel): Promise<BatchModel> {
+    async createBatch(batch: BatchModel): Promise<number> {
         const result = await this.backend.postData(
             ROUTES.BATCH.INSERT_BATCH,
             batch.toJSON()
         );
-        return BatchModel.fromJSON(result);
+        return result.id;
     }
 
     async getAllBatches(): Promise<Array<BatchModel>> {

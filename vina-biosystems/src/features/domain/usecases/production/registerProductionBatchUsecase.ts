@@ -18,13 +18,38 @@ export class RegisterProductionBatchUsecase {
     async execute(batch: BatchModel): Promise<void> {
         await this.validateFields(batch);
         batch.setSituation(BatchModel.SITUATION.EM_ABERTO);
+        let batchId: number;
         try {
-            batch = await this.batchData.createBatch(batch);
+            batchId = await this.batchData.createBatch(batch);
         } catch (error) {
             console.error(error);
             throw new DatabaseException(`Erro ao cadastrar o lote de produção!`);
         }
-        for (let rawMaterial of batch.getRawMaterialList() as Array<RawMaterialInBatch>) {
+        batch.setId(batchId);
+        await this.addRawMaterialsToBatch(batch);
+        await this.removeRawMaterialsFromInventory(batch);
+    }
+
+    private async removeRawMaterialsFromInventory(batch: BatchModel) {
+        const rawMaterialList = batch.getRawMaterialList() as Array<RawMaterialInBatch>;
+        for (let rawMaterial of rawMaterialList) {
+            try {
+                await this.inventoryData.removeRawMaterialQuantityFromInventory(
+                    rawMaterial.getRawMaterialId(),
+                    rawMaterial.getQuantity()
+                );
+            } catch (error) {
+                console.error(error);
+                throw new DatabaseException(
+                    `Erro ao dar baixa no insumo "${rawMaterial.getRawMaterialId()}" do estoque!`
+                );
+            }
+        }
+    }
+
+    private async addRawMaterialsToBatch(batch: BatchModel) {
+        const rawMaterialList = batch.getRawMaterialList() as Array<RawMaterialInBatch>;
+        for (let rawMaterial of rawMaterialList) {
             try {
                 await this.batchData.addRawMaterialToBatch(
                     batch.getId() as number,
@@ -41,6 +66,7 @@ export class RegisterProductionBatchUsecase {
     }
 
     private async validateFields(batch: BatchModel) {
+        console.log(batch);
         if (!batch.getLabel()) {
             throw new ValidationException("label", "O rótulo do lote é obrigatório.");
         }
@@ -53,7 +79,8 @@ export class RegisterProductionBatchUsecase {
         if (batch.getStartDate().isAfter(batch.getEndDate())) {
             throw new ValidationException("startDate", "A data de início não pode ser posterior à data de término.");
         }
-        await this.validateRawMaterials(batch.getRawMaterialList() as Array<RawMaterialInBatch>);
+        const rawMaterialsList = batch.getRawMaterialList() as Array<RawMaterialInBatch>;
+        await this.validateRawMaterials(rawMaterialsList);
     }
 
     private async validateRawMaterials(rawMaterialsList: Array<RawMaterialInBatch>) {

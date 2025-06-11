@@ -47,4 +47,16 @@ export class InventoryDataMock implements InventoryDataContract {
             throw new DatabaseException(`Raw material with ID "${rawMaterialId}" not found.`);
         }
     }
+
+    async removeRawMaterialQuantityFromInventory(rawMaterialId: number, quantityToRemove: number): Promise<void> {
+        const material = this.inventory.find(item => item.getId() === rawMaterialId);
+        if (!material) {
+            throw new DatabaseException(`Raw material with ID "${rawMaterialId}" not found.`);
+        }
+        const currentQuantity = material.getQuantity();
+        if (currentQuantity < quantityToRemove) {
+            throw new DatabaseException(`Not enough quantity to remove. Available: ${currentQuantity}, Requested: ${quantityToRemove}`);
+        }
+        material.setQuantity(currentQuantity - quantityToRemove);
+    }
 }

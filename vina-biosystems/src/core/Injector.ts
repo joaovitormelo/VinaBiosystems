@@ -4,6 +4,7 @@ import { UserDataMock } from "../features/data/authentication/userDataMock";
 import { InventoryData } from "../features/data/inventory/inventoryData";
 import { InventoryDataContract } from "../features/data/inventory/inventoryDataContract";
 import { InventoryDataMock } from "../features/data/inventory/inventoryDataMock";
+import { BatchData } from "../features/data/production/batchData";
 import { BatchDataContract } from "../features/data/production/batchDataContract";
 import { BatchDataMock } from "../features/data/production/batchDataMock";
 import { SamplingResultDataContract } from "../features/data/production/samplingResultDataContract";
@@ -75,7 +76,7 @@ export class Injector
         this.sessionManager = new SessionManager();
         this.inventoryData = new InventoryData(this.backend);
         this.notificationManager = new NotificationManagerMock();
-        this.batchData = new BatchDataMock();
+        this.batchData = new BatchData(this.backend);
         this.samplingResultData = new SamplingResultDataMock();
         this.doLoginUsecase = new DoLoginUsecase(this.userData, this.criptography, this.sessionManager);
         this.viewRegisteredUsersListUsecase = new ViewRegisteredUsersListUsecase(this.userData);

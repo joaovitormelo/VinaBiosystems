@@ -92,3 +92,19 @@ export async function deleteRawMaterial(req, res){
         });
     });
 }
+
+export async function removeRawMaterialQuantityFromInventoy(req, res){
+    const quantityToRemove = req.body.quantityToRemove;
+    const id = req.body.id;
+    openDb().then(db=>{
+        db.run(
+            'UPDATE RawMaterial SET quantity=quantity-? WHERE id=?', 
+            [quantityToRemove, id]
+        )
+        .then(() => res.json({"statusCode": 200}))
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({ error: err.message })
+        });
+    });
+}
