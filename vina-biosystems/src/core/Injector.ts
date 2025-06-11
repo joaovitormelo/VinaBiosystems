@@ -1,12 +1,9 @@
 import { UserData } from "../features/data/authentication/userData";
 import { UserDataContract } from "../features/data/authentication/userDataContract";
-import { UserDataMock } from "../features/data/authentication/userDataMock";
 import { InventoryData } from "../features/data/inventory/inventoryData";
 import { InventoryDataContract } from "../features/data/inventory/inventoryDataContract";
-import { InventoryDataMock } from "../features/data/inventory/inventoryDataMock";
 import { BatchData } from "../features/data/production/batchData";
 import { BatchDataContract } from "../features/data/production/batchDataContract";
-import { BatchDataMock } from "../features/data/production/batchDataMock";
 import { SamplingResultDataContract } from "../features/data/production/samplingResultDataContract";
 import { SamplingResultDataMock } from "../features/data/production/samplingResultDataMock";
 import { NotificationManagerContract } from "../features/data/system/notificationManagerContract";

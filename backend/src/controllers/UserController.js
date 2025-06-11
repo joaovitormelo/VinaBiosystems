@@ -61,7 +61,7 @@ export async function deleteUser(req, res){
     let id = req.body.id;
     openDb().then(db=>{
         db.get('DELETE FROM User WHERE id=?', [id])
-        .then(res=>  res.json({ statusCode: 200 }))
+        .then(() =>  res.json({ statusCode: 200 }))
         .catch(err => {
             console.error(err);
             res.status(500).json({ error: err.message })

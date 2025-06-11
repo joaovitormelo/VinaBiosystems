@@ -1,9 +1,7 @@
-import React from "react";
 import { Header, SidebarMenu } from "../../components";
 import { Home, Content, ImgContainer } from "./styles";
 import { Image } from "antd";
 import cafeBordoIniciar from "../../utils/cafeBordoIniciar.png"
-import { useNavigate } from "react-router-dom";
 function HomePage(){
 
     return(
