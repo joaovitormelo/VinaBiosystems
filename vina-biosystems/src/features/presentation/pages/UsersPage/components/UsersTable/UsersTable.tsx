@@ -1,10 +1,9 @@
-
 import { Table, message, Modal } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { IconButton, CustomTable } from './styles';
 import { ColumnsType } from 'antd/es/table';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { UsersTableProp } from './types';
 import { Injector } from "../../../../../../core/Injector";
 import { UserModel } from "../../../../../domain/models/userModel";
@@ -15,6 +14,15 @@ function UsersTable({ dataSource, onUserDeleted }: UsersTableProp) {
   const [messageApi, contextHolder] = message.useMessage();
   const injector = Injector.getInstance();
   const excludeUserUsecase = injector.getExcludeUserUsecase();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const sessionUser = localStorage.getItem('sessionUser');
+    if (sessionUser) {
+      const user = UserModel.fromJson(JSON.parse(sessionUser));
+      setIsAdmin(user.getIsAdmin());
+    }
+  }, []);
 
   const handleEdit = useCallback((record: any) => {
     console.log('Editar usuário:', record);
@@ -22,20 +30,23 @@ function UsersTable({ dataSource, onUserDeleted }: UsersTableProp) {
   }, []);
 
   const handleDelete = useCallback(async (record: any) => {
-    console.log('Excluir usuário:', record);
+    if (!isAdmin) {
+      messageApi.error({
+        type: 'error',
+        content: 'Você não tem permissão para excluir usuários. Apenas administradores podem realizar esta ação.',
+        duration: 3
+      });
+      return;
+    }
 
     try {
       const userToDelete = new UserModel(parseInt(record.key), "", "", "", "", false, "");
-
       await excludeUserUsecase.execute(userToDelete);
-
       messageApi.success({
         type: 'success',
         content: 'Usuário excluído com sucesso!',
         duration: 2
       });
-
-      // Atualiza a lista de usuários após exclusão
       if (onUserDeleted) {
         onUserDeleted();
       }
@@ -43,7 +54,7 @@ function UsersTable({ dataSource, onUserDeleted }: UsersTableProp) {
       messageApi.error('Erro ao excluir usuário');
       console.error('Erro ao excluir usuário:', error);
     }
-  }, [excludeUserUsecase, messageApi, onUserDeleted]);
+  }, [excludeUserUsecase, messageApi, onUserDeleted, isAdmin]);
 
   const columns: ColumnsType<any> = [
     { title: 'Nome do Usuário', dataIndex: 'nome', key: 'nome' },
