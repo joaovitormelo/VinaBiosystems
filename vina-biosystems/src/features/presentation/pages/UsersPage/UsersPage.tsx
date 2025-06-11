@@ -16,6 +16,15 @@ function UsersPage() {
     const [users, setUsers] = useState<UserColumns[]>([]);
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    useEffect(() => {
+        const sessionUser = localStorage.getItem('sessionUser');
+        if (sessionUser) {
+            const user = UserModel.fromJson(JSON.parse(sessionUser));
+            setIsAdmin(user.getIsAdmin());
+        }
+    }, []);
 
     const getUserData = useCallback(async () => {
         try {
@@ -50,7 +59,7 @@ function UsersPage() {
             <SidebarMenu />
             <Container>
                 <Header
-                    showButton={true}
+                    showButton={isAdmin}
                     title="Usuários"
                     buttonName="Novo usuário"
                     actionButton={handleNewUser}
@@ -59,7 +68,7 @@ function UsersPage() {
                     <SearchInput />
                     <TableStyle>
                         <GlobalStyle />
-                        <UsersTable dataSource={users} onUserDeleted={getUserData} />
+                        <UsersTable dataSource={users} />
                     </TableStyle>
                 </Content>
             </Container>
