@@ -7,4 +7,5 @@ export interface StockColumns {
 
 export type StockTableProp = {
   dataSource: StockColumns[],
+  getStockData: () => any,
 }

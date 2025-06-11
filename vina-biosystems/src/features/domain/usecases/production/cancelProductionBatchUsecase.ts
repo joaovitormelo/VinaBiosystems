@@ -22,8 +22,12 @@ export class CancelProductionBatchUsecase {
     }
 
     public async execute(batch: BatchModel): Promise<void> {
+        console.log(batch);
         if (!batch.getId()) {
             throw new Error("ID do lote de produção é obrigatório.");
+        }
+        if (batch.getSituation() !== BatchModel.SITUATION.EM_ABERTO) {
+            throw new UsecaseException("O lote de produção não está em aberto, portanto não pode ser cancelado.");
         }
 
         const samplingResults = await this.samplingResultData.getSamplingResultsByBatchId(

@@ -58,7 +58,7 @@ function StockPage() {
                 <Content>
                     <TableStyle>
                         <GlobalStyle />
-                        <StockTable dataSource={stockData} />
+                        <StockTable dataSource={stockData} getStockData={getStockData} />
                     </TableStyle>
                 </Content>
             </Container>
