@@ -1,20 +1,20 @@
-# Uses node version 22 as our base image
 FROM node:22
 
-# Goes to the ap directory
-WORKDIR /vina-biosystems
+# Cria e define o diretório de trabalho
+WORKDIR /app
 
-# Copy package.json and package-lock.json
-COPY vina-biosystems/package*.json ./
+# Copia os arquivos de dependência
+COPY ./vina-biosystems/package*.json ./
 
-# Install app dependencies
+# Instala as dependências
 RUN npm install
 
-# Set port environment variable
-ENV PORT=9000
+# Copia o restante da aplicação
+COPY ./vina-biosystems/ .
 
-# Expose the port do our computer can access it
+# Configurações de porta
+ENV PORT=9000
 EXPOSE 9000
 
-# Run the app
+# Comando de inicialização
 CMD ["npm", "start"]

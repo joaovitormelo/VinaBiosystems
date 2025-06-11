@@ -1,6 +1,7 @@
 import moment from "moment";
 import { BatchModel } from "../../domain/models/batchModel";
 import { BatchDataContract } from "./batchDataContract";
+import { RawMaterialInBatch } from "../../domain/types/rawMaterialInBatch";
 
 export class BatchDataMock implements BatchDataContract {
     private batches: BatchModel[] = [];
@@ -17,6 +18,30 @@ export class BatchDataMock implements BatchDataContract {
         batchB.setEndDate(moment("2024-07-08"));
         this.batches = [batchA, batchB];
     }
+    async getRawMaterialListByBatchId(batchId: number | null): Promise<RawMaterialInBatch[]> {
+        if (batchId === null) {
+            throw new Error("Batch ID não pode ser nulo!");
+        }
+        const batch = this.batches.find(b => b.getId() === batchId);
+        if (!batch) {
+            throw new Error(`Batch com ID ${batchId} não encontrado!`);
+        }
+        return batch.getRawMaterialList() ?? [];
+    }
+
+    async addRawMaterialToBatch(batchId: number, rawMaterialId: number, quantity: number): Promise<void> {
+        const batch = this.batches.find(b => b.getId() === batchId);
+        if (!batch) {
+            throw new Error(`Batch com ID ${batchId} não encontrado!`);
+        }
+        let rawMaterials: Array<RawMaterialInBatch> = [];
+        if (batch.getRawMaterialList()) {
+            rawMaterials = batch.getRawMaterialList() as Array<RawMaterialInBatch>;
+        }
+        rawMaterials.push(new RawMaterialInBatch(rawMaterialId, quantity));
+        batch.setRawMaterialList(rawMaterials);
+    }
+    
     async updateSituationField(batchId: number, situation: string): Promise<void> {
         const batch = this.batches.find(b => b.getId() === batchId);
         if (!batch) {

@@ -16,6 +16,14 @@ export class ROUTES {
         static readonly DELETE_RAW_MATERIAL = "/deleteRawMaterial";
         static readonly IS_RAW_MATERIAL_BEING_USED_IN_BATCH = "/isRawMaterialBeingUsedInABatch";
     };
+
+    public static BATCH = class {
+        static readonly SELECT_BATCHES = "/selectBatches";
+        static readonly INSERT_BATCH = "/insertBatch";
+        static readonly UPDATE_BATCH_SITUATION = "/updateBatchSituation";
+        static readonly GET_RAW_MATERIAL_LIST_BY_BATCH_ID = "/getRawMaterialListByBatchId";
+        static readonly ADD_RAW_MATERIAL_TO_BATCH = "/addRawMaterialToBatch";
+    };
 };
 
 export interface BackendContract {
