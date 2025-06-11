@@ -7,10 +7,11 @@ import { useCallback, useEffect, useState } from 'react';
 import { UsersTableProp } from './types';
 import { Injector } from "../../../../../../core/Injector";
 import { UserModel } from "../../../../../domain/models/userModel";
+import { UsecaseException } from '../../../../../../core/exceptions/usecaseException';
 
 const { confirm } = Modal;
 
-function UsersTable({ dataSource, onUserDeleted }: UsersTableProp) {
+function UsersTable({ dataSource, onUserDeleted, userList }: UsersTableProp) {
   const [messageApi, contextHolder] = message.useMessage();
   const injector = Injector.getInstance();
   const excludeUserUsecase = injector.getExcludeUserUsecase();
@@ -24,12 +25,12 @@ function UsersTable({ dataSource, onUserDeleted }: UsersTableProp) {
     }
   }, []);
 
-  const handleEdit = useCallback((record: any) => {
-    console.log('Editar usuário:', record);
+  const handleEdit = useCallback((index: number) => {
+      const userToEdit = userList[index];
     // 
   }, []);
 
-  const handleDelete = useCallback(async (record: any) => {
+  const handleDelete = useCallback(async (index: number, ) => {
     if (!isAdmin) {
       messageApi.error({
         type: 'error',
@@ -40,7 +41,7 @@ function UsersTable({ dataSource, onUserDeleted }: UsersTableProp) {
     }
 
     try {
-      const userToDelete = new UserModel(parseInt(record.key), "", "", "", "", false, "");
+      const userToDelete = userList[index];
       await excludeUserUsecase.execute(userToDelete);
       messageApi.success({
         type: 'success',
@@ -51,7 +52,16 @@ function UsersTable({ dataSource, onUserDeleted }: UsersTableProp) {
         onUserDeleted();
       }
     } catch (error) {
-      messageApi.error('Erro ao excluir usuário');
+      if (error instanceof UsecaseException) {
+        messageApi.error({
+          type: 'error',
+          content: error.message,
+          duration: 3
+        });
+        return;
+      } else {
+        messageApi.error('Erro ao excluir usuário');
+      }
       console.error('Erro ao excluir usuário:', error);
     }
   }, [excludeUserUsecase, messageApi, onUserDeleted, isAdmin]);
@@ -64,12 +74,12 @@ function UsersTable({ dataSource, onUserDeleted }: UsersTableProp) {
     {
       title: 'Ações',
       key: 'acoes',
-      render: (_: any, record: any) => (
+      render: (value, record, index) => (
         <>
-          <IconButton onClick={() => handleEdit(record)}>
+          <IconButton onClick={() => handleEdit(index)}>
             <EditOutlined />
           </IconButton>
-          <IconButton onClick={() => handleDelete(record)}>
+          <IconButton onClick={() => handleDelete(index)}>
             <DeleteOutlined />
           </IconButton>
         </>

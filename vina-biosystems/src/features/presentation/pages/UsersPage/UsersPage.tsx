@@ -13,6 +13,7 @@ import { Injector } from "../../../../core/Injector";
 import { message } from "antd";
 
 function UsersPage() {
+    const [userList, setUserList] = useState<UserModel[]>([]);
     const [users, setUsers] = useState<UserColumns[]>([]);
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
@@ -39,6 +40,7 @@ function UsersPage() {
                 email: user.getEmail(),
             }));
 
+            setUserList(userList);
             setUsers(formattedUsers);
         }catch (error: any) {
                 console.error('Erro ao buscar usuarios:', error);
@@ -68,7 +70,7 @@ function UsersPage() {
                     <SearchInput />
                     <TableStyle>
                         <GlobalStyle />
-                        <UsersTable dataSource={users} />
+                        <UsersTable dataSource={users} userList={userList} />
                     </TableStyle>
                 </Content>
             </Container>
