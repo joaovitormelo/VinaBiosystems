@@ -5,13 +5,17 @@ import { Sidebar, Logo, ExitButton } from "./styles";
 import logoVinaVertical from '../../utils/logoVinaVertical.png'
 import { useNavigate } from "react-router-dom";
 import type { MenuInfo } from 'rc-menu/lib/interface';
-
+import { Injector } from "../../../../core/Injector";
+import { DoLogoutUsecase } from "../../../domain/usecases/authentication/doLogoutUsecase";
 
 const { Link } = Typography;
 
 function SidebarMenu(){
     const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
     const navigate = useNavigate();
+    const injector = Injector.getInstance();
+    const doLogoutUsecase = injector.getDoLogoutUsecase();
+
     const handleMenuClick = useCallback(({ key }: MenuInfo) => {
         switch(key){
             case "1":
@@ -31,9 +35,14 @@ function SidebarMenu(){
         }
     }, [navigate]);
 
-    const handleExit = useCallback(() => {
-        navigate('/login');
-    }, [navigate]);
+    const handleExit = useCallback(async () => {
+        try {
+            await doLogoutUsecase.execute();
+            navigate('/login');
+        } catch (error) {
+            console.error('Erro ao realizar logout:', error);
+        }
+    }, [navigate, doLogoutUsecase]);
 
     return (
       <Sidebar>
