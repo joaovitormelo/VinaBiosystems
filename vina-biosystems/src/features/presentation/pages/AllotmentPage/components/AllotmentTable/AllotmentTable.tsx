@@ -2,11 +2,16 @@ import { EditOutlined, DeleteOutlined, InfoCircleOutlined } from '@ant-design/ic
 import { IconButton, CustomTable } from './styles';
 import { useCallback, useState } from 'react';
 import { AllotmentTableProp } from './types';
-import { Button, Modal } from 'antd';
+import { Button, Modal, message } from 'antd';
+import { Injector } from '../../../../../../core/Injector';
+import { BatchModel } from '../../../../../domain/models/batchModel';
+import moment from 'moment';
 
 function AllotmentTable({ dataSource }: AllotmentTableProp) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [recordToUpdate, setRecordToUpdate] = useState<any>(null);
+  const [messageApi, contextHolder] = message.useMessage();
+
   const handleInfo = useCallback(() => {
     //LÓGICA
   }, []);
@@ -21,8 +26,37 @@ function AllotmentTable({ dataSource }: AllotmentTableProp) {
   }, []);
 
   const handleOk = useCallback(async () => {
-    //LÓGICA
-  }, []);
+    try {
+      const cancelProductionBatchUsecase = Injector.getInstance().getCancelProductionBatchUsecase();
+      
+      const batch = new BatchModel(
+        parseInt(recordToUpdate.key),
+        recordToUpdate.rotulo,
+        moment(),
+        moment(),
+        [],
+        recordToUpdate.situacao
+      );
+
+      await cancelProductionBatchUsecase.execute(batch);
+      
+      messageApi.success({
+        type: 'success',
+        content: 'Lote cancelado com sucesso!',
+        duration: 2
+      });
+
+      setIsModalVisible(false);
+      setRecordToUpdate(null);
+    } catch (error: any) {
+      console.error('Erro ao cancelar lote:', error);
+      messageApi.error({
+        type: 'error',
+        content: error.message || 'Erro ao cancelar lote. Tente novamente.',
+        duration: 3
+      });
+    }
+  }, [recordToUpdate, messageApi]);
 
   const handleCancel = useCallback(() => {
     setIsModalVisible(false);
@@ -53,6 +87,7 @@ function AllotmentTable({ dataSource }: AllotmentTableProp) {
 
   return (
     <>
+      {contextHolder}
       <CustomTable
         columns={columns}
         dataSource={dataSource}
@@ -84,7 +119,6 @@ function AllotmentTable({ dataSource }: AllotmentTableProp) {
         )}
       </Modal>
     </>
-      
   );
 };
 
