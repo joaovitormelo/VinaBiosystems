@@ -15,6 +15,7 @@ function NewAllotmentPage(){
     const [form] = Form.useForm();
     const formRef = useRef<FormInstance>(null);
     const navigate = useNavigate();
+    const [messageApi, contextHolder] = message.useMessage();
     const [options, setOptions] = useState<Array<{label: string, value: string}>>([]);
 
     const loadInitialData = useCallback(async () => {
@@ -30,35 +31,50 @@ function NewAllotmentPage(){
             setOptions(formattedOptions);
         } catch (error) {
             console.error('Erro ao carregar insumos:', error);
-            message.error('Erro ao carregar insumos. Tente novamente.');
+            messageApi.error({
+                type: 'error',
+                content: 'Erro ao carregar insumos. Tente novamente.',
+                duration: 3
+            });
         }
-    }, []);
+    }, [messageApi]);
 
     const onFinish = useCallback(async (values: any) => {
         try {
             const registerProductionBatchUsecase = Injector.getInstance().getRegisterProductionBatchUsecase();
             
             const rawMaterialList: RawMaterialInBatch[] = values.insumos.map((insumoId: string) => {
-                return new RawMaterialInBatch(parseInt(insumoId), 0); 
+                return new RawMaterialInBatch(parseInt(insumoId), 0);
             });
             
             const batch = new BatchModel(
                 null, 
                 values.rotulo, 
                 moment(values.dataInicio), 
-                moment(), 
+                moment(),
                 rawMaterialList, 
                 BatchModel.SITUATION.EM_ABERTO 
             );
             
             await registerProductionBatchUsecase.execute(batch);
-            message.success('Lote criado com sucesso!');
-            navigate('/lotes');
+            
+            messageApi.success({
+                type: 'success',
+                content: 'Lote criado com sucesso!',
+                duration: 2,
+                onClose: () => {
+                    navigate('/lotes');
+                }
+            });
         } catch (error: any) {
             console.error('Erro ao criar lote:', error);
-            message.error(error.message || 'Erro ao criar lote. Tente novamente.');
+            messageApi.error({
+                type: 'error',
+                content: error.message || 'Erro ao criar lote. Tente novamente.',
+                duration: 3
+            });
         }
-    }, [navigate]);
+    }, [navigate, messageApi]);
 
     useEffect(() => {
         if (form) {
@@ -72,6 +88,7 @@ function NewAllotmentPage(){
 
     return (
         <NewAllotment>
+            {contextHolder}
             <SidebarMenu />
             <Container>
                 <Header title="Novo Lote" buttonName="Salvar" showButton={true} actionButton={() => formRef.current?.submit()} />
@@ -90,7 +107,6 @@ function NewAllotmentPage(){
                                 rules={[{ required: true, message:"Por favor, digite o rótulo do lote!"}]}
                             >
                                 <InputStyled size="large" placeholder="Digite o nome do lote" />
-                                
                             </Form.Item>
                             <Form.Item
                                 label="Insumos utilizados"
@@ -117,11 +133,10 @@ function NewAllotmentPage(){
                             </Form.Item>
                         </div>
                     </FormStyled>
-
                 </Content>
-
             </Container>
         </NewAllotment>
     )
 }
+
 export default NewAllotmentPage;
