@@ -19,10 +19,24 @@ export class RegisterProductionBatchUsecase {
         await this.validateFields(batch);
         batch.setSituation(BatchModel.SITUATION.EM_ABERTO);
         try {
-            await this.batchData.createBatch(batch);
+            batch = await this.batchData.createBatch(batch);
         } catch (error) {
             console.error(error);
             throw new DatabaseException(`Erro ao cadastrar o lote de produção!`);
+        }
+        for (let rawMaterial of batch.getRawMaterialList() as Array<RawMaterialInBatch>) {
+            try {
+                await this.batchData.addRawMaterialToBatch(
+                    batch.getId() as number,
+                    rawMaterial.getRawMaterialId(),
+                    rawMaterial.getQuantity()
+                );
+            } catch (error) {
+                console.error(error);
+                throw new DatabaseException(
+                    `Erro ao adicionar o insumo "${rawMaterial.getRawMaterialId()}" ao lote!`
+                );
+            }
         }
     }
 
@@ -39,7 +53,7 @@ export class RegisterProductionBatchUsecase {
         if (batch.getStartDate().isAfter(batch.getEndDate())) {
             throw new ValidationException("startDate", "A data de início não pode ser posterior à data de término.");
         }
-        await this.validateRawMaterials(batch.getRawMaterialList());
+        await this.validateRawMaterials(batch.getRawMaterialList() as Array<RawMaterialInBatch>);
     }
 
     private async validateRawMaterials(rawMaterialsList: Array<RawMaterialInBatch>) {

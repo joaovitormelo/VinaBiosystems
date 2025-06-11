@@ -6,7 +6,7 @@ export class BatchModel {
     private label: string;
     private startDate: Moment;
     private endDate: Moment;
-    private rawMaterialList: Array<RawMaterialInBatch>;
+    private rawMaterialList: Array<RawMaterialInBatch> | null;
     private situation: string;
 
     public static SITUATION = class {
@@ -17,7 +17,7 @@ export class BatchModel {
 
     constructor(
         id: number | null, label: string, startDate: Moment, endDate: Moment,
-        rawMaterialList: Array<RawMaterialInBatch>, situation: string
+        rawMaterialList: Array<RawMaterialInBatch> | null, situation: string
     ) {
         this.id = id;
         this.label = label;
@@ -39,7 +39,7 @@ export class BatchModel {
     getEndDate(): Moment {
         return this.endDate;
     }
-    getRawMaterialList(): Array<RawMaterialInBatch> {
+    getRawMaterialList(): Array<RawMaterialInBatch> | null {
         return this.rawMaterialList;
     }
     getSituation(): string {
@@ -57,7 +57,7 @@ export class BatchModel {
     setEndDate(endDate: Moment) {
         this.endDate = endDate;
     }
-    setRawMaterialList(rawMaterialList: Array<RawMaterialInBatch>) {
+    setRawMaterialList(rawMaterialList: Array<RawMaterialInBatch> | null) {
         this.rawMaterialList = rawMaterialList;
     }
     setSituation(situation: string) {
@@ -73,5 +73,27 @@ export class BatchModel {
             [RawMaterialInBatch.getMock()],
             this.SITUATION.EM_ABERTO
         );
+    }
+
+    static fromJSON(json: any): BatchModel {
+        return new BatchModel(
+            json.id || null,
+            json.label || "",
+            moment(json.startDate),
+            moment(json.endDate),
+            null,
+            json.situation || this.SITUATION.EM_ABERTO
+        );
+    }
+
+    toJSON(): any {
+        return {
+            id: this.id,
+            label: this.label,
+            startDate: this.startDate.toISOString(),
+            endDate: this.endDate.toISOString(),
+            rawMaterialList: null,
+            situation: this.situation
+        };
     }
 }

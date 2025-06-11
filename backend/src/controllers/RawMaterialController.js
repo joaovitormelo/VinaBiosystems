@@ -1,7 +1,7 @@
 import { openDb } from '../configDB.js';
 
 export async function selectRawMaterialByName(req, res){
-    let name = req.params.name;
+    let name = req.query.name;
     openDb().then(db=>{
          db.get('SELECT * FROM RawMaterial WHERE name=?', [name])
         .then(rawMaterial=>  res.json(rawMaterial))
@@ -13,7 +13,7 @@ export async function selectRawMaterialByName(req, res){
 }
 
 export async function selectRawMaterialById(req, res){
-    let id = req.params.id;
+    let id = req.query.id;
     openDb().then(db=>{
          db.get('SELECT * FROM RawMaterial WHERE id=?', [id])
         .then(rawMaterial=>  res.json(rawMaterial))
@@ -68,7 +68,7 @@ export async function updateRawMaterial(req, res){
 
 // TODO: INNER JOIN - boolean return 
 export async function isRawMaterialBeingUsedInABatch(req, res){
-    let id = req.params.id;
+    let id = req.query.id;
     openDb().then(db=>{
         res.json({"isBeingUsed": false});
         // db.all('SELECT * FROM RawMaterial')

@@ -34,7 +34,7 @@ export class CancelProductionBatchUsecase {
         }
 
         const rawMaterialList = batch.getRawMaterialList();
-        await this.returnRawMaterialListToInventory(rawMaterialList);
+        await this.returnRawMaterialListToInventory(rawMaterialList as Array<RawMaterialInBatch>);
 
         try {
             await this.batchData.updateSituationField(
