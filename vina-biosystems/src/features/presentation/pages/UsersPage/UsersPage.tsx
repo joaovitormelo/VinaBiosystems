@@ -26,7 +26,7 @@ function UsersPage() {
                 key: user.getId()?.toString() || '',
                 nome: user.getName(),
                 perfil: user.getIsAdmin() ? 'Administrador' : 'Colaborador',
-                telefone: '',
+                telefone: user.getPhone()?.toString() || '',
                 email: user.getEmail(),
             }));
 

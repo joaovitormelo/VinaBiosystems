@@ -27,8 +27,8 @@ function NewUserPage({title = "Novo Usuário"}: NewUserPageProp) {
             const user = new UserModel(
                 null,
                 values.nomeCompleto,
-                values.telefone, // no user model pede o login, mas no formulario o telefone... vamo mudar o user model ou o formulario?
-                values.email,
+                values.email, 
+                values.telefone,
                 values.dataNascimento?.format('YYYY-MM-DD') || '',
                 values.tipoPerfil === 'Administrador',
                 values.senhaAtual
