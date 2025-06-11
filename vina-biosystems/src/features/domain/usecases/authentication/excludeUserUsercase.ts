@@ -14,7 +14,7 @@ export class ExcludeUserUsecase {
     }
 
     async execute(user: UserModel): Promise<void> {
-        if (!user.getId()) {
+        if (user.getId() == null) {
             throw new UsecaseException("O usuário deve possuir ID!");
         }
         if (user.getIsAdmin()) {
