@@ -59,7 +59,7 @@ function UsersPage() {
                     <SearchInput />
                     <TableStyle>
                         <GlobalStyle />
-                        <UsersTable dataSource={users} />
+                        <UsersTable dataSource={users} onUserDeleted={getUserData} />
                     </TableStyle>
                 </Content>
             </Container>
