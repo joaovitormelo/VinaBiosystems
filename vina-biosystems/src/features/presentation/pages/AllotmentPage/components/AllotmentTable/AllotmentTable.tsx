@@ -1,12 +1,12 @@
-import { Table } from 'antd';
 import { EditOutlined, DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import styled from 'styled-components';
-import { IconButton, CustomTable, GlobalStyle } from './styles';
-import { ColumnsType } from 'antd/es/table';
-import { useCallback } from 'react';
+import { IconButton, CustomTable } from './styles';
+import { useCallback, useState } from 'react';
 import { AllotmentTableProp } from './types';
+import { Button, Modal } from 'antd';
 
 function AllotmentTable({ dataSource }: AllotmentTableProp) {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [recordToUpdate, setRecordToUpdate] = useState<any>(null);
   const handleInfo = useCallback(() => {
     //LÓGICA
   }, []);
@@ -15,8 +15,18 @@ function AllotmentTable({ dataSource }: AllotmentTableProp) {
     //LÓGICA
   }, []);
 
-  const handleDelete = useCallback(() => {
+  const handleUpdateSituation = useCallback((record: any) => {
+    setRecordToUpdate(record);
+    setIsModalVisible(true);
+  }, []);
+
+  const handleOk = useCallback(async () => {
     //LÓGICA
+  }, []);
+
+  const handleCancel = useCallback(() => {
+    setIsModalVisible(false);
+    setRecordToUpdate(null);
   }, []);
 
   const columns = [
@@ -33,7 +43,7 @@ function AllotmentTable({ dataSource }: AllotmentTableProp) {
           <IconButton onClick={handleEdit}>
             <EditOutlined />
           </IconButton>
-          <IconButton onClick={handleDelete}>
+          <IconButton onClick={() => handleUpdateSituation(record)}>
             <DeleteOutlined />
           </IconButton>
         </>
@@ -42,12 +52,38 @@ function AllotmentTable({ dataSource }: AllotmentTableProp) {
   ];
 
   return (
-    <CustomTable
-      columns={columns}
-      dataSource={dataSource}
-      pagination={false}
-      style={{ marginRight: '3.125rem' }}
-    />
+    <>
+      <CustomTable
+        columns={columns}
+        dataSource={dataSource}
+        pagination={false}
+        style={{ marginRight: '3.125rem' }}
+      />
+
+      <Modal 
+        title="Confirmar alteração de situação"
+        open={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={[
+          <Button key="back" onClick={handleCancel}>
+            Cancelar
+          </Button>,
+          <Button key="submit" type="primary" onClick={handleOk}>
+            Confirmar
+          </Button>,
+        ]}
+      >
+        <p>Tem certeza que deseja alterar a situação deste registro?</p>
+        {recordToUpdate && (
+          <>
+            <p>Registro: {recordToUpdate.rotulo}</p>
+            <p>Situação atual: {recordToUpdate.situacao}</p>
+            <p>Nova situação: CANCELADO</p>
+          </>
+        )}
+      </Modal>
+    </>
       
   );
 };
