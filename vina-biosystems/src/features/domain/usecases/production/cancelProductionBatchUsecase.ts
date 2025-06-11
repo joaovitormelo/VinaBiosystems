@@ -22,7 +22,6 @@ export class CancelProductionBatchUsecase {
     }
 
     public async execute(batch: BatchModel): Promise<void> {
-        console.log(batch);
         if (!batch.getId()) {
             throw new Error("ID do lote de produção é obrigatório.");
         }

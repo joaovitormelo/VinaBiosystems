@@ -22,7 +22,7 @@ function AllotmentTable({ dataSource, getStockData }: StockTableProp) {
       await removeRawMaterialUsecase.execute(record.key);
       messageApi.success('Insumo removido com sucesso!');
       getStockData();
-      window.location.reload();
+      
     } catch (error: any) {
       messageApi.error(error.message || 'Erro ao remover insumo');
     }
