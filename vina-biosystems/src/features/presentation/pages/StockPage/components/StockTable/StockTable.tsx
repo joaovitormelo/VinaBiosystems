@@ -9,7 +9,7 @@ import { StockTableProp } from './types';
 import { Injector } from '../../../../../../core/Injector';
 import { message } from 'antd';
 
-function AllotmentTable({ dataSource }: StockTableProp) {
+function AllotmentTable({ dataSource, getStockData }: StockTableProp) {
   const [messageApi, contextHolder] = message.useMessage();
 
   const handleEdit = useCallback(() => {
@@ -21,7 +21,8 @@ function AllotmentTable({ dataSource }: StockTableProp) {
       const removeRawMaterialUsecase = Injector.getInstance().getRemoveRawMaterialUsecase();
       await removeRawMaterialUsecase.execute(record.key);
       messageApi.success('Insumo removido com sucesso!');
-      window.location.reload();
+      getStockData();
+      
     } catch (error: any) {
       messageApi.error(error.message || 'Erro ao remover insumo');
     }

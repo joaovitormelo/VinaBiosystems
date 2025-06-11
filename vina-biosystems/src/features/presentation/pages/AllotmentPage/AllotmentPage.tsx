@@ -52,7 +52,7 @@ function AllotmentPage() {
                 <Content>
                     <TableStyle>
                         <GlobalStyle />
-                        <AllotmentTable dataSource={allotments} />
+                        <AllotmentTable dataSource={allotments} getAllotmentData={getAllotmentData} />
                     </TableStyle>
                 </Content>
             </Container>

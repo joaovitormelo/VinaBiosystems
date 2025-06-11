@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import { UtilityFunctions } from '../../../../utils/UtilityFunctions';
 
-function AllotmentTable({ dataSource }: AllotmentTableProp) {
+function AllotmentTable({ dataSource, getAllotmentData }: AllotmentTableProp) {
   const navigate = useNavigate();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [recordToUpdate, setRecordToUpdate] = useState<any>(null);
@@ -57,6 +57,7 @@ function AllotmentTable({ dataSource }: AllotmentTableProp) {
 
       setIsModalVisible(false);
       setRecordToUpdate(null);
+      getAllotmentData();
     } catch (error: any) {
       console.error('Erro ao cancelar lote:', error);
       messageApi.error({
