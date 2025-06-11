@@ -1,49 +1,67 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Header, SidebarMenu } from "../../components";
-import { GlobalStyle} from "./components/StockTable/styles";
-import { Users, TableStyle, Content, Container} from "./styles";
+import { GlobalStyle } from "./components/StockTable/styles";
+import { Users, TableStyle, Content, Container } from "./styles";
 import { Table } from "antd";
 import StockTable from "./components/StockTable/StockTable";
 import { StockColumns } from "./components/StockTable/types";
+import { Injector } from "../../../../core/Injector";
+import { RawMaterialModel } from "../../../domain/models/rawMaterialModel";
 
-function StockPage(){
-  const getStockData = useCallback(() => {
-    //ALTERAR LÓGICA, APENAS UM EXEMPLO PARA NAO TER ERRO.
-    const dataSource: StockColumns[] = [
-        {
-        key: '1',
-        nomeInsumo: 'Insumo 1',
-        quantidadeAtual: 10,
-        quantidadeMinima: 5
-        },
-        {
-        key: '2',
-        nomeInsumo: 'Insumo 2',
-        quantidadeAtual: 7,
-        quantidadeMinima: 2
+function StockPage() {
+    const [stockData, setStockData] = useState<StockColumns[]>([]);
+    const navigate = useNavigate();
+
+    const getStockData = useCallback(async () => {
+        try {
+            const viewRawMaterialInventoryUsecase = Injector.getInstance().getViewRawMaterialInventoryUsecase();
+            const rawMaterials = await viewRawMaterialInventoryUsecase.execute();
+
+            if (!Array.isArray(rawMaterials)) {
+                console.error("Dados recebidos não são um array:", rawMaterials);
+                setStockData([]);
+                return;
+            }
+
+            const formattedData: StockColumns[] = rawMaterials.map((material: RawMaterialModel) => ({
+                key: material.getId().toString(),
+                nomeInsumo: material.getName(),
+                quantidadeAtual: material.getQuantity(),
+                quantidadeMinima: material.getMinQuantity()
+            }));
+
+            setStockData(formattedData);
+        } catch (error) {
+            console.error("Erro ao buscar dados do estoque:", error);
+            setStockData([]);
         }
-    ];
-    return dataSource;
-  }, []);
+    }, []);
 
-    return(
+    useEffect(() => {
+        getStockData();
+    }, [getStockData]);
+
+    const handleNewSupply = () => {
+        navigate('/novo-insumo');
+    };
+    return (
         <Users>
             <SidebarMenu />
             <Container>
-                <Header 
-                    showButton={true} 
-                    title="Lotes" 
-                    buttonName="Novo lote"
+                <Header
+                    showButton={true}
+                    title="Estoque"
+                    buttonName="Novo Insumo"
+                    actionButton={handleNewSupply}
                 />
                 <Content>
                     <TableStyle>
-                        <GlobalStyle/>
-                        <StockTable dataSource={getStockData()}/>
+                        <GlobalStyle />
+                        <StockTable dataSource={stockData} />
                     </TableStyle>
                 </Content>
-
             </Container>
-                
         </Users>
     )
 }

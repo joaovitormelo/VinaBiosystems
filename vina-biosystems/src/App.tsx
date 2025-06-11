@@ -10,6 +10,7 @@ import NewAllotmentPage from './features/presentation/pages/NewAllotmentPage';
 import NewUserPage from './features/presentation/pages/NewUserPage';
 import StockPage from './features/presentation/pages/StockPage';
 import ProfilePage from './features/presentation/pages/ProfilePage';
+import NewSupplyPage from './features/presentation/pages/NewSupplyPage';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/novo-lote" element={<NewAllotmentPage />} />
           <Route path="/novo-usuario" element={<NewUserPage />} />
           <Route path="/estoque" element={<StockPage />} />
+          <Route path="/novo-insumo" element={<NewSupplyPage />} />
         </Routes>
       </div>
     </Router>

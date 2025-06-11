@@ -1,13 +1,19 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { Header, SidebarMenu } from "../../components";
-import { Form, FormInstance, Select } from "antd";
+import { Form, FormInstance, Select, message } from "antd";
 import { Container, Content, FormStyled, SelectStyled, InputStyled, NewSupply, InputNumberStyled } from "./styles";
+import { RegisterRawMaterialUsecase } from "../../../domain/usecases/inventory/registerRawMaterialUsecase";
+import { RawMaterialModel } from "../../../domain/models/rawMaterialModel";
+import { Injector } from "../../../../core/Injector";
+import { useNavigate } from "react-router-dom";
 
 interface NewSupplyPageProp {
     title?: string;
 }
 
 function NewSupplyPage({title = "Novo Insumo"} : NewSupplyPageProp){
+    const navigate = useNavigate();
+    const [messageApi, contextHolder] = message.useMessage();
     const chemicalUnits = [
         { value: 'g', label: 'Gramas (g)' },
         { value: 'mg', label: 'Miligramas (mg)' },
@@ -23,20 +29,37 @@ function NewSupplyPage({title = "Novo Insumo"} : NewSupplyPageProp){
         { value: 'eq', label: 'Equivalentes (eq)' }
     ];
 
-        const [form] = Form.useForm();
-        const formRef = useRef<FormInstance>(null);
+    const [form] = Form.useForm();
+    const formRef = useRef<FormInstance>(null);
 
-        const onFinish = useCallback(() => {
-            //LÓGICA
-        }, []);
+    const onFinish = useCallback(async (values: any) => {
+        try {
+            const registerRawMaterialUsecase = Injector.getInstance().getRegisterRawMaterialUsecase();
+            const rawMaterial = new RawMaterialModel(
+                0,
+                values.nomeInsumo,
+                values.quantidadeAtual || 0,
+                values.unidadeMedida,
+                values.quantidadeMinima || 0
+            );
 
-    // const loadInitialData = useCallback(() => {
-    //     //BUSCAR VALORES NO BANCO
-    //     //DEPOIS DAR
-    //     //form.setFieldsValue(DADOS)
-    // }, []);
-
-
+            await registerRawMaterialUsecase.execute(rawMaterial);
+            messageApi.success({
+                type: 'success',
+                content: 'Insumo cadastrado com sucesso!',
+                duration: 2,
+                onClose: () => {
+                    navigate('/estoque');
+                }
+            });
+        } catch (error: any) {
+            messageApi.error({
+                type: 'error',
+                content: error.message || 'Erro ao cadastrar insumo',
+                duration: 3
+            });
+        }
+    }, [form, messageApi, navigate]);
 
     useEffect(() => {
         if (form) {
@@ -44,12 +67,9 @@ function NewSupplyPage({title = "Novo Insumo"} : NewSupplyPageProp){
         }
     }, [form]);
 
-    // useEffect(() => {
-    //     loadInitialData
-    // }, []);
-
     return (
         <NewSupply>
+            {contextHolder}
             <SidebarMenu />
             <Container>
                 <Header title={title} buttonName="Salvar" showButton={true} actionButton={() => formRef.current?.submit()} />
@@ -101,9 +121,7 @@ function NewSupplyPage({title = "Novo Insumo"} : NewSupplyPageProp){
                             </Form.Item>
                         </div>
                     </FormStyled>
-
                 </Content>
-
             </Container>
         </NewSupply>
     )

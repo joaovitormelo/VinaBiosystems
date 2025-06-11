@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { Header, SidebarMenu } from "../../components";
 import { GlobalStyle } from "./components/AllotmentTable/styles";
 import { Users, TableStyle, Content, Container } from "./styles";
-import { Table } from "antd";
 import AllotmentTable from "./components/AllotmentTable/AllotmentTable";
 import { AllotmentColumns } from "./components/AllotmentTable/types";
 
