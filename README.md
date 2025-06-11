@@ -6,10 +6,11 @@ Sistema de software para a empresa Vina Biotech, desenvolvido como parte do proj
 
 
 ## Rodando a aplicação
-Execute o seguinte comando na raiz do projeto:
+Execute os seguintes comandos na raiz do projeto:
 
 ```bash
-docker-compose up --build
+docker-compose build --no-cache
+docker-compose up
 ```
 
 Acesse a aplicação em http://localhost:9000
@@ -17,7 +18,8 @@ Acesse a aplicação em http://localhost:9000
 Caso atualize as dependências usando o npm install (como instalar uma nova biblioteca), execute:
 ```bash
 docker-compose down 
-docker-compose up --build
+docker-compose build --no-cache
+docker-compose up
 ```
 Isso garantirá que as novas dependências sejam refletidas corretamente na imagem Docker.
 
