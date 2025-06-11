@@ -6,15 +6,22 @@ import { Button, Modal, message } from 'antd';
 import { Injector } from '../../../../../../core/Injector';
 import { BatchModel } from '../../../../../domain/models/batchModel';
 import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
 
 function AllotmentTable({ dataSource }: AllotmentTableProp) {
+  const navigate = useNavigate();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [recordToUpdate, setRecordToUpdate] = useState<any>(null);
   const [messageApi, contextHolder] = message.useMessage();
 
-  const handleInfo = useCallback(() => {
-    //LÓGICA
-  }, []);
+  const handleInfo = useCallback((record: any) => {
+    navigate('/info-lote', { 
+      state: { 
+        rotulo: record.rotulo,
+        situacao: record.situacao
+      } 
+    });
+  }, [navigate]);
 
   const handleEdit = useCallback(() => {
     //LÓGICA
@@ -71,7 +78,7 @@ function AllotmentTable({ dataSource }: AllotmentTableProp) {
       key: 'acoes',
       render: (_: any, record: any) => ( dataSource.length > 0 && 
         <>
-          <IconButton onClick={handleInfo}>
+          <IconButton onClick={() => handleInfo(record)}>
             <InfoCircleOutlined />
           </IconButton>
           <IconButton onClick={handleEdit}>
