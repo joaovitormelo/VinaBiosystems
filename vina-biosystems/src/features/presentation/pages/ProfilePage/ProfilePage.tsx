@@ -35,6 +35,11 @@ function ProfilePage(){
                 throw new Error("Usuário não encontrado");
             }
 
+            if (values.novaSenha && !values.senhaAtual) {
+                messageApi.error('Por favor, informe sua senha atual para alterar a senha');
+                return;
+            }
+
             const editUserUsecase = Injector.getInstance().getEditUserUsecase();
             
             const updatedUser = new UserModel(
@@ -49,8 +54,13 @@ function ProfilePage(){
 
             await editUserUsecase.execute(updatedUser);
             
-            localStorage.setItem('sessionUser', JSON.stringify(updatedUser.toJson()));
             setCurrentUser(updatedUser);
+            localStorage.setItem('sessionUser', JSON.stringify(updatedUser.toJson()));
+            
+            form.setFieldsValue({
+                senhaAtual: undefined,
+                novaSenha: undefined
+            });
             
             messageApi.success('Dados atualizados com sucesso!');
         } catch (error: any) {
@@ -63,7 +73,7 @@ function ProfilePage(){
             }
             console.error('Erro ao atualizar usuário:', error);
         }
-    }, [currentUser, messageApi]);
+    }, [currentUser, messageApi, form]);
 
     useEffect(() => {
         if (form) {
@@ -141,9 +151,7 @@ function ProfilePage(){
                             </Form.Item>
                         </div>
                     </FormStyled>
-
                 </Content>
-
             </Container>
         </Profile>
     )

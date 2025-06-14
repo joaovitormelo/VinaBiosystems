@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Header, SidebarMenu } from "../../components";
 import { Button, Form, FormInstance, Select, Table, message } from "antd";
-import { Container, Content, DatePickerStyled, FormStyled, SelectStyled, InputStyled, NewAllotment } from "./styles";
+import { Container, Content, DatePickerStyled, FormStyled, StyledTable, SelectStyled, InputStyled, NewAllotment, TableContainer } from "./styles";
 import { useNavigate } from "react-router-dom";
 import { Injector } from "../../../../core/Injector";
 import { BatchModel } from "../../../domain/models/batchModel";
@@ -118,98 +118,12 @@ function NewAllotmentPage(){
                                 name="insumos"
                             >
                                 <Button onClick={onAddRawMaterial}>+</Button>
-                                <Table
-                                    dataSource={rawMaterialInBatchList}
-                                    pagination={false}
-                                    style={{ marginTop: '10px' }}
-                                    bordered
-                                    columns={
-                                        [
-                                            {
-                                                title: 'Nome',
-                                                dataIndex: 'rawMaterialId',
-                                                key: 'name',
-                                                render: (text: string, record, index) => (
-                                                    <Form.Item
-                                                        label="Insumos utilizados"
-                                                        name={"rawMaterialName" + index}
-                                                        rules={[{ required: true, message: "Por favor, selecione o insumo!" }]}
-                                                    >
-                                                        <SelectStyled
-                                                            placeholder="Selecione o insumo"
-                                                            size="large"
-                                                            onChange={(value) => {
-                                                                setRawMaterialInBatchList((prevList) => {
-                                                                    const newList = [...prevList];
-                                                                    if (newList[index]) {
-                                                                        newList[index].setRawMaterialId(Number(value));
-                                                                    }
-                                                                    return newList;
-                                                                }
-                                                            )}}
-                                                        >
-                                                            {options.map((item) => (
-                                                                <Option key={item.value} value={item.value}>
-                                                                    {item.label}
-                                                                </Option>
-                                                            ))}
-                                                        </SelectStyled>
-                                                    </Form.Item>
-                                                )
-                                            },
-                                            {
-                                                title: 'Quantidade',
-                                                dataIndex: 'quantity',
-                                                key: 'quantity',
-                                                render: (text: number, record, index) => (
-                                                    <Form.Item
-                                                        label="Insumos utilizados"
-                                                        name={"rawMaterialQuantity" + index}
-                                                        rules={[{ required: true, message: "Por favor, digite a quantidade do insumo!" }]}
-                                                        
-                                                    >
-                                                        <InputStyled
-                                                            size="large" placeholder="Digite o nome do lote"
-                                                            type="number" min={0} step={1} suffix="unidades"
-                                                            onChange={(value) => {
-                                                                setRawMaterialInBatchList((prevList) => {
-                                                                    const newList = [...prevList];
-                                                                    if (newList[index]) {
-                                                                        newList[index].setQuantity(Number(value.target.value));
-                                                                    }
-                                                                    return newList;
-                                                                }
-                                                            )}}
-                                                        />
-                                                    </Form.Item>
-                                                )
-                                            },
-                                            {
-                                                title: 'Ações',
-                                                key: 'actions',
-                                                render: (_, __, index) => (
-                                                    <Button
-                                                        type="link"
-                                                        danger
-                                                        onClick={() => {
-                                                            setRawMaterialInBatchList((prevList) => {
-                                                                const newList = [...prevList];
-                                                                newList.splice(index, 1);
-                                                                return newList;
-                                                            });
-                                                        }}
-                                                    >
-                                                        Remover
-                                                    </Button>
-                                                )
-                                            }
-                                        ]
-                                    }
-                                >
-
-                                </Table>
+                                
                             </Form.Item>
                         </div>
+
+
+
                         <div>
                             <Form.Item
                                 label="Data de início"
@@ -221,7 +135,100 @@ function NewAllotmentPage(){
                                 />
                             </Form.Item>
                         </div>
+                        
                     </FormStyled>
+                    <TableContainer>
+                            <StyledTable
+                                dataSource={rawMaterialInBatchList}
+                                pagination={false}
+                                style={{ marginTop: '10px' }}
+                                bordered
+                                columns={
+                                    [
+                                        {
+                                            title: 'Nome',
+                                            dataIndex: 'rawMaterialId',
+                                            key: 'name',
+                                            render: (text: string, record, index) => (
+                                                <Form.Item
+                                                    label="Insumos utilizados"
+                                                    name={"rawMaterialName" + index}
+                                                    rules={[{ required: true, message: "Por favor, selecione o insumo!" }]}
+                                                >
+                                                    <SelectStyled
+                                                        placeholder="Selecione o insumo"
+                                                        size="large"
+                                                        onChange={(value) => {
+                                                            setRawMaterialInBatchList((prevList) => {
+                                                                const newList = [...prevList];
+                                                                if (newList[index]) {
+                                                                    newList[index].setRawMaterialId(Number(value));
+                                                                }
+                                                                return newList;
+                                                            }
+                                                        )}}
+                                                    >
+                                                        {options.map((item) => (
+                                                            <Option key={item.value} value={item.value}>
+                                                                {item.label}
+                                                            </Option>
+                                                        ))}
+                                                    </SelectStyled>
+                                                </Form.Item>
+                                            )
+                                        },
+                                        {
+                                            title: 'Quantidade',
+                                            dataIndex: 'quantity',
+                                            key: 'quantity',
+                                            render: (text: number, record, index) => (
+                                                <Form.Item
+                                                    label="Insumos utilizados"
+                                                    name={"rawMaterialQuantity" + index}
+                                                    rules={[{ required: true, message: "Por favor, digite a quantidade do insumo!" }]}
+                                                    
+                                                >
+                                                    <InputStyled
+                                                        size="large" placeholder="Digite o nome do lote"
+                                                        type="number" min={0} step={1} suffix="unidades"
+                                                        onChange={(value) => {
+                                                            setRawMaterialInBatchList((prevList) => {
+                                                                const newList = [...prevList];
+                                                                if (newList[index]) {
+                                                                    newList[index].setQuantity(Number(value.target.value));
+                                                                }
+                                                                return newList;
+                                                            }
+                                                        )}}
+                                                    />
+                                                </Form.Item>
+                                            )
+                                        },
+                                        {
+                                            title: 'Ações',
+                                            key: 'actions',
+                                            render: (_, __, index) => (
+                                                <Button
+                                                    type="link"
+                                                    danger
+                                                    onClick={() => {
+                                                        setRawMaterialInBatchList((prevList) => {
+                                                            const newList = [...prevList];
+                                                            newList.splice(index, 1);
+                                                            return newList;
+                                                        });
+                                                    }}
+                                                >
+                                                    Remover
+                                                </Button>
+                                            )
+                                        }
+                                    ]
+                                }
+                            >
+
+                            </StyledTable>
+                        </TableContainer>
                 </Content>
             </Container>
         </NewAllotment>

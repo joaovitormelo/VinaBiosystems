@@ -1,4 +1,4 @@
-import { DatePicker, Form, Input, Select } from "antd";
+import { DatePicker, Form, Input, Select, Table } from "antd";
 import styled from "styled-components";
 
 export const NewAllotment = styled.div`
@@ -24,6 +24,65 @@ export const Container = styled.div `
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+`;
+
+export const StyledTable = styled(Table)`
+  &.ant-table-wrapper {
+    width: 98% !important;
+    max-width: 98% !important;
+    min-width: 98% !important;
+    
+    .ant-table {
+      background: #ffffff;
+      table-layout: fixed !important;
+      width: 98% !important;
+      
+      .ant-table-container {
+        border-left: 1px solid #f0f0f0;
+        width: 98% !important;
+        
+        .ant-table-thead > tr > th {
+          background: #ffffff;
+          color: #333;
+          font-weight: 600;
+          border-bottom: 2px solid #f0f0f0;
+          padding: 16px;
+          width: auto !important;
+        }
+        
+        .ant-table-tbody > tr > td {
+          background: #ffffff;
+          border-bottom: 1px solid #f0f0f0;
+          padding: 12px 16px;
+          transition: background 0.3s;
+          width: auto !important;
+        }
+        
+        .ant-table-tbody > tr:hover > td {
+          background: #fafafa;
+        }
+        
+        .ant-table-cell {
+          &:first-child {
+            border-left: 1px solid #f0f0f0;
+          }
+        }
+      }
+    }
+    
+    .ant-table-pagination.ant-pagination {
+      margin: 16px;
+      background: white;
+      padding: 8px;
+      border-radius: 4px;
+    }
+  }
+`;
+
+export const TableContainer = styled.div`
+  width: 100%;
+  margin-top: 24px;
+  overflow-x: auto;
 `;
 
 export const FormStyled = styled(Form)`
