@@ -115,8 +115,7 @@ export const SelectStyled = styled(Select)`
   }
 
   .ant-select-selection-item {
-    background-color: #0E3226 !important;
-    color: #F1E7DB !important;
+    color: #000000 !important;
     padding: 2px 10px;
     font-size: 14px;
     display: flex;
@@ -132,7 +131,7 @@ export const SelectStyled = styled(Select)`
   }
 
   .ant-select-arrow {
-    color: #0E3226;
+    color: #0E3226 !important;
   }
 
   .ant-select-dropdown {
