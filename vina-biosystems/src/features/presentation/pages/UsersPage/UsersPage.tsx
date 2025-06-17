@@ -14,6 +14,7 @@ import { message } from "antd";
 
 function UsersPage() {
     const [userList, setUserList] = useState<UserModel[]>([]);
+    const [loading, setLoading] = useState(false);
     const [users, setUsers] = useState<UserColumns[]>([]);
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
@@ -29,6 +30,7 @@ function UsersPage() {
 
     const getUserData = useCallback(async () => {
         try {
+            setLoading(true);
             const viewUsersUsecase = Injector.getInstance().getViewRegisteredUsersListUsecase();
             const userList = await viewUsersUsecase.execute();
 
@@ -42,11 +44,13 @@ function UsersPage() {
 
             setUserList(userList);
             setUsers(formattedUsers);
-        }catch (error: any) {
-                console.error('Erro ao buscar usuarios:', error);
-                messageApi.error('Erro ao carregar lista de usuários');
-            }
-        }, [messageApi]);
+        } catch (error: any) {
+            console.error('Erro ao buscar usuarios:', error);
+            messageApi.error('Erro ao carregar lista de usuários');
+        } finally {
+            setLoading(false);
+        }
+    }, [messageApi]);
 
     useEffect(() => {
         getUserData();
@@ -70,7 +74,12 @@ function UsersPage() {
                     <SearchInput />
                     <TableStyle>
                         <GlobalStyle />
-                        <UsersTable dataSource={users} userList={userList} />
+                        <UsersTable
+                            dataSource={users}
+                            userList={userList}
+                            updateTable={getUserData}
+                            loading={loading}
+                        />
                     </TableStyle>
                 </Content>
             </Container>

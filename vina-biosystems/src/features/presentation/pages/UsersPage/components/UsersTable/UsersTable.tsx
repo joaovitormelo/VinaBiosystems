@@ -9,13 +9,13 @@ import { Injector } from "../../../../../../core/Injector";
 import { UserModel } from "../../../../../domain/models/userModel";
 import { UsecaseException } from '../../../../../../core/exceptions/usecaseException';
 
-const { confirm } = Modal;
-
-function UsersTable({ dataSource, onUserDeleted, userList }: UsersTableProp) {
+function UsersTable({ dataSource, userList, updateTable, loading }: UsersTableProp) {
   const [messageApi, contextHolder] = message.useMessage();
   const injector = Injector.getInstance();
   const excludeUserUsecase = injector.getExcludeUserUsecase();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [excludeModalVisible, setExcludeModalVisible] = useState(false);
+  const [userToDeleteIndex, setUserToDeleteIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const sessionUser = localStorage.getItem('sessionUser');
@@ -28,9 +28,10 @@ function UsersTable({ dataSource, onUserDeleted, userList }: UsersTableProp) {
   const handleEdit = useCallback((index: number) => {
       const userToEdit = userList[index];
     // 
-  }, []);
+  }, [userList, updateTable]);
 
-  const handleDelete = useCallback(async (index: number, ) => {
+  const handleDelete = useCallback((index: number, ) => {
+    console.log("Chamou handleDelete");
     if (!isAdmin) {
       messageApi.error({
         type: 'error',
@@ -39,8 +40,13 @@ function UsersTable({ dataSource, onUserDeleted, userList }: UsersTableProp) {
       });
       return;
     }
-
+    setUserToDeleteIndex(index);
+    setExcludeModalVisible(true);
+  }, [messageApi, isAdmin]);
+  
+  const performExclusion = useCallback(async () => {
     try {
+      const index = userToDeleteIndex as number;
       const userToDelete = userList[index];
       await excludeUserUsecase.execute(userToDelete);
       messageApi.success({
@@ -48,9 +54,7 @@ function UsersTable({ dataSource, onUserDeleted, userList }: UsersTableProp) {
         content: 'Usuário excluído com sucesso!',
         duration: 2
       });
-      if (onUserDeleted) {
-        onUserDeleted();
-      }
+      updateTable();
     } catch (error) {
       if (error instanceof UsecaseException) {
         messageApi.error({
@@ -63,8 +67,11 @@ function UsersTable({ dataSource, onUserDeleted, userList }: UsersTableProp) {
         messageApi.error('Erro ao excluir usuário');
       }
       console.error('Erro ao excluir usuário:', error);
+    } finally {
+      setExcludeModalVisible(false);
+      setUserToDeleteIndex(null);
     }
-  }, [excludeUserUsecase, messageApi, onUserDeleted, isAdmin]);
+  }, [excludeUserUsecase, userList, updateTable, userToDeleteIndex]);
 
   const columns: ColumnsType<any> = [
     { title: 'Nome do Usuário', dataIndex: 'nome', key: 'nome' },
@@ -90,12 +97,23 @@ function UsersTable({ dataSource, onUserDeleted, userList }: UsersTableProp) {
   return (
     <>
       {contextHolder}
+      <Modal
+        title="Confirmar exclusão"
+        open={excludeModalVisible}
+        onOk={() => performExclusion()}
+        onCancel={() => setExcludeModalVisible(false)}
+        okText="Sim"
+        cancelText="Não"
+      >
+        <p>Tem certeza que deseja excluir este usuário?</p>
+      </Modal>
       <CustomTable
         columns={columns}
         dataSource={dataSource}
         pagination={false}
         style={{ marginRight: '3.125rem' }}
         rowKey="id"
+        loading={loading}
       />
     </>
   );
