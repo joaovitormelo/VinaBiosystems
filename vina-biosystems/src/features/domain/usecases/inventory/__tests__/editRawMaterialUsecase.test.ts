@@ -35,8 +35,6 @@ describe('EditRawMaterialUsecase', () => {
     await expect(usecase.execute(rawMaterial)).rejects.toBeInstanceOf(DatabaseException);
   });
 
-
-
   it('deve lançar DatabaseException se updateRawMaterial lançar erro', async () => {
     const rawMaterial = RawMaterialModel.getMock();
     jest.spyOn(inventoryData, 'getRawMaterialByName').mockResolvedValue(undefined);
@@ -58,5 +56,22 @@ describe('EditRawMaterialUsecase', () => {
     rawMaterial.setUnit('kg');
     rawMaterial.setMinQuantity(-5);
     await expect(usecase.execute(rawMaterial)).rejects.toBeInstanceOf(ValidationException);
+  });
+
+  it('deve lançar DatabaseException se já existir outro insumo com o mesmo nome e id diferente', async () => {
+    const rawMaterial = RawMaterialModel.getMock();
+    rawMaterial.setId(1);
+    rawMaterial.setName('Álcool');
+
+    const outro = RawMaterialModel.getMock();
+    outro.setId(2); // ID diferente
+    outro.setName('Álcool'); // mesmo nome
+
+    const getRawMaterialByNameMock = jest.spyOn(inventoryData, 'getRawMaterialByName').mockResolvedValue(outro);
+    const updateRawMaterialMock = jest.spyOn(inventoryData, 'updateRawMaterial');
+
+    await expect(usecase.execute(rawMaterial)).rejects.toBeInstanceOf(DatabaseException);
+    expect(getRawMaterialByNameMock).toHaveBeenCalledWith('Álcool');
+    expect(updateRawMaterialMock).not.toHaveBeenCalled();
   });
 }); 

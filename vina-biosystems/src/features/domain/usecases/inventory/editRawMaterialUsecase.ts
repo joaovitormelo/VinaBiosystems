@@ -15,7 +15,7 @@ export class EditRawMaterialUsecase {
 
         let existingRawMaterial: RawMaterialModel | undefined;
         try {
-            const existingRawMaterial = await this.inventoryData.getRawMaterialByName(rawMaterial.getName());
+            existingRawMaterial = await this.inventoryData.getRawMaterialByName(rawMaterial.getName());
         } catch(error) {
             console.error(error);
             throw new DatabaseException("Não foi possível consultar a existência de insumos com o nome " + rawMaterial.getName() + "!");
