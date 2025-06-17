@@ -1,32 +1,36 @@
-import React from 'react';
-import { Table } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import styled from 'styled-components';
 import { IconButton, CustomTable, GlobalStyle } from './styles';
-import { ColumnsType } from 'antd/es/table';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { StockTableProp } from './types';
 import { Injector } from '../../../../../../core/Injector';
-import { message } from 'antd';
+import { message, Modal } from 'antd';
 
 function AllotmentTable({ dataSource, getStockData }: StockTableProp) {
   const [messageApi, contextHolder] = message.useMessage();
+  const [excludeModalVisible, setExcludeModalVisible] = useState(false);
+  const [rawMaterialToDeleteId, setRawMaterialToDeleteId] = useState<number | null>(null);
 
   const handleEdit = useCallback(() => {
     //LÓGICA
   }, []);
 
   const handleDelete = useCallback(async (record: any) => {
+    setRawMaterialToDeleteId(record.key);
+    setExcludeModalVisible(true);
+  }, [messageApi]);
+
+  const performExclusion = useCallback(async () => {
     try {
       const removeRawMaterialUsecase = Injector.getInstance().getRemoveRawMaterialUsecase();
-      await removeRawMaterialUsecase.execute(record.key);
+      await removeRawMaterialUsecase.execute(rawMaterialToDeleteId as number);
       messageApi.success('Insumo removido com sucesso!');
       getStockData();
-      
+      setExcludeModalVisible(false);
+      setRawMaterialToDeleteId(null);
     } catch (error: any) {
       messageApi.error(error.message || 'Erro ao remover insumo');
     }
-  }, [messageApi]);
+  }, [messageApi, getStockData, rawMaterialToDeleteId]);
 
   const columns = [
     { title: 'Nome do Insumo', dataIndex: 'nomeInsumo', key: 'NomeInsumo' },
@@ -51,6 +55,16 @@ function AllotmentTable({ dataSource, getStockData }: StockTableProp) {
   return (
     <>
       {contextHolder}
+      <Modal
+        title="Confirmar exclusão"
+        open={excludeModalVisible}
+        onOk={() => performExclusion()}
+        onCancel={() => setExcludeModalVisible(false)}
+        okText="Sim"
+        cancelText="Não"
+      >
+        <p>Tem certeza que deseja excluir este insumo?</p>
+      </Modal>
       <CustomTable
         columns={columns}
         dataSource={dataSource}
