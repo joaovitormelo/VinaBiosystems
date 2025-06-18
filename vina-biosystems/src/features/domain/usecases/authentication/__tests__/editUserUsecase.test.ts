@@ -22,7 +22,7 @@ describe("EditUserUsecase", () => {
         editUserUsecase = new EditUserUsecase(userData, sessionManager);
         user = UserModel.getMock();
         differentId = 5;
-        console.error = jest.fn(); // Mock console.error to avoid logging errors in tests
+        console.error = jest.fn(); // Omite logs de erro durante os testes
     });
 
     beforeEach(() => {

@@ -11,6 +11,10 @@ describe('CheckOutRawMaterialUsecase', () => {
   let usecase: CheckOutRawMaterialUsecase;
   let rawMaterial: RawMaterialModel;
 
+  beforeAll(() => {
+    console.error = jest.fn(); // Omite logs de erro durante os testes
+  });
+
   beforeEach(() => {
     inventoryData = new InventoryDataMock();
     notificationManager = new NotificationManagerMock();

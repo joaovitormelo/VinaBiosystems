@@ -10,6 +10,10 @@ describe('RemoveRawMaterialUsecase', () => {
   let usecase: RemoveRawMaterialUsecase;
   let rawMaterialId: number;
 
+  beforeAll(() => {
+    console.error = jest.fn(); // Omite logs de erro durante os testes
+  });
+
   beforeEach(() => {
     inventoryData = new InventoryDataMock();
     usecase = new RemoveRawMaterialUsecase(inventoryData);

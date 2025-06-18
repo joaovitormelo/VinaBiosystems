@@ -25,7 +25,7 @@ describe('DoLoginUsecase', () => {
         doLoginUsecase = new DoLoginUsecase(userData, criptography, sessionManager);
         userEmail = "teste@teste.com";
         userPassword = "123456";
-        console.error = jest.fn(); // Mock console.error to avoid logging errors in tests
+        console.error = jest.fn(); // Omite logs de erro durante os testes
     });
 
     beforeEach(() => {

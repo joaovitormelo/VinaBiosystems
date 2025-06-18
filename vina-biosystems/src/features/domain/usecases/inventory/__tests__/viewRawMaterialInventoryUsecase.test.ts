@@ -8,6 +8,10 @@ describe('ViewRawMaterialInventoryUsecase', () => {
   let inventoryData: InventoryDataMock;
   let usecase: ViewRawMaterialInventoryUsecase;
 
+  beforeAll(() => {
+    console.error = jest.fn(); // Omite logs de erro durante os testes
+  });
+
   beforeEach(() => {
     inventoryData = new InventoryDataMock();
     usecase = new ViewRawMaterialInventoryUsecase(inventoryData);

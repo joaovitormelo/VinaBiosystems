@@ -9,7 +9,7 @@ describe("DoLogoutUsecase", () => {
     beforeAll(() => {
         sessionManager = new SessionManagerMock();
         doLogoutUsecase = new DoLogoutUsecase(sessionManager);
-        console.error = jest.fn(); // Mock console.error to avoid logging errors in tests
+        console.error = jest.fn(); // Omite logs de erro durante os testes
     });
 
     it("Deve chamar clearSession no SessionManager", async () => {

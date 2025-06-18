@@ -10,6 +10,10 @@ describe('RegisterRawMaterialUsecase', () => {
   let usecase: RegisterRawMaterialUsecase;
   let rawMaterial: RawMaterialModel;
 
+  beforeAll(() => {
+    console.error = jest.fn(); // Omite logs de erro durante os testes
+  });
+
   beforeEach(() => {
     inventoryData = new InventoryDataMock();
     usecase = new RegisterRawMaterialUsecase(inventoryData);
