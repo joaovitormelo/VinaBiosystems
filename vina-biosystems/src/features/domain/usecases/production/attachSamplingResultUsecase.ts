@@ -15,7 +15,6 @@ export class AttachSamplingResultUsecase {
     }
 
     async execute(samplingResult: SamplingResultModel): Promise<SamplingResultModel> {
-        this.validate(samplingResult);
         const user = this.sessionManager.getSessionUser() as UserModel;
         samplingResult.setCreationUserId(user.getId() as number);
         try {
@@ -24,15 +23,6 @@ export class AttachSamplingResultUsecase {
         } catch (error) {
             console.error(error);
             throw new DatabaseException(`Erro ao anexar o resultado de coleta!`);
-        }
-    }
-
-    private validate(samplingResult: SamplingResultModel) {
-        if (!samplingResult.getFileName()) {
-            throw new ValidationException("fileName", "O arquivo não pode ser vazio!");
-        }
-        if (!samplingResult.getDate()) {
-            throw new ValidationException("date", "A data não pode ser vazia!");
         }
     }
 }
