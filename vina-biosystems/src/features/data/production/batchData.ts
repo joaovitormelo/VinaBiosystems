@@ -14,6 +14,7 @@ export class BatchData implements BatchDataContract {
         const results = await this.backend.fetchData(
             ROUTES.BATCH.GET_RAW_MATERIAL_LIST_BY_BATCH_ID, { batchId }
         );
+        if (!results || !Array.isArray(results)) return [];
         return results.map((item: any) => RawMaterialInBatch.fromJson(item));
     }
 

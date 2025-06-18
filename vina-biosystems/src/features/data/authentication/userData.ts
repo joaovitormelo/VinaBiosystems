@@ -17,6 +17,7 @@ export class UserData implements UserDataContract {
 
     async fetchUsers(): Promise<Array<UserModel>> {
         const response = await this.backend.fetchData(ROUTES.USER.SELECT_USERS, null);
+        if (!response) return [];
         return response.map((user: any) => {
             return UserModel.fromJson(user);
         });
