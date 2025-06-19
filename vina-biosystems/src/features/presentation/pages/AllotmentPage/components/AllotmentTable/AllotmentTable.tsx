@@ -7,7 +7,7 @@ import { Injector } from '../../../../../../core/Injector';
 import { BatchModel } from '../../../../../domain/models/batchModel';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
-import { UtilityFunctions } from '../../../../utils/utilityFunctions';
+import { UtilityFunctions } from '../../../../utils/UtilityFunctions';
 
 function AllotmentTable({ dataSource, getAllotmentData }: AllotmentTableProp) {
   const navigate = useNavigate();
