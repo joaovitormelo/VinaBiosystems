@@ -189,7 +189,7 @@ function NewAllotmentPage(){
                                                     
                                                 >
                                                     <InputStyled
-                                                        size="large" placeholder="Digite o nome do lote"
+                                                        size="large" placeholder="Informe a quantidade"
                                                         type="number" min={0} step={1} suffix="unidades"
                                                         onChange={(value) => {
                                                             setRawMaterialInBatchList((prevList) => {
