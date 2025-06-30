@@ -14,8 +14,3 @@ app.use((err, req, res, next) => {
   console.error(err.stack); // Loga o erro
   res.status(500).json({ error: err.message || 'Internal Server Error' });
 });
-
-// https.createServer({
-//     cert: fs.readFileSync('src/SSL/code.crt'),
-//     key: fs.readFileSync('src/SSL/code.key')
-// }, app).listen(3001, ()=> console.log("Rodando em https"));

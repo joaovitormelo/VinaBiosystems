@@ -4,6 +4,7 @@ import { insertUser, updateUser, selectUserByEmail, selectUsers, deleteUser } fr
 import { selectRawMaterialByName, selectRawMaterialById, insertRawMaterial, selecRawMaterials, updateRawMaterial, isRawMaterialBeingUsedInABatch, deleteRawMaterial, removeRawMaterialQuantityFromInventoy } from './controllers/RawMaterialController.js'
 import { updateBatchSituation, insertBatch, selectBatches, addRawMaterialToBatch, getRawMaterialListByBatchId, deleteBatchById } from './controllers/BatchController.js'
 import { selectSamplingResultsByBatchId, insertSamplingResults, deleteSamplingResults} from './controllers/SamplingResultsController.js'
+import { selectProducts, selectProductById, insertProduct, updateProduct, deleteProduct} from './controllers/ProductController.js'
 
 createTables();
 
@@ -41,5 +42,11 @@ router.delete('/deleteBatchById', deleteBatchById);
 router.get('/selectSamplingResultsByBatchId', selectSamplingResultsByBatchId);
 router.post('/insertSamplingResults', insertSamplingResults);
 router.delete('/deleteSamplingResults', deleteSamplingResults);
+
+router.get('/selectProducts', selectProducts);
+router.get('/selectProductById', selectProductById);
+router.post('/insertProduct', insertProduct);
+router.put('/updateProduct', updateProduct);
+router.delete('/deleteProduct', deleteProduct);
 
 export default router;
