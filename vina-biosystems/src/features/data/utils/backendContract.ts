@@ -25,6 +25,14 @@ export class ROUTES {
         static readonly GET_RAW_MATERIAL_LIST_BY_BATCH_ID = "/getRawMaterialListByBatchId";
         static readonly ADD_RAW_MATERIAL_TO_BATCH = "/addRawMaterialToBatch";
     };
+
+    public static PRODUCT = class {
+        static readonly SELECT_PRODUCTS = "/selectProducts";
+        static readonly SELECT_PRODUCT_BY_ID = "/selectProductById";
+        static readonly INSERT_PRODUCT = "/insertProduct";
+        static readonly UPDATE_PRODUCT = "/updateProduct";
+        static readonly DELETE_PRODUCT = "/deleteProduct";
+    }
 };
 
 export interface BackendContract {
