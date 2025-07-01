@@ -81,6 +81,24 @@ function AllotmentTable({ dataSource, getAllotmentData }: AllotmentTableProp) {
         return <span style={{ color }}>{UtilityFunctions.getSituationLabel(text)}</span>;
       }
     },
+    { 
+      title: 'Produto', dataIndex: 'produto', key: 'produto',
+      render: (text: string) => {
+        /* 
+          Logica (Vai aparecer o nome do produto)
+        */
+        return "Teste"; // Retorno para função não gerar erro de void...
+      }
+    },
+    { 
+      title: 'Quantidade', dataIndex: 'qtdeProduto', key: 'qtdeProduto',
+      render: (text: string) => {
+        /* 
+          Logica (Vai aparecer a quantidade do produto)
+        */
+        return "Teste"; // Retorno para função não gerar erro de void...
+      }
+    },
     {
       title: 'Ações',
       key: 'acoes',

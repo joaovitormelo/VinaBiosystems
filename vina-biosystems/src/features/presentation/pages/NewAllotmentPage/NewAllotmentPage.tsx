@@ -165,8 +165,39 @@ function NewAllotmentPage(){
                                     size="large"
                                 />
                             </Form.Item>
+
+                            <Form.Item label="Produto">
+                                <SelectStyled
+                                    placeholder="Selecione o produto"
+                                    size="large"
+                                    //onChange={(value) => {
+                                    //setRawMaterialInBatchList(() => {
+                                        /* 
+                                            Logica (Vai aparecer o nome do produto)
+                                        */
+                                    //});
+                                    //}}
+                                >
+                                    {options.map((item) => (
+                                    <Option key={item.value} value={item.value}>
+                                        {item.label}
+                                    </Option>
+                                    ))}
+                                </SelectStyled>
+
+                                <InputStyled
+                                    size="large" placeholder="Informe a quantidade"
+                                    type="number" min={0} step={1} suffix="unidades"
+                                    //onChange={(value) => {
+                                        //setRawMaterialInBatchList(() => {
+                                            /* 
+                                                Logica (Vai aparecer a quantidade do produto)
+                                            */
+                                        //}
+                                    //) }}
+                                />
+                            </Form.Item>
                         </div>
-                        
                     </FormStyled>
                     <TableContainer>
                             <StyledTable

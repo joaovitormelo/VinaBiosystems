@@ -14,6 +14,8 @@ export const NewAllotment = styled.div`
       width: 70%;
     }
 `;
+
+
 export const Content = styled.div `
   margin-left: 390px;
   margin-top: 50px;
@@ -99,6 +101,7 @@ export const FormStyled = styled(Form)`
 `;
 
 export const SelectStyled = styled(Select)`
+  margin-bottom: 20px;
   &.ant-select:hover .ant-select-selector {
     border-color: #0E3226 !important;
   }
