@@ -7,7 +7,7 @@ import { Injector } from '../../../../../../core/Injector';
 import { BatchModel } from '../../../../../domain/models/batchModel';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
-import { UtilityFunctions } from '../../../../utils/utilityFunctions';
+import { UtilityFunctions } from '../../../../utils/UtilityFunctions';
 
 function AllotmentTable({ dataSource, getAllotmentData }: AllotmentTableProp) {
   const navigate = useNavigate();
@@ -24,9 +24,9 @@ function AllotmentTable({ dataSource, getAllotmentData }: AllotmentTableProp) {
     });
   }, [navigate]);
 
-  const handleEdit = useCallback(() => {
-    //LÓGICA
-  }, []);
+  const handleEdit = useCallback((record: any) => {
+    navigate('/novo-lote', { state: { lote: record } });
+  }, [navigate]);
 
   const handleUpdateSituation = useCallback((record: any) => {
     setRecordToUpdate(record);
@@ -89,7 +89,7 @@ function AllotmentTable({ dataSource, getAllotmentData }: AllotmentTableProp) {
           <IconButton onClick={() => handleInfo(record)}>
             <InfoCircleOutlined />
           </IconButton>
-          <IconButton onClick={handleEdit}>
+          <IconButton onClick={() => handleEdit(record)}>
             <EditOutlined />
           </IconButton>
           <IconButton onClick={() => handleUpdateSituation(record)}>

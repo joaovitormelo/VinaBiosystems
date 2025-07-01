@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Header, SidebarMenu } from "../../components";
 import { Button, Form, FormInstance, Select, Table, message } from "antd";
 import { Container, Content, DatePickerStyled, FormStyled, StyledTable, SelectStyled, InputStyled, NewAllotment, TableContainer } from "./styles";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Injector } from "../../../../core/Injector";
 import { BatchModel } from "../../../domain/models/batchModel";
 import { RawMaterialModel } from "../../../domain/models/rawMaterialModel";
@@ -15,6 +15,8 @@ function NewAllotmentPage(){
     const [form] = Form.useForm();
     const formRef = useRef<FormInstance>(null);
     const navigate = useNavigate();
+    const location = useLocation();
+    const editingLote = location.state?.lote;
     const [messageApi, contextHolder] = message.useMessage();
     const [options, setOptions] = useState<Array<{label: string, value: string}>>([]);
     const [rawMaterialInBatchList, setRawMaterialInBatchList] = useState<Array<RawMaterialInBatch>>([]);
@@ -42,36 +44,53 @@ function NewAllotmentPage(){
 
     const onFinish = useCallback(async (values: any, rawMaterialList: RawMaterialInBatch[]) => {
         try {
-            const registerProductionBatchUsecase = Injector.getInstance().getRegisterProductionBatchUsecase();
-            
-            const batch = new BatchModel(
-                null, 
-                values.rotulo, 
-                moment(values.dataInicio), 
-                moment(),
-                rawMaterialList, 
-                BatchModel.SITUATION.EM_ABERTO 
-            );
-            
-            await registerProductionBatchUsecase.execute(batch);
-            
-            messageApi.success({
-                type: 'success',
-                content: 'Lote criado com sucesso!',
-                duration: 2,
-                onClose: () => {
-                    navigate('/lotes');
-                }
-            });
+            if (editingLote) {
+                const editProductionBatchUsecase = Injector.getInstance().getEditProductionBatchUsecase();
+                const batch = new BatchModel(
+                    parseInt(editingLote.key),
+                    values.rotulo,
+                    moment(values.dataInicio),
+                    moment(),
+                    rawMaterialList,
+                    editingLote.situacao || BatchModel.SITUATION.EM_ABERTO
+                );
+                await editProductionBatchUsecase.execute(batch);
+                messageApi.success({
+                    type: 'success',
+                    content: 'Lote editado com sucesso!',
+                    duration: 2,
+                    onClose: () => {
+                        navigate('/lotes');
+                    }
+                });
+            } else {
+                const registerProductionBatchUsecase = Injector.getInstance().getRegisterProductionBatchUsecase();
+                const batch = new BatchModel(
+                    null, 
+                    values.rotulo, 
+                    moment(values.dataInicio), 
+                    moment(),
+                    rawMaterialList, 
+                    BatchModel.SITUATION.EM_ABERTO 
+                );
+                await registerProductionBatchUsecase.execute(batch);
+                messageApi.success({
+                    type: 'success',
+                    content: 'Lote criado com sucesso!',
+                    duration: 2,
+                    onClose: () => {
+                        navigate('/lotes');
+                    }
+                });
+            }
         } catch (error: any) {
-            console.error('Erro ao criar lote:', error);
             messageApi.error({
                 type: 'error',
-                content: error.message || 'Erro ao criar lote. Tente novamente.',
+                content: error.message || (editingLote ? 'Erro ao editar lote. Tente novamente.' : 'Erro ao criar lote. Tente novamente.'),
                 duration: 3
             });
         }
-    }, [navigate, messageApi]);
+    }, [navigate, messageApi, editingLote]);
 
     const onAddRawMaterial = useCallback(async () => {
         setRawMaterialInBatchList((prevList) => [
@@ -89,14 +108,26 @@ function NewAllotmentPage(){
 
     useEffect(() => {
         loadInitialData();
-    }, [loadInitialData]);
+        if (editingLote) {
+            // Preencher formulário e insumos
+            form.setFieldsValue({
+                rotulo: editingLote.rotulo,
+                dataInicio: editingLote.dataInicio ? moment(editingLote.dataInicio) : moment(),
+            });
+            // Buscar insumos do lote (mock: vazio, real: buscar pelo id se necessário)
+            if (editingLote.key) {
+                // Aqui você pode buscar insumos reais se necessário
+                // setRawMaterialInBatchList(...)
+            }
+        }
+    }, [loadInitialData, form, editingLote]);
 
     return (
         <NewAllotment>
             {contextHolder}
             <SidebarMenu />
             <Container>
-                <Header title="Novo Lote" buttonName="Salvar" showButton={true} actionButton={() => formRef.current?.submit()} />
+                <Header title={editingLote ? "Editar Lote" : "Novo Lote"} buttonName="Salvar" showButton={true} actionButton={() => formRef.current?.submit()} />
                 <Content>
                     <FormStyled
                         form={form}

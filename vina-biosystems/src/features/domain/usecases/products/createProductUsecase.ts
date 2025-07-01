@@ -1,12 +1,12 @@
 import { DatabaseException } from "../../../../core/exceptions/databaseException";
 import { ValidationException } from "../../../../core/exceptions/validationException";
-import { ProductsDataContract } from "../../../data/products/productsDataContract";
+import { ProductDataContract } from "../../../data/products/productsDataContract";
 import { ProductModel } from "../../models/productModel";
 
 export class CreateProductUsecase {
-    private productsData: ProductsDataContract;
+    private productsData: ProductDataContract;
 
-    constructor(productsData: ProductsDataContract) {
+    constructor(productsData: ProductDataContract) {
         this.productsData = productsData;
     }
 

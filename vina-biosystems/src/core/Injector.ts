@@ -64,6 +64,7 @@ export class Injector
     private finishProductionBatchUsecase: FinishProductionBatchUsecase;
     private cancelProductionBatchUsecase: CancelProductionBatchUsecase;
     private doLogoutUsecase: DoLogoutUsecase;
+    private editProductionBatchUsecase: any;
 
     private constructor()
     {
@@ -182,6 +183,13 @@ export class Injector
 
     getDoLogoutUsecase(): DoLogoutUsecase {
         return this.doLogoutUsecase;
+    }
+
+    public getEditProductionBatchUsecase() {
+        if (!this.editProductionBatchUsecase) {
+            this.editProductionBatchUsecase = new (require('../features/domain/usecases/production/editProductionBatchUsecase').EditProductionBatchUsecase)(this.batchData);
+        }
+        return this.editProductionBatchUsecase;
     }
 }
 

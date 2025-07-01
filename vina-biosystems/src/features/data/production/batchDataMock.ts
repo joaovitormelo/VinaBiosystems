@@ -63,4 +63,11 @@ export class BatchDataMock implements BatchDataContract {
         // Return a copy to prevent external mutation
         return this.batches.map(b => Object.assign(Object.create(Object.getPrototypeOf(b)), b));
     }
+
+    async updateBatch(batch: BatchModel): Promise<void> {
+        const idx = this.batches.findIndex(b => b.getId() === batch.getId());
+        if (idx !== -1) {
+            this.batches[idx] = batch;
+        }
+    }
 }

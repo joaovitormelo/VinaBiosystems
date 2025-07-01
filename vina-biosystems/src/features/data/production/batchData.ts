@@ -45,5 +45,8 @@ export class BatchData implements BatchDataContract {
         if (!Array.isArray(results)) return [];
         return results.map((item: any) => BatchModel.fromJSON(item));
     }
-    
+
+    async updateBatch(batch: BatchModel): Promise<void> {
+        await this.backend.putData(ROUTES.BATCH.UPDATE_BATCH, batch.toJSON());
+    }
 }

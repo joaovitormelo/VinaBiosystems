@@ -24,6 +24,7 @@ export class ROUTES {
         static readonly UPDATE_BATCH_SITUATION = "/updateBatchSituation";
         static readonly GET_RAW_MATERIAL_LIST_BY_BATCH_ID = "/getRawMaterialListByBatchId";
         static readonly ADD_RAW_MATERIAL_TO_BATCH = "/addRawMaterialToBatch";
+        static readonly UPDATE_BATCH = "/updateBatch";
     };
 
     public static PRODUCT = class {

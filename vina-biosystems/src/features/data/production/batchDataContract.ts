@@ -7,4 +7,5 @@ export interface BatchDataContract {
     updateSituationField(batchId: number, situation: string): Promise<void>;
     createBatch(batch: BatchModel): Promise<number>;
     getAllBatches(): Promise<Array<BatchModel>>;
+    updateBatch(batch: BatchModel): Promise<void>;
 }

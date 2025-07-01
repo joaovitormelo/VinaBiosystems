@@ -81,3 +81,18 @@ export async function selectBatches(req, res){
         });
     });
 }
+
+export async function updateBatch(req, res) {
+    const batch = req.body;
+    openDb().then(db => {
+        db.run(
+            'UPDATE Batch SET label=?, startDate=?, endDate=?, situation=? WHERE id=?',
+            [batch.label, batch.startDate, batch.endDate, batch.situation, batch.id]
+        )
+        .then(() => res.json({ statusCode: 200 }))
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({ error: err.message || "Internal Server Error" });
+        });
+    });
+}
