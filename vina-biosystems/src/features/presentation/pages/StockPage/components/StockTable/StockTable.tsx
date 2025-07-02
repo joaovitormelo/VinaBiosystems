@@ -4,15 +4,23 @@ import { useCallback, useState } from 'react';
 import { StockTableProp } from './types';
 import { Injector } from '../../../../../../core/Injector';
 import { message, Modal } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 function AllotmentTable({ dataSource, getStockData }: StockTableProp) {
   const [messageApi, contextHolder] = message.useMessage();
   const [excludeModalVisible, setExcludeModalVisible] = useState(false);
   const [rawMaterialToDeleteId, setRawMaterialToDeleteId] = useState<number | null>(null);
+  const navigate = useNavigate();
 
-  const handleEdit = useCallback(() => {
-    //LÓGICA
-  }, []);
+  const handleEdit = useCallback((record: any) => {
+    navigate('/novo-insumo', { state: { rawMaterial: {
+      id: Number(record.key),
+      name: record.nomeInsumo,
+      quantity: record.quantidadeAtual,
+      unit: record.unidadeMedida || '',
+      minQuantity: record.quantidadeMinima
+    } } });
+  }, [navigate]);
 
   const handleDelete = useCallback(async (record: any) => {
     setRawMaterialToDeleteId(record.key);
@@ -41,7 +49,7 @@ function AllotmentTable({ dataSource, getStockData }: StockTableProp) {
       key: 'acoes',
       render: (_: any, record: any) => ( dataSource.length > 0 && 
         <>
-          <IconButton onClick={handleEdit}>
+          <IconButton onClick={() => handleEdit(record)}>
             <EditOutlined />
           </IconButton>
           <IconButton onClick={() => handleDelete(record)}>

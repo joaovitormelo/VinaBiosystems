@@ -5,13 +5,29 @@ import { Container, Content, FormStyled, SelectStyled, InputStyled, NewSupply, I
 import { RegisterRawMaterialUsecase } from "../../../domain/usecases/inventory/registerRawMaterialUsecase";
 import { RawMaterialModel } from "../../../domain/models/rawMaterialModel";
 import { Injector } from "../../../../core/Injector";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { EditRawMaterialUsecase } from '../../../domain/usecases/inventory/editRawMaterialUsecase';
 
 interface NewSupplyPageProp {
     title?: string;
 }
 
+function fillFields(form: FormInstance<any>, rawMaterial: RawMaterialModel) {
+    form.setFieldsValue({
+        nomeInsumo: rawMaterial.getName(),
+        quantidadeAtual: rawMaterial.getQuantity(),
+        unidadeMedida: rawMaterial.getUnit(),
+        quantidadeMinima: rawMaterial.getMinQuantity()
+    });
+}
+
 function NewSupplyPage({title = "Novo Insumo"} : NewSupplyPageProp){
+    const location = useLocation();
+    let editingRawMaterial: RawMaterialModel | null = null;
+    if (location?.state?.rawMaterial) {
+        editingRawMaterial = RawMaterialModel.fromJson(location.state.rawMaterial);
+        title = "Editar Insumo";
+    }
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
     const chemicalUnits = [
@@ -32,21 +48,30 @@ function NewSupplyPage({title = "Novo Insumo"} : NewSupplyPageProp){
     const [form] = Form.useForm();
     const formRef = useRef<FormInstance>(null);
 
+    if (editingRawMaterial) {
+        fillFields(form, editingRawMaterial);
+    }
+
     const onFinish = useCallback(async (values: any) => {
         try {
-            const registerRawMaterialUsecase = Injector.getInstance().getRegisterRawMaterialUsecase();
-            const rawMaterial = new RawMaterialModel(
+            let rawMaterial = new RawMaterialModel(
                 0,
                 values.nomeInsumo,
                 values.quantidadeAtual || 0,
                 values.unidadeMedida,
                 values.quantidadeMinima || 0
             );
-
-            await registerRawMaterialUsecase.execute(rawMaterial);
+            if (editingRawMaterial) {
+                rawMaterial.setId(editingRawMaterial.getId());
+                const editRawMaterialUsecase = Injector.getInstance().getEditRawMaterialUsecase();
+                await editRawMaterialUsecase.execute(rawMaterial);
+            } else {
+                const registerRawMaterialUsecase = Injector.getInstance().getRegisterRawMaterialUsecase();
+                await registerRawMaterialUsecase.execute(rawMaterial);
+            }
             messageApi.success({
                 type: 'success',
-                content: 'Insumo cadastrado com sucesso!',
+                content: 'Insumo salvo com sucesso!',
                 duration: 2,
                 onClose: () => {
                     navigate('/estoque');
@@ -55,7 +80,7 @@ function NewSupplyPage({title = "Novo Insumo"} : NewSupplyPageProp){
         } catch (error: any) {
             messageApi.error({
                 type: 'error',
-                content: error.message || 'Erro ao cadastrar insumo',
+                content: error.message || 'Erro ao salvar insumo',
                 duration: 3
             });
         }
