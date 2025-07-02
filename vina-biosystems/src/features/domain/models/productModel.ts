@@ -1,3 +1,5 @@
+import { ValidationException } from "../../../core/exceptions/validationException";
+
 export class ProductModel {
     private id: number | null;
     private name: string;
@@ -61,5 +63,17 @@ export class ProductModel {
             quantity: this.quantity,
             unit: this.unit
         };
+    }
+
+    static validate(product: ProductModel): void {
+        if (!product.getName() || product.getName().trim() === "") {
+            throw new ValidationException("name", "Nome do produto não pode ser vazio.");
+        }
+        if (product.getQuantity() < 0) {
+            throw new ValidationException("quantity", "Quantidade do produto não pode ser negativa.");
+        }
+        if (!product.getUnit() || product.getUnit().trim() === "") {
+            throw new ValidationException("unit", "Unidade do produto não pode ser vazia.");
+        }
     }
 }

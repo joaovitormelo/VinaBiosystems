@@ -5,5 +5,5 @@ export interface ProductDataContract {
     fetchProductById(id: number): Promise<ProductModel | null>;
     createProduct(product: ProductModel): Promise<void>;
     updateProduct(product: ProductModel): Promise<void>;
-    deleteProduct(product: ProductModel): Promise<void>;
+    deleteProduct(id: number): Promise<void>;
 }

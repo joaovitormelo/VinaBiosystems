@@ -28,9 +28,10 @@ export class ProductData implements ProductDataContract {
         await this.backend.putData(ROUTES.PRODUCT.UPDATE_PRODUCT, data);
     }
 
-    async deleteProduct(product: ProductModel): Promise<void> {
-        const data = product.toJson();
-        await this.backend.deleteData(ROUTES.PRODUCT.DELETE_PRODUCT, data);
+    async deleteProduct(productId: number): Promise<void> {
+        await this.backend.deleteData(ROUTES.PRODUCT.DELETE_PRODUCT, {
+            id: productId
+        });
     }
 
     async createProduct(product: ProductModel): Promise<void> {

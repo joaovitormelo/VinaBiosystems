@@ -1,5 +1,5 @@
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { IconButton, CustomTable, GlobalStyle } from './styles';
+import { IconButton, CustomTable } from './styles';
 import { useCallback, useState } from 'react';
 import { ProductTableProp } from './types';
 import { message, Modal } from 'antd';
@@ -8,29 +8,29 @@ import { Injector } from '../../../../../core/Injector';
 function ProductTable({ dataSource, getProductData }: ProductTableProp) {
   const [messageApi, contextHolder] = message.useMessage();
   const [excludeModalVisible, setExcludeModalVisible] = useState(false);
-  const [rawMaterialToDeleteId, setRawMaterialToDeleteId] = useState<number | null>(null);
+  const [productToDeleteId, setProductToDeleteId] = useState<number | null>(null);
 
   const handleEdit = useCallback(() => {
     //LÓGICA
   }, []);
 
   const handleDelete = useCallback(async (record: any) => {
-    setRawMaterialToDeleteId(record.key);
+    setProductToDeleteId(record.key);
     setExcludeModalVisible(true);
   }, [messageApi]);
 
   const performExclusion = useCallback(async () => {
     try {
-      const removeRawMaterialUsecase = Injector.getInstance().getRemoveRawMaterialUsecase();
-      await removeRawMaterialUsecase.execute(rawMaterialToDeleteId as number);
+      const deleteProductUsecase = Injector.getInstance().getDeleteProductUsecase();
+      await deleteProductUsecase.execute(productToDeleteId as number);
       messageApi.success('Insumo removido com sucesso!');
       getProductData();
       setExcludeModalVisible(false);
-      setRawMaterialToDeleteId(null);
+      setProductToDeleteId(null);
     } catch (error: any) {
       messageApi.error(error.message || 'Erro ao remover insumo');
     }
-  }, [messageApi, getProductData, rawMaterialToDeleteId]);
+  }, [messageApi, getProductData, productToDeleteId]);
 
   const columns = [
     { title: 'Nome do Produto', dataIndex: 'nomeProduto', key: 'NomeProduto' },

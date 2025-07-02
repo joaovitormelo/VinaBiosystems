@@ -1,16 +1,17 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { Header, SidebarMenu } from "../../components";
 import { Form, FormInstance, Select, message } from "antd";
-import { Container, Content, FormStyled, SelectStyled, InputStyled, NewProduct, InputNumberStyled } from "./styles";
-import { RawMaterialModel } from "../../../domain/models/rawMaterialModel";
+import { Container, Content, FormStyled, InputStyled, NewProduct, InputNumberStyled } from "./styles";
 import { Injector } from "../../../../core/Injector";
 import { useNavigate } from "react-router-dom";
+import { ProductModel } from "../../../domain/models/productModel";
 
 interface NewSupplyPageProp {
     title?: string;
+    editMode?: boolean;
 }
 
-function NewProductPage({title = "Novo Produto"} : NewSupplyPageProp){
+function NewProductPage({title = "Novo Produto", editMode = false} : NewSupplyPageProp){
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
     const chemicalUnits = [
@@ -33,16 +34,15 @@ function NewProductPage({title = "Novo Produto"} : NewSupplyPageProp){
 
     const onFinish = useCallback(async (values: any) => {
         try {
-            const registerRawMaterialUsecase = Injector.getInstance().getRegisterRawMaterialUsecase();
-            const rawMaterial = new RawMaterialModel(
+            const createProductUsecase = Injector.getInstance().getCreateProductUsecase();
+            const product = new ProductModel(
                 0,
-                values.nomeInsumo,
+                values.nomeProduto,
                 values.quantidadeAtual || 0,
-                values.unidadeMedida,
-                values.quantidadeMinima || 0
+                values.unidadeMedida
             );
 
-            await registerRawMaterialUsecase.execute(rawMaterial);
+            await createProductUsecase.execute(product);
             messageApi.success({
                 type: 'success',
                 content: 'Produto cadastrado com sucesso!',
@@ -103,14 +103,13 @@ function NewProductPage({title = "Novo Produto"} : NewSupplyPageProp){
                                 />
                             </Form.Item>
                             <Form.Item
-                                label="Quantidade do insumo"
+                                label={`Quantidade ${editMode ? 'atual' : 'inicial'}`}
                                 name="quantidadeAtual"
                                 rules={[
                                     { required: true, message: 'Por favor, informe a quantidade do insumo!' },
                                 ]}
                             >
                                 <InputNumberStyled min={0} placeholder="0" />
-                                
                             </Form.Item>
                         </div>
                     </FormStyled>

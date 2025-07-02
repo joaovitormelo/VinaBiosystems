@@ -7,6 +7,7 @@ import { RawMaterialModel } from "../../../domain/models/rawMaterialModel";
 import { ProductColumns } from "./components/types";
 import { GlobalStyle } from "./components/styles";
 import ProductTable from "./components/ProductTable";
+import { ProductModel } from "../../../domain/models/productModel";
 
 function ProductPage() {
     const [productData, setProductData] = useState<ProductColumns[]>([]);
@@ -14,19 +15,19 @@ function ProductPage() {
 
     const getProductData = useCallback(async () => {
         try {
-            const viewRawMaterialInventoryUsecase = Injector.getInstance().getViewRawMaterialInventoryUsecase();
-            const rawMaterials = await viewRawMaterialInventoryUsecase.execute();
+            const viewProductsUsecase = Injector.getInstance().getViewProductsUsecase();
+            const productList = await viewProductsUsecase.execute();
 
-            if (!Array.isArray(rawMaterials)) {
-                console.error("Dados recebidos não são um array:", rawMaterials);
+            if (!Array.isArray(productList)) {
+                console.error("Dados recebidos não são um array:", productList);
                 setProductData([]);
                 return;
             }
 
-            const formattedData: ProductColumns[] = rawMaterials.map((material: RawMaterialModel) => ({
-                key: material.getId().toString(),
-                nomeProduto: material.getName(),
-                quantidadeAtual: material.getQuantity(),
+            const formattedData: ProductColumns[] = productList.map((product: ProductModel) => ({
+                key: (product.getId() as number).toString(),
+                nomeProduto: product.getName(),
+                quantidadeAtual: product.getQuantity(),
             }));
 
             setProductData(formattedData);

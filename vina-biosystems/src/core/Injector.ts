@@ -6,6 +6,8 @@ import { BatchData } from "../features/data/production/batchData";
 import { BatchDataContract } from "../features/data/production/batchDataContract";
 import { SamplingResultDataContract } from "../features/data/production/samplingResultDataContract";
 import { SamplingResultDataMock } from "../features/data/production/samplingResultDataMock";
+import { ProductData } from "../features/data/products/productData";
+import { ProductDataContract } from "../features/data/products/productsDataContract";
 import { NotificationManagerContract } from "../features/data/system/notificationManagerContract";
 import { NotificationManagerMock } from "../features/data/system/notificationManagerMock";
 import { AxiosAdapter } from "../features/data/utils/axiosAdapter";
@@ -29,6 +31,10 @@ import { FinishProductionBatchUsecase } from "../features/domain/usecases/produc
 import { RegisterProductionBatchUsecase } from "../features/domain/usecases/production/registerProductionBatchUsecase";
 import { ViewProductionBatchesUsecase } from "../features/domain/usecases/production/viewProductionBatchesUsecase";
 import { ViewSamplingResultsUsecase } from "../features/domain/usecases/production/viewSamplingResultsUsecase";
+import { CreateProductUsecase } from "../features/domain/usecases/products/createProductUsecase";
+import { DeleteProductUsecase } from "../features/domain/usecases/products/deleteProductUsecase";
+import { EditProductUsecase } from "../features/domain/usecases/products/editProductUsecase";
+import { ViewProductsUsecase } from "../features/domain/usecases/products/viewProductsUsecase";
 import { CriptographyContract } from "../utils/criptography/criptographyContract";
 import { CriptographyMock } from "../utils/criptography/criptographyMock";
 import { SessionManager } from "./session/sessionManager";
@@ -46,6 +52,7 @@ export class Injector
     private notificationManager: NotificationManagerContract;
     private batchData: BatchDataContract;
     private samplingResultData: SamplingResultDataContract;
+    private productsData: ProductDataContract;
     private viewRegisteredUsersListUsecase: ViewRegisteredUsersListUsecase;
     private editUserUsecase: EditUserUsecase;
     private excludeUserUsecase: ExcludeUserUsecase;
@@ -65,6 +72,10 @@ export class Injector
     private cancelProductionBatchUsecase: CancelProductionBatchUsecase;
     private doLogoutUsecase: DoLogoutUsecase;
     private editProductionBatchUsecase: any;
+    private viewProductsUsecase: ViewProductsUsecase;
+    private createProductUsecase: CreateProductUsecase;
+    private editProductUsecase: EditProductUsecase;
+    private deleteProductUsecase: DeleteProductUsecase;
 
     private constructor()
     {
@@ -76,6 +87,7 @@ export class Injector
         this.notificationManager = new NotificationManagerMock();
         this.batchData = new BatchData(this.backend);
         this.samplingResultData = new SamplingResultDataMock();
+        this.productsData = new ProductData(this.backend);
         this.doLoginUsecase = new DoLoginUsecase(this.userData, this.criptography, this.sessionManager);
         this.viewRegisteredUsersListUsecase = new ViewRegisteredUsersListUsecase(this.userData);
         this.editUserUsecase = new EditUserUsecase(this.userData, this.sessionManager);
@@ -97,6 +109,10 @@ export class Injector
             this.batchData, this.samplingResultData, this.inventoryData
         );
         this.doLogoutUsecase = new DoLogoutUsecase(this.sessionManager);
+        this.viewProductsUsecase = new ViewProductsUsecase(this.productsData);
+        this.createProductUsecase = new CreateProductUsecase(this.productsData);
+        this.editProductUsecase = new EditProductUsecase(this.productsData);
+        this.deleteProductUsecase = new DeleteProductUsecase(this.productsData);
     }
 
     static getInstance(): Injector
@@ -185,11 +201,27 @@ export class Injector
         return this.doLogoutUsecase;
     }
 
-    public getEditProductionBatchUsecase() {
+    getEditProductionBatchUsecase() {
         if (!this.editProductionBatchUsecase) {
             this.editProductionBatchUsecase = new (require('../features/domain/usecases/production/editProductionBatchUsecase').EditProductionBatchUsecase)(this.batchData);
         }
         return this.editProductionBatchUsecase;
+    }
+
+    getViewProductsUsecase(): ViewProductsUsecase {
+        return this.viewProductsUsecase;
+    }
+
+    getCreateProductUsecase(): CreateProductUsecase {
+        return this.createProductUsecase;
+    }
+
+    getEditProductUsecase(): EditProductUsecase {
+        return this.editProductUsecase;
+    }
+
+    getDeleteProductUsecase(): DeleteProductUsecase {
+        return this.deleteProductUsecase;
     }
 }
 
