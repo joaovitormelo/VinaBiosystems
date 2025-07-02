@@ -1,6 +1,6 @@
 import React, { use, useCallback, useState } from "react";
 import { Menu, Typography } from 'antd';
-import { IdcardOutlined, InboxOutlined, ReconciliationOutlined, TeamOutlined } from "@ant-design/icons";
+import { ExperimentOutlined, IdcardOutlined, InboxOutlined, ReconciliationOutlined, TeamOutlined } from "@ant-design/icons";
 import { Sidebar, Logo, ExitButton } from "./styles";
 import logoVinaVertical from '../../utils/logoVinaVertical.png'
 import { useNavigate } from "react-router-dom";
@@ -25,9 +25,12 @@ function SidebarMenu(){
                 navigate('/usuarios');
                 break;
             case "3":
-                navigate('/estoque');
+                navigate('/produtos');
                 break;
             case "4":
+                navigate('/estoque');
+                break;
+            case "5":
                 navigate('/lotes');
                 break;
             default:
@@ -65,10 +68,13 @@ function SidebarMenu(){
                 <Menu.Item key="2" icon={<TeamOutlined />}>
                     Usuários
                 </Menu.Item>
-                <Menu.Item key="3" icon={<InboxOutlined />}>
+                <Menu.Item key="3" icon={<ExperimentOutlined />}>
+                    Produtos
+                </Menu.Item>
+                <Menu.Item key="4" icon={<InboxOutlined />}>
                     Estoque
                 </Menu.Item>
-                <Menu.Item key="4" icon={<ReconciliationOutlined />}>
+                <Menu.Item key="5" icon={<ReconciliationOutlined />}>
                     Lotes
                 </Menu.Item>
             </Menu>

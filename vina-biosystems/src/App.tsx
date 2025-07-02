@@ -12,6 +12,8 @@ import StockPage from './features/presentation/pages/StockPage';
 import ProfilePage from './features/presentation/pages/ProfilePage';
 import NewSupplyPage from './features/presentation/pages/NewSupplyPage';
 import AllotmentInfoPage from './features/presentation/pages/AllotmentInfoPage';
+import ProductPage from './features/presentation/pages/ProductPage';
+import NewProductPage from './features/presentation/pages/NewProductPage';
 
 // componente wrapper para passar as props do estado da navegacao
 function AllotmentInfoPageWrapper() {
@@ -38,6 +40,8 @@ function App() {
           <Route path="/estoque" element={<StockPage />} />
           <Route path="/novo-insumo" element={<NewSupplyPage />} />
           <Route path="/info-lote" element={<AllotmentInfoPageWrapper />} />
+          <Route path="/produtos" element={<ProductPage />} />
+          <Route path="/novo-produto" element={<NewProductPage />} />
         </Routes>
       </div>
     </Router>
