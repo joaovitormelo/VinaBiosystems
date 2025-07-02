@@ -45,7 +45,7 @@ function NewProductPage({title = "Novo Produto"} : NewSupplyPageProp){
             await registerRawMaterialUsecase.execute(rawMaterial);
             messageApi.success({
                 type: 'success',
-                content: 'Insumo cadastrado com sucesso!',
+                content: 'Produto cadastrado com sucesso!',
                 duration: 2,
                 onClose: () => {
                     navigate('/produtos');
@@ -54,7 +54,7 @@ function NewProductPage({title = "Novo Produto"} : NewSupplyPageProp){
         } catch (error: any) {
             messageApi.error({
                 type: 'error',
-                content: error.message || 'Erro ao cadastrar insumo',
+                content: error.message || 'Erro ao cadastrar produto',
                 duration: 3
             });
         }
