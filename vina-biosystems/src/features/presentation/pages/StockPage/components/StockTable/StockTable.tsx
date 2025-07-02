@@ -20,7 +20,7 @@ function AllotmentTable({ dataSource, getStockData }: StockTableProp) {
       unit: record.unidadeMedida || '',
       minQuantity: record.quantidadeMinima
     } } });
-  }, [navigate]);
+    }, [navigate]);
 
   const handleDelete = useCallback(async (record: any) => {
     setRawMaterialToDeleteId(record.key);
