@@ -71,7 +71,6 @@ function UsersPage() {
                     actionButton={handleNewUser}
                 />
                 <Content>
-                    <SearchInput />
                     <TableStyle>
                         <GlobalStyle />
                         <UsersTable

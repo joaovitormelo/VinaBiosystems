@@ -6,7 +6,7 @@ import { Injector } from "../../../../core/Injector";
 import { UserModel } from "../../../domain/models/userModel";
 import moment from "moment";
 
-function ProfilePage(){
+function ProfilePage() {
     const [form] = Form.useForm();
     const formRef = useRef<FormInstance>(null);
     const [userType, setUserType] = useState<string>("Colaborador");
@@ -19,7 +19,7 @@ function ProfilePage(){
             const user = UserModel.fromJson(JSON.parse(sessionUser));
             setCurrentUser(user);
             setUserType(user.getIsAdmin() ? "Administrador" : "Colaborador");
-            
+
             form.setFieldsValue({
                 nomeCompleto: user.getName(),
                 email: user.getEmail(),
@@ -41,7 +41,7 @@ function ProfilePage(){
             }
 
             const editUserUsecase = Injector.getInstance().getEditUserUsecase();
-            
+
             const updatedUser = new UserModel(
                 currentUser.getId(),
                 values.nomeCompleto,
@@ -53,15 +53,15 @@ function ProfilePage(){
             );
 
             await editUserUsecase.execute(updatedUser);
-            
+
             setCurrentUser(updatedUser);
             localStorage.setItem('sessionUser', JSON.stringify(updatedUser.toJson()));
-            
+
             form.setFieldsValue({
                 senhaAtual: undefined,
                 novaSenha: undefined
             });
-            
+
             messageApi.success('Dados atualizados com sucesso!');
         } catch (error: any) {
             if (error.message?.includes('já existe')) {
@@ -103,7 +103,7 @@ function ProfilePage(){
                             <Form.Item
                                 label="Nome Completo"
                                 name="nomeCompleto"
-                                rules={[{ required: true, message: "Por favor, insira seu nome completo!"}]}
+                                rules={[{ required: true, message: "Por favor, insira seu nome completo!" }]}
                             >
                                 <InputStyled size="large" />
                             </Form.Item>
@@ -112,25 +112,40 @@ function ProfilePage(){
                                 name="email"
                                 rules={[
                                     { required: true, message: 'Campo obrigatório!' },
-                                    { type: 'email', message: 'E-mail inválido!'}
+                                    { type: 'email', message: 'E-mail inválido!' }
                                 ]}
                             >
-                                <InputStyled size="large"/>
+                                <InputStyled size="large" />
                             </Form.Item>
-                            <Form.Item
-                                label="Senha atual"
-                                name="senhaAtual"
-                            >
-                                <InputStyled.Password />
-                            </Form.Item>
+
                             <Form.Item
                                 label="Nova senha"
                                 name="novaSenha"
                                 rules={[
                                     { min: 6, message: "Mínimo de 6 caracteres" }
                                 ]}
+                                hasFeedback
                             >
-                                <InputStyled.Password size="large"/>
+                                <InputStyled.Password size="large" />
+                            </Form.Item>
+                            <Form.Item
+                                label="Confirme a nova senha"
+                                name="senhaAtual"
+                                dependencies={['novaSenha']} // observa mudanças no campo novaSenha
+                                hasFeedback
+                                rules={[
+                                    { required: true, message: "Confirme a nova senha" },
+                                    ({ getFieldValue }) => ({
+                                        validator(_, value) {
+                                            if (!value || getFieldValue('novaSenha') === value) {
+                                                return Promise.resolve();
+                                            }
+                                            return Promise.reject(new Error('As senhas não coincidem'));
+                                        }
+                                    })
+                                ]}
+                            >
+                                <InputStyled.Password />
                             </Form.Item>
                         </div>
                         <div>
@@ -147,7 +162,7 @@ function ProfilePage(){
                                 label="Telefone"
                                 name="telefone"
                             >
-                                <InputStyled size="large"/>
+                                <InputStyled size="large" />
                             </Form.Item>
                         </div>
                     </FormStyled>
