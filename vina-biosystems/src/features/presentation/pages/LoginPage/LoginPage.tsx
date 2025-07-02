@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { LoginArea, FormArea, StyledButton } from "./styles";
 
 import logoVinaHorizontal from '../../utils/logoVinaHorizontal.png';
-import cafeBordoLogin from '../../utils/cafeBordoLogin.png';
+import simboloVinaLogin from '../../utils/simboloVinaLogin.png';
 import { Injector } from "../../../../core/Injector";
 import { DoLoginUsecase } from "../../../domain/usecases/authentication/doLoginUsecase";
 import { RawMaterialInBatch } from "../../../domain/types/rawMaterialInBatch";
@@ -351,7 +351,7 @@ function LoginPage(){
                     src={logoVinaHorizontal}
                     alt="Logo Vina Biotech em bege"
                     preview={false}
-                    style={{ width: 730, height: 335 }}
+                    style={{ width: 730, height: 335}}
                 />
                 <p>Biotecnologia, Bioeconomia</p>
                 <p>Circular e Soluções Inovadoras</p>
@@ -399,11 +399,11 @@ function LoginPage(){
             </FormArea>
             <div>
                 <Image
-                    src={cafeBordoLogin}
-                    alt="Grãos de café espalhados"
+                    src={simboloVinaLogin}
+                    alt="Símbolo da Vina Biotech verde com opacidade reduzida"
                     preview={false}
                     className="side-image"
-                    style={{ width: '50vw', height: '100vh' }}
+                    style={{ width: '40vw', height: '100vh' }}
                 />
             </div>
         </LoginArea>

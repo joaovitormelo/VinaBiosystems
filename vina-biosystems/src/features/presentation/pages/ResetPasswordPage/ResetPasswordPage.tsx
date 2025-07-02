@@ -4,7 +4,7 @@ import { Button, Form, Image, Input, Typography} from "antd";
 import { LoginArea, FormArea, StyledButton } from "./styles";
 
 import logoVinaHorizontal from '../../utils/logoVinaHorizontal.png';
-import cafeBordoLogin from '../../utils/cafeBordoLogin.png';
+import simboloVinaLogin from '../../utils/simboloVinaLogin.png';
 
 const { Link } = Typography;
 
@@ -25,7 +25,7 @@ function ResetPasswordPage(){
                     src={logoVinaHorizontal}
                     alt="Logo Vina Biotech em bege"
                     preview={false}
-                    style={{ width: 730, height: 335 }}
+                    style={{ width: 730, height: 320 }}
                 />
                 <p>
                     Digite o e-mail associado a sua conta e, em
@@ -69,10 +69,11 @@ function ResetPasswordPage(){
             </FormArea>
             <div>
                 <Image
-                    src={cafeBordoLogin}
-                    alt="Grãos de café espalhados"
+                    src={simboloVinaLogin}
+                    alt="Símbolo da Vina Biotech verde com opacidade reduzida"
                     preview={false}
                     className="side-image"
+                    style={{ width: '40vw', height: '100vh' }}
                 />
             </div>
         </LoginArea>

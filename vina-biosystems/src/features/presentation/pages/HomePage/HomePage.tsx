@@ -1,7 +1,7 @@
 import { Header, SidebarMenu } from "../../components";
 import { Home, Content, ImgContainer } from "./styles";
 import { Image } from "antd";
-import cafeBordoIniciar from "../../utils/cafeBordoIniciar.png"
+import simboloVinaIniciar from "../../utils/simboloVinaIniciar.png"
 function HomePage(){
 
     return(
@@ -15,8 +15,8 @@ function HomePage(){
                 />
                 <ImgContainer>
                     <Image 
-                        src={cafeBordoIniciar}
-                        alt="Grãos de café espalhados pela página"
+                        src={simboloVinaIniciar}
+                        alt="Símbolo da Vina Biotech verde com opacidade reduzida"
                         preview={false}
                     />
                 </ImgContainer>

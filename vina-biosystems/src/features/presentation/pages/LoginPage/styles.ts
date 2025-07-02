@@ -40,7 +40,7 @@ export const FormArea = styled.div`
     #loginForm_submitButton {
         width: 280px;
         height: 60px;
-        margin-left: 50px;
+        margin-top: 10px;
     }
     
 `;

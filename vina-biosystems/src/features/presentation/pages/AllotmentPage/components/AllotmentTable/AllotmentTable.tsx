@@ -1,4 +1,4 @@
-import { EditOutlined, DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { EditOutlined, CloseCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { IconButton, CustomTable } from './styles';
 import { useCallback, useState } from 'react';
 import { AllotmentColumns, AllotmentTableProp } from './types';
@@ -106,11 +106,11 @@ function AllotmentTable({ dataSource, getAllotmentData, productList }: Allotment
           <IconButton onClick={() => handleInfo(record)}>
             <InfoCircleOutlined />
           </IconButton>
-          <IconButton onClick={() => handleEdit(record)}>
+          {/*<IconButton onClick={() => handleEdit(record)}>
             <EditOutlined />
-          </IconButton>
+          </IconButton>*/}
           <IconButton onClick={() => handleUpdateSituation(record)}>
-            <DeleteOutlined />
+            <CloseCircleOutlined />
           </IconButton>
         </>
       ),
