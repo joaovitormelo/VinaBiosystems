@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { Header, SidebarMenu } from "../../components";
 import { Products, TableStyle, Content, Container } from "./styles";
 import { Injector } from "../../../../core/Injector";
-import { RawMaterialModel } from "../../../domain/models/rawMaterialModel";
 import { ProductColumns } from "./components/types";
 import { GlobalStyle } from "./components/styles";
 import ProductTable from "./components/ProductTable";
@@ -11,12 +10,15 @@ import { ProductModel } from "../../../domain/models/productModel";
 
 function ProductPage() {
     const [productData, setProductData] = useState<ProductColumns[]>([]);
+    const [productList, setProductList] = useState<ProductModel[]>([]);
     const navigate = useNavigate();
 
     const getProductData = useCallback(async () => {
         try {
             const viewProductsUsecase = Injector.getInstance().getViewProductsUsecase();
             const productList = await viewProductsUsecase.execute();
+
+            setProductList(productList);
 
             if (!Array.isArray(productList)) {
                 console.error("Dados recebidos não são um array:", productList);
@@ -57,7 +59,10 @@ function ProductPage() {
                 <Content>
                     <TableStyle>
                         <GlobalStyle />
-                        <ProductTable dataSource={productData} getProductData={getProductData} />
+                        <ProductTable
+                            dataSource={productData} getProductData={getProductData}
+                            productList={productList}
+                        />
                     </TableStyle>
                 </Content>
             </Container>

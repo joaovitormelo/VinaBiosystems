@@ -3,15 +3,25 @@ import { Header, SidebarMenu } from "../../components";
 import { Form, FormInstance, Select, message } from "antd";
 import { Container, Content, FormStyled, InputStyled, NewProduct, InputNumberStyled } from "./styles";
 import { Injector } from "../../../../core/Injector";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ProductModel } from "../../../domain/models/productModel";
 
 interface NewSupplyPageProp {
     title?: string;
-    editMode?: boolean;
 }
 
-function NewProductPage({title = "Novo Produto", editMode = false} : NewSupplyPageProp){
+function fillFields(form: FormInstance<any>, product: ProductModel) {
+    form.setFieldsValue({
+        nomeProduto: product.getName(),
+        quantidadeAtual: product.getQuantity(),
+        unidadeMedida: product.getUnit()
+    });
+}
+
+function NewProductPage({title = "Novo Produto"} : NewSupplyPageProp){
+    const location = useLocation();
+    const editingProduct = ProductModel.fromJson(location.state?.product);
+
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
     const chemicalUnits = [
@@ -32,9 +42,23 @@ function NewProductPage({title = "Novo Produto", editMode = false} : NewSupplyPa
     const [form] = Form.useForm();
     const formRef = useRef<FormInstance>(null);
 
+    if (editingProduct) {
+        title = "Editar Produto";
+        fillFields(form, editingProduct);
+    }
+
+    const createProduct = async (product: ProductModel) => {
+        const createProductUsecase = Injector.getInstance().getCreateProductUsecase();
+        return await createProductUsecase.execute(product);
+    }
+
+    const editProduct = async (product: ProductModel) => {
+        const updateProductUsecase = Injector.getInstance().getEditProductUsecase();
+        return await updateProductUsecase.execute(product);
+    }
+
     const onFinish = useCallback(async (values: any) => {
         try {
-            const createProductUsecase = Injector.getInstance().getCreateProductUsecase();
             const product = new ProductModel(
                 0,
                 values.nomeProduto,
@@ -42,10 +66,16 @@ function NewProductPage({title = "Novo Produto", editMode = false} : NewSupplyPa
                 values.unidadeMedida
             );
 
-            await createProductUsecase.execute(product);
+            if (editingProduct) {
+                product.setId(editingProduct.getId());
+                await editProduct(product);
+            } else {
+                await createProduct(product);
+            }
+
             messageApi.success({
                 type: 'success',
-                content: 'Produto cadastrado com sucesso!',
+                content: 'Produto salvo com sucesso!',
                 duration: 2,
                 onClose: () => {
                     navigate('/produtos');
@@ -54,7 +84,7 @@ function NewProductPage({title = "Novo Produto", editMode = false} : NewSupplyPa
         } catch (error: any) {
             messageApi.error({
                 type: 'error',
-                content: error.message || 'Erro ao cadastrar produto',
+                content: error.message || 'Erro ao salvar produto',
                 duration: 3
             });
         }
@@ -103,7 +133,7 @@ function NewProductPage({title = "Novo Produto", editMode = false} : NewSupplyPa
                                 />
                             </Form.Item>
                             <Form.Item
-                                label={`Quantidade ${editMode ? 'atual' : 'inicial'}`}
+                                label={`Quantidade ${editingProduct ? 'atual' : 'inicial'}`}
                                 name="quantidadeAtual"
                                 rules={[
                                     { required: true, message: 'Por favor, informe a quantidade do insumo!' },

@@ -4,15 +4,19 @@ import { useCallback, useState } from 'react';
 import { ProductTableProp } from './types';
 import { message, Modal } from 'antd';
 import { Injector } from '../../../../../core/Injector';
+import { useNavigate } from 'react-router-dom';
 
-function ProductTable({ dataSource, getProductData }: ProductTableProp) {
+function ProductTable({ dataSource, getProductData, productList }: ProductTableProp) {
   const [messageApi, contextHolder] = message.useMessage();
   const [excludeModalVisible, setExcludeModalVisible] = useState(false);
   const [productToDeleteId, setProductToDeleteId] = useState<number | null>(null);
+  const navigate = useNavigate();
 
-  const handleEdit = useCallback(() => {
-    //LÓGICA
-  }, []);
+  const handleEdit = useCallback((index: number) => {
+    navigate('/novo-produto', { state: {
+      product: productList[index].toJson()
+    } });
+  }, [navigate, productList]);
 
   const handleDelete = useCallback(async (record: any) => {
     setProductToDeleteId(record.key);
@@ -38,9 +42,9 @@ function ProductTable({ dataSource, getProductData }: ProductTableProp) {
     {
       title: 'Ações',
       key: 'acoes',
-      render: (_: any, record: any) => ( dataSource.length > 0 && 
+      render: (_: any, record: any, index: number) => ( dataSource.length > 0 && 
         <>
-          <IconButton onClick={handleEdit}>
+          <IconButton onClick={() => handleEdit(index)}>
             <EditOutlined />
           </IconButton>
           <IconButton onClick={() => handleDelete(record)}>

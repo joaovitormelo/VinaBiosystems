@@ -1,3 +1,5 @@
+import { ProductModel } from "../../../../domain/models/productModel";
+
 export interface ProductColumns {
   key: string;
   nomeProduto: string;
@@ -6,5 +8,6 @@ export interface ProductColumns {
 
 export type ProductTableProp = {
   dataSource: ProductColumns[],
+  productList: ProductModel[],
   getProductData: () => any,
 }
