@@ -8,27 +8,20 @@ import { UsersTableProp } from './types';
 import { Injector } from "../../../../../../core/Injector";
 import { UserModel } from "../../../../../domain/models/userModel";
 import { UsecaseException } from '../../../../../../core/exceptions/usecaseException';
+import { useNavigate } from 'react-router-dom';
 
-function UsersTable({ dataSource, userList, updateTable, loading }: UsersTableProp) {
+function UsersTable({ dataSource, userList, updateTable, loading, isAdmin }: UsersTableProp) {
   const [messageApi, contextHolder] = message.useMessage();
   const injector = Injector.getInstance();
   const excludeUserUsecase = injector.getExcludeUserUsecase();
-  const [isAdmin, setIsAdmin] = useState(false);
   const [excludeModalVisible, setExcludeModalVisible] = useState(false);
   const [userToDeleteIndex, setUserToDeleteIndex] = useState<number | null>(null);
-
-  useEffect(() => {
-    const sessionUser = localStorage.getItem('sessionUser');
-    if (sessionUser) {
-      const user = UserModel.fromJson(JSON.parse(sessionUser));
-      setIsAdmin(user.getIsAdmin());
-    }
-  }, []);
+  const navigate = useNavigate();
 
   const handleEdit = useCallback((index: number) => {
-      const userToEdit = userList[index];
-    // 
-  }, [userList, updateTable]);
+    const userToEdit = userList[index];
+    navigate('/novo-usuario', { state: { isEdit: true, user: userToEdit } });
+  }, [userList, navigate]);
 
   const handleDelete = useCallback((index: number, ) => {
     console.log("Chamou handleDelete");
@@ -83,9 +76,11 @@ function UsersTable({ dataSource, userList, updateTable, loading }: UsersTablePr
       key: 'acoes',
       render: (value, record, index) => (
         <>
-          <IconButton onClick={() => handleEdit(index)}>
-            <EditOutlined />
-          </IconButton>
+          {isAdmin && (
+            <IconButton onClick={() => handleEdit(index)}>
+              <EditOutlined />
+            </IconButton>
+          )}
           <IconButton onClick={() => handleDelete(index)}>
             <DeleteOutlined />
           </IconButton>

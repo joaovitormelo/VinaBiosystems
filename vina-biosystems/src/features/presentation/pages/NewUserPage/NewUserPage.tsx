@@ -26,6 +26,15 @@ function NewUserPage({ title = "Novo Usuário" }) {
 
     const options = ['Administrador', 'Colaborador'];
 
+    // Verifica se é edição de um admin
+    const sessionUserRaw = localStorage.getItem('sessionUser');
+    let sessionUserIsAdmin = false;
+    if (sessionUserRaw) {
+        const sessionUser = UserModel.fromJson(JSON.parse(sessionUserRaw));
+        sessionUserIsAdmin = sessionUser.getIsAdmin();
+    }
+    const isEditingAdmin = isEdit && initialUser?.getIsAdmin() && sessionUserIsAdmin;
+
     const onFinish = useCallback(async (values: any) => {
         try {
             const injector = Injector.getInstance();
@@ -48,7 +57,14 @@ function NewUserPage({ title = "Novo Usuário" }) {
             messageApi.success(isEdit ? 'Usuário atualizado com sucesso!' : 'Usuário cadastrado com sucesso!');
             navigate('/usuarios', { replace: true });
         } catch (error: any) {
-            onFinishFailed(error);
+            // Exibe a mensagem real do erro, se existir
+            if (error && error.message) {
+                messageApi.error(error.message);
+            } else {
+                messageApi.error('Erro ao processar operação');
+            }
+            // Loga o erro completo para debug
+            console.error('Erro ao salvar usuário:', error);
         }
     }, [isEdit, initialUser, messageApi, navigate]);
 
@@ -72,15 +88,17 @@ function NewUserPage({ title = "Novo Usuário" }) {
     // Preencher os campos se for edição
     useEffect(() => {
         if (isEdit && user) {
-            setInitialUser(user);
+            // Garante que user é uma instância de UserModel
+            const userInstance = user instanceof UserModel ? user : UserModel.fromJson(user);
+            setInitialUser(userInstance);
 
             form.setFieldsValue({
-                nomeCompleto: user.getName(),
-                email: user.getEmail(),
-                telefone: user.getPhone(),
-                dataNascimento: user.getBirthDate() ? dayjs(user.getBirthDate()) : null,
-                tipoPerfil: user.getIsAdmin() ? 'Administrador' : 'Colaborador',
-                senhaAtual: user.getPassword()
+                nomeCompleto: userInstance.getName(),
+                email: userInstance.getEmail(),
+                telefone: userInstance.getPhone(),
+                dataNascimento: userInstance.getBirthDate() ? dayjs(userInstance.getBirthDate()) : null,
+                tipoPerfil: userInstance.getIsAdmin() ? 'Administrador' : 'Colaborador',
+                senhaAtual: userInstance.getPassword()
             });
         }
     }, [isEdit, user, form]);
@@ -111,7 +129,7 @@ function NewUserPage({ title = "Novo Usuário" }) {
                                 name="tipoPerfil"
                                 rules={[{ required: true, message: "Por favor, selecione um tipo de usuário!" }]}
                             >
-                                <SelectStyled placeholder="Selecione uma opção" allowClear size="large">
+                                <SelectStyled placeholder="Selecione uma opção" allowClear size="large" disabled={isEditingAdmin}>
                                     {options.map((o) => (
                                         <Option key={o} value={o}>{o}</Option>
                                     ))}

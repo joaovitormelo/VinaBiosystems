@@ -13,4 +13,5 @@ export interface UsersTableProp {
     userList: UserModel[];      // Lista de usuários do modelo UserModel
     updateTable: () => void; // Callback para atualizar a tabela
     loading: boolean;          // Flag para estado de carregamento
+    isAdmin: boolean;          // Flag para indicar se o usuário é admin
 }

@@ -32,7 +32,8 @@ export class EditUserUsecase {
         if (userInDb && userInDb.getId() !== user.getId()) {
             throw new ExistentUserException(user.getEmail());
         }
-        const currentUser: UserModel = this.sessionManager.getSessionUser() as UserModel;
+        const currentUserRaw = this.sessionManager.getSessionUser();
+        const currentUser: UserModel = currentUserRaw instanceof UserModel ? currentUserRaw : UserModel.fromJson(currentUserRaw);
         // Tentativa de redefinir senha
         if (user.getPassword() != null) {
             // Se o usuário atual não for admin e não for o próprio usuário, lança exceção

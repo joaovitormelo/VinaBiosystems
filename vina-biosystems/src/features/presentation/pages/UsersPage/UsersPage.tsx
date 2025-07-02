@@ -79,6 +79,7 @@ function UsersPage() {
                             userList={userList}
                             updateTable={getUserData}
                             loading={loading}
+                            isAdmin={isAdmin}
                         />
                     </TableStyle>
                 </Content>
