@@ -1,7 +1,7 @@
 import { EditOutlined, DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { IconButton, CustomTable } from './styles';
 import { useCallback, useState } from 'react';
-import { AllotmentTableProp } from './types';
+import { AllotmentColumns, AllotmentTableProp } from './types';
 import { Button, Modal, message } from 'antd';
 import { Injector } from '../../../../../../core/Injector';
 import { BatchModel } from '../../../../../domain/models/batchModel';
@@ -9,7 +9,7 @@ import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import { UtilityFunctions } from '../../../../utils/utilityFunctions';
 
-function AllotmentTable({ dataSource, getAllotmentData }: AllotmentTableProp) {
+function AllotmentTable({ dataSource, getAllotmentData, productList }: AllotmentTableProp) {
   const navigate = useNavigate();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [recordToUpdate, setRecordToUpdate] = useState<any>(null);
@@ -43,7 +43,9 @@ function AllotmentTable({ dataSource, getAllotmentData }: AllotmentTableProp) {
         moment(),
         moment(),
         [],
-        recordToUpdate.situacao
+        recordToUpdate.situacao,
+        recordToUpdate.productId ? parseInt(recordToUpdate.productId) : null,
+        recordToUpdate.productQuantity ? parseInt(recordToUpdate.productQuantity) : null
       );
 
       await cancelProductionBatchUsecase.execute(batch);
@@ -83,20 +85,17 @@ function AllotmentTable({ dataSource, getAllotmentData }: AllotmentTableProp) {
     },
     { 
       title: 'Produto', dataIndex: 'produto', key: 'produto',
-      render: (text: string) => {
-        /* 
-          Logica (Vai aparecer o nome do produto)
-        */
-        return "Teste"; // Retorno para função não gerar erro de void...
+      render: (text: string, record: any) => {
+        const product = productList.find(
+          product => "" + (product.getId() as number) == record.productId
+        );
+        return product ? product.getName() : 'Produto não encontrado';
       }
     },
     { 
-      title: 'Quantidade', dataIndex: 'qtdeProduto', key: 'qtdeProduto',
+      title: 'Quantidade', dataIndex: 'productQuantity', key: 'productQuantity',
       render: (text: string) => {
-        /* 
-          Logica (Vai aparecer a quantidade do produto)
-        */
-        return "Teste"; // Retorno para função não gerar erro de void...
+        return text; // Retorno para função não gerar erro de void...
       }
     },
     {

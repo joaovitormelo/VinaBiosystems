@@ -66,15 +66,11 @@ export class RegisterProductionBatchUsecase {
     }
 
     private async validateFields(batch: BatchModel) {
-        console.log(batch);
         if (!batch.getLabel()) {
             throw new ValidationException("label", "O rótulo do lote é obrigatório.");
         }
         if (!batch.getStartDate()) {
             throw new ValidationException("startDate", "A data de início do lote é obrigatória.");
-        }
-        if (!batch.getEndDate()) {
-            throw new ValidationException("endDate", "A data de término do lote é obrigatória.");
         }
         if (batch.getStartDate().isAfter(batch.getEndDate())) {
             throw new ValidationException("startDate", "A data de início não pode ser posterior à data de término.");

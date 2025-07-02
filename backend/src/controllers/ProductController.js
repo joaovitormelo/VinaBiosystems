@@ -25,9 +25,9 @@ export async function selectProductById(req, res){
 
 export async function insertProduct(req, res){
     let product = req.body;
-    let fields = "id, name, quantity, unit";
-    let placeholders = "?, ?, ?, ?";
-    let values = [product.id, product.name, product.quantity, product.unit];
+    let fields = "name, quantity, unit";
+    let placeholders = "?, ?, ?";
+    let values = [product.name, product.quantity, product.unit];
     openDb().then(db=>{
         db.run(`INSERT INTO Product(${fields}) VALUES (${placeholders})`, values)
         .then(() => res.json({ statusCode: 200 }))
@@ -61,6 +61,19 @@ export async function deleteProduct(req, res){
         .catch(err => {
             console.error(err);
             res.status(500).json({ error: err.message })
+        });
+    });
+}
+
+export async function addToProductQuantity(req, res) {
+    const { id, quantity } = req.body;
+    console.log(req);
+    openDb().then(db => {
+        db.run('UPDATE Product SET quantity = quantity + ? WHERE id = ?', [quantity, id])
+        .then(() => res.json({ statusCode: 200 }))
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({ error: err.message || "Internal Server Error" });
         });
     });
 }

@@ -38,4 +38,11 @@ export class ProductData implements ProductDataContract {
         const data = product.toJson();
         await this.backend.postData(ROUTES.PRODUCT.INSERT_PRODUCT, data);
     }
+
+    async addToProductQuantity(id: number, quantity: number): Promise<void> {
+        await this.backend.putData(ROUTES.PRODUCT.ADD_TO_PRODUCT_QUANTITY, {
+            id,
+            quantity
+        });
+    }
 }

@@ -4,10 +4,7 @@ import { Container, Content, NewAllotment, InfoContainer, InfoItem, Label, Value
 import { useLocation, useNavigate } from "react-router-dom";
 import { Injector } from "../../../../core/Injector";
 import { BatchModel } from "../../../domain/models/batchModel";
-import { RawMaterialInBatch } from "../../../domain/types/rawMaterialInBatch";
-import { RawMaterialModel } from "../../../domain/models/rawMaterialModel";
 import { message } from "antd";
-import moment from "moment";
 
 interface AllotmentInfoPageProps {
     rotulo: string;
@@ -81,7 +78,7 @@ function AllotmentInfoPage({ rotulo, situacao }: AllotmentInfoPageProps) {
         if (batchData?.getId()) {
             navigate('/finalizar-lote', { 
                 state: { 
-                    batchId: batchData.getId(),
+                    batch: batchData.toJSON(),
                     rotulo: batchData.getLabel(),
                     situacao: batchData.getSituation()
                 } 
@@ -130,7 +127,7 @@ function AllotmentInfoPage({ rotulo, situacao }: AllotmentInfoPageProps) {
                             <InfoItem>
                                 <Label>Data de término:</Label>
                                 <Value>
-                                    {batchData?.getEndDate().format('DD/MM/YYYY')}
+                                    {batchData?.getEndDate()?.format('DD/MM/YYYY')}
                                 </Value>
                             </InfoItem>
                         )}

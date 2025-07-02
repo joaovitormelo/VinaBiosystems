@@ -6,4 +6,5 @@ export interface ProductDataContract {
     createProduct(product: ProductModel): Promise<void>;
     updateProduct(product: ProductModel): Promise<void>;
     deleteProduct(id: number): Promise<void>;
+    addToProductQuantity(id: number, quantity: number): Promise<void>;
 }

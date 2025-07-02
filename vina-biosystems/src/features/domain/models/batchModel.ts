@@ -5,9 +5,11 @@ export class BatchModel {
     private id: number | null;
     private label: string;
     private startDate: Moment;
-    private endDate: Moment;
+    private endDate: Moment | null;
     private rawMaterialList: Array<RawMaterialInBatch> | null;
     private situation: string;
+    private productId: number | null;
+    private productQuantity: number | null
 
     public static SITUATION = class {
         static readonly EM_ABERTO = "open";
@@ -16,8 +18,9 @@ export class BatchModel {
     };
 
     constructor(
-        id: number | null, label: string, startDate: Moment, endDate: Moment,
-        rawMaterialList: Array<RawMaterialInBatch> | null, situation: string
+        id: number | null, label: string, startDate: Moment, endDate: Moment | null,
+        rawMaterialList: Array<RawMaterialInBatch> | null, situation: string,
+        productId: number | null, productQuantity: number | null
     ) {
         this.id = id;
         this.label = label;
@@ -25,6 +28,8 @@ export class BatchModel {
         this.endDate = endDate;
         this.rawMaterialList = rawMaterialList;
         this.situation = situation;
+        this.productId = productId;
+        this.productQuantity = productQuantity;
     }
 
     getId(): number | null {
@@ -36,7 +41,7 @@ export class BatchModel {
     getStartDate(): Moment {
         return this.startDate;
     }
-    getEndDate(): Moment {
+    getEndDate(): Moment | null {
         return this.endDate;
     }
     getRawMaterialList(): Array<RawMaterialInBatch> | null {
@@ -54,7 +59,7 @@ export class BatchModel {
     setStartDate(startDate: Moment) {
         this.startDate = startDate;
     }
-    setEndDate(endDate: Moment) {
+    setEndDate(endDate: Moment | null) {
         this.endDate = endDate;
     }
     setRawMaterialList(rawMaterialList: Array<RawMaterialInBatch> | null) {
@@ -64,6 +69,13 @@ export class BatchModel {
         this.situation = situation;
     }
 
+    getProductId(): number | null {
+        return this.productId;
+    }
+    getProductQuantity(): number | null {
+        return this.productQuantity;
+    }
+
     static getMock(): BatchModel {
         return new BatchModel(
             1,
@@ -71,7 +83,9 @@ export class BatchModel {
             moment("2023-01-01"),
             moment("2023-01-10"),
             [RawMaterialInBatch.getMock()],
-            this.SITUATION.EM_ABERTO
+            this.SITUATION.EM_ABERTO,
+            null, // productId
+            null // productQuantity
         );
     }
 
@@ -80,9 +94,11 @@ export class BatchModel {
             json.id || null,
             json.label || "",
             moment(json.startDate),
-            moment(json.endDate),
+            json.endDate ? moment(json.endDate) : json.endDate,
             null,
-            json.situation || this.SITUATION.EM_ABERTO
+            json.situation || this.SITUATION.EM_ABERTO,
+            json.productId || null,
+            json.productQuantity || null
         );
     }
 
@@ -91,9 +107,11 @@ export class BatchModel {
             id: this.id,
             label: this.label,
             startDate: this.startDate.toISOString(),
-            endDate: this.endDate.toISOString(),
+            endDate: this.endDate?.toISOString(),
             rawMaterialList: null,
-            situation: this.situation
+            situation: this.situation,
+            productId: this.productId,
+            productQuantity: this.productQuantity
         };
     }
 }

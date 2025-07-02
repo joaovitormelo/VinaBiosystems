@@ -8,6 +8,7 @@ import { BatchModel } from "../../../domain/models/batchModel";
 import { RawMaterialModel } from "../../../domain/models/rawMaterialModel";
 import { RawMaterialInBatch } from "../../../domain/types/rawMaterialInBatch";
 import moment from "moment";
+import { ProductModel } from "../../../domain/models/productModel";
 
 const { Option } = Select;
 
@@ -18,10 +19,12 @@ function NewAllotmentPage(){
     const location = useLocation();
     const editingLote = location.state?.lote;
     const [messageApi, contextHolder] = message.useMessage();
-    const [options, setOptions] = useState<Array<{label: string, value: string}>>([]);
+    const [rawMaterialOptions, setRawMaterialOptions] = useState<Array<{label: string, value: string}>>([]);
     const [rawMaterialInBatchList, setRawMaterialInBatchList] = useState<Array<RawMaterialInBatch>>([]);
+    const [productList, setProductList] = useState<ProductModel[]>([]);
+    const [productOptions, setProductOptions] = useState<Array<{label: string, value: string}>>([]);
 
-    const loadInitialData = useCallback(async () => {
+    const loadRawMaterialList = async () => {
         try {
             const viewRawMaterialInventoryUsecase = Injector.getInstance().getViewRawMaterialInventoryUsecase();
             const rawMaterials = await viewRawMaterialInventoryUsecase.execute();
@@ -31,7 +34,7 @@ function NewAllotmentPage(){
                 value: material.getId()?.toString() || ''
             }));
             
-            setOptions(formattedOptions);
+            setRawMaterialOptions(formattedOptions);
         } catch (error) {
             console.error('Erro ao carregar insumos:', error);
             messageApi.error({
@@ -40,6 +43,31 @@ function NewAllotmentPage(){
                 duration: 3
             });
         }
+    }
+
+    const loadProductList = useCallback(async () => {
+        try {
+            const viewProductsUsecase = Injector.getInstance().getViewProductsUsecase();
+            const products = await viewProductsUsecase.execute();
+            setProductList(products);
+            const formattedOptions = products.map((product: ProductModel) => ({
+                label: product.getName(),
+                value: product.getId()?.toString() || ''
+            }));
+            setProductOptions(formattedOptions);
+        } catch (error) {
+            console.error('Erro ao carregar lista de produtos:', error);
+            messageApi.error({
+                type: 'error',
+                content: 'Erro ao carregar lista de produtos. Tente novamente.',
+                duration: 3
+            });
+        }
+    }, [messageApi]);
+
+    const loadInitialData = useCallback(async () => {
+        loadRawMaterialList();
+        loadProductList();
     }, [messageApi]);
 
     const onFinish = useCallback(async (values: any, rawMaterialList: RawMaterialInBatch[]) => {
@@ -52,7 +80,9 @@ function NewAllotmentPage(){
                     moment(values.dataInicio),
                     moment(),
                     rawMaterialList,
-                    editingLote.situacao || BatchModel.SITUATION.EM_ABERTO
+                    editingLote.situacao || BatchModel.SITUATION.EM_ABERTO,
+                    values.productId ? parseInt(values.productId) : null,
+                    values.productQuantity ? parseInt(values.productQuantity) : null
                 );
                 await editProductionBatchUsecase.execute(batch);
                 messageApi.success({
@@ -69,9 +99,11 @@ function NewAllotmentPage(){
                     null, 
                     values.rotulo, 
                     moment(values.dataInicio), 
-                    moment(),
+                    null,
                     rawMaterialList, 
-                    BatchModel.SITUATION.EM_ABERTO 
+                    BatchModel.SITUATION.EM_ABERTO,
+                    values.productId ? parseInt(values.productId) : null,
+                    values.productQuantity ? parseInt(values.productQuantity) : null
                 );
                 await registerProductionBatchUsecase.execute(batch);
                 messageApi.success({
@@ -166,7 +198,7 @@ function NewAllotmentPage(){
                                 />
                             </Form.Item>
 
-                            <Form.Item label="Produto">
+                            <Form.Item label="Produto" name={"productId"} rules={[{ required: true, message: "Por favor, selecione um produto!" }]}>
                                 <SelectStyled
                                     placeholder="Selecione o produto"
                                     size="large"
@@ -178,13 +210,19 @@ function NewAllotmentPage(){
                                     //});
                                     //}}
                                 >
-                                    {options.map((item) => (
+                                    {productOptions.map((item) => (
                                     <Option key={item.value} value={item.value}>
                                         {item.label}
                                     </Option>
                                     ))}
                                 </SelectStyled>
+                            </Form.Item>
 
+                            <Form.Item
+                                label=""
+                                name="productQuantity"
+                                rules={[{ required: true, message: "Por favor, informe a quantidade do produto!" }]}
+                            >
                                 <InputStyled
                                     size="large" placeholder="Informe a quantidade"
                                     type="number" min={0} step={1} suffix="unidades"
@@ -230,7 +268,7 @@ function NewAllotmentPage(){
                                                             }
                                                         )}}
                                                     >
-                                                        {options.map((item) => (
+                                                        {rawMaterialOptions.map((item) => (
                                                             <Option key={item.value} value={item.value}>
                                                                 {item.label}
                                                             </Option>

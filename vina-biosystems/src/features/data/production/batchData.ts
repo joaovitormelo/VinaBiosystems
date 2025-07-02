@@ -1,3 +1,4 @@
+import moment from "moment";
 import { BatchModel } from "../../domain/models/batchModel";
 import { RawMaterialInBatch } from "../../domain/types/rawMaterialInBatch";
 import { BackendContract, ROUTES } from "../utils/backendContract";
@@ -48,5 +49,12 @@ export class BatchData implements BatchDataContract {
 
     async updateBatch(batch: BatchModel): Promise<void> {
         await this.backend.putData(ROUTES.BATCH.UPDATE_BATCH, batch.toJSON());
+    }
+
+    async updateEndDateOfBatch(batchId: number, endDate: moment.Moment): Promise<void> {
+        await this.backend.putData(
+            ROUTES.BATCH.UPDATE_END_DATE_OF_BATCH,
+            { batchId, endDate: endDate.format("YYYY-MM-DD") }
+        );
     }
 }

@@ -25,6 +25,7 @@ export class ROUTES {
         static readonly GET_RAW_MATERIAL_LIST_BY_BATCH_ID = "/getRawMaterialListByBatchId";
         static readonly ADD_RAW_MATERIAL_TO_BATCH = "/addRawMaterialToBatch";
         static readonly UPDATE_BATCH = "/updateBatch";
+        static readonly UPDATE_END_DATE_OF_BATCH = "/updateEndDateOfBatch";
     };
 
     public static PRODUCT = class {
@@ -33,6 +34,7 @@ export class ROUTES {
         static readonly INSERT_PRODUCT = "/insertProduct";
         static readonly UPDATE_PRODUCT = "/updateProduct";
         static readonly DELETE_PRODUCT = "/deleteProduct";
+        static readonly ADD_TO_PRODUCT_QUANTITY = "/addToProductQuantity";
     }
 };
 

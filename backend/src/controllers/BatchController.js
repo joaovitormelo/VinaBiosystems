@@ -20,8 +20,8 @@ export async function updateBatchSituation(req, res){
 export async function insertBatch(req, res){
     let batch = req.body;
     openDb().then(db=>{
-        db.run('INSERT INTO Batch (label, startDate, endDate, situation) VALUES (?,?,?,?)', 
-            [batch.label, batch.startDate, batch.endDate, batch.situation])
+        db.run('INSERT INTO Batch (label, startDate, endDate, situation, productId, productQuantity) VALUES (?,?,?,?,?,?)', 
+            [batch.label, batch.startDate, batch.endDate, batch.situation, batch.productId, batch.productQuantity])
         .then((value) => {
             res.json({ id: value.lastID, statusCode: 200 })
         })
@@ -88,6 +88,22 @@ export async function updateBatch(req, res) {
         db.run(
             'UPDATE Batch SET label=?, startDate=?, endDate=?, situation=? WHERE id=?',
             [batch.label, batch.startDate, batch.endDate, batch.situation, batch.id]
+        )
+        .then(() => res.json({ statusCode: 200 }))
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({ error: err.message || "Internal Server Error" });
+        });
+    });
+}
+
+export async function updateEndDateOfBatch(req, res) {
+    const { batchId, endDate } = req.body;
+
+    openDb().then(db => {
+        db.run(
+            'UPDATE Batch SET endDate=? WHERE id=?',
+            [endDate, batchId]
         )
         .then(() => res.json({ statusCode: 200 }))
         .catch(err => {

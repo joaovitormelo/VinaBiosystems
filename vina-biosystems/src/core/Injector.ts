@@ -88,23 +88,37 @@ export class Injector
         this.batchData = new BatchData(this.backend);
         this.samplingResultData = new SamplingResultDataMock();
         this.productsData = new ProductData(this.backend);
-        this.doLoginUsecase = new DoLoginUsecase(this.userData, this.criptography, this.sessionManager);
+        this.doLoginUsecase = new DoLoginUsecase(
+            this.userData, this.criptography, this.sessionManager
+        );
         this.viewRegisteredUsersListUsecase = new ViewRegisteredUsersListUsecase(this.userData);
         this.editUserUsecase = new EditUserUsecase(this.userData, this.sessionManager);
         this.excludeUserUsecase = new ExcludeUserUsecase(this.userData);
         this.registerNewUserUsecase = new RegisterNewUserUsecase(this.userData);
-        this.viewRawMaterialInventoryUsecase = new ViewRawMaterialInventoryUsecase(this.inventoryData);
+        this.viewRawMaterialInventoryUsecase = new ViewRawMaterialInventoryUsecase(
+            this.inventoryData
+        );
         this.registerRawMaterialUsecase = new RegisterRawMaterialUsecase(this.inventoryData);
         this.editRawMaterialUsecase = new EditRawMaterialUsecase(this.inventoryData);
         this.removeRawMaterialUsecase = new RemoveRawMaterialUsecase(this.inventoryData);
         this.checkInRawMaterialUsecase = new CheckInRawMaterialUsecase(this.inventoryData);
-        this.checkOutRawMaterialUsecase = new CheckOutRawMaterialUsecase(this.inventoryData, this.notificationManager);
+        this.checkOutRawMaterialUsecase = new CheckOutRawMaterialUsecase(
+            this.inventoryData, this.notificationManager
+        );
         this.viewProductionBatchesUsecase = new ViewProductionBatchesUsecase(this.batchData);
-        this.registerProductionBatchUsecase = new RegisterProductionBatchUsecase(this.batchData, this.inventoryData);
+        this.registerProductionBatchUsecase = new RegisterProductionBatchUsecase(
+            this.batchData, this.inventoryData
+        );
         this.viewSamplingResultsUsecase = new ViewSamplingResultsUsecase(this.samplingResultData);
-        this.attachSamplingResultUsecase = new AttachSamplingResultUsecase(this.samplingResultData, this.sessionManager);
-        this.excludeSamplingResultUsecase = new ExcludeSamplingResultUsecase(this.samplingResultData);
-        this.finishProductionBatchUsecase = new FinishProductionBatchUsecase(this.batchData);
+        this.attachSamplingResultUsecase = new AttachSamplingResultUsecase(
+            this.samplingResultData, this.sessionManager
+        );
+        this.excludeSamplingResultUsecase = new ExcludeSamplingResultUsecase(
+            this.samplingResultData
+        );
+        this.finishProductionBatchUsecase = new FinishProductionBatchUsecase(
+            this.batchData, this.productsData
+        );
         this.cancelProductionBatchUsecase = new CancelProductionBatchUsecase(
             this.batchData, this.samplingResultData, this.inventoryData
         );

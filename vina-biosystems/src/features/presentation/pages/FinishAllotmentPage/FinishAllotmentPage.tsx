@@ -1,16 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Header, SidebarMenu } from "../../components";
 import { Form, FormInstance, Select, message } from "antd";
-import { Container, Content, DatePickerStyled, FormStyled, FinishAllotment, Line, Label, InputNumberStyled } from "./styles";
+import { Container, Content, DatePickerStyled, FormStyled, FinishAllotment } from "./styles";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Injector } from "../../../../core/Injector";
 import { BatchModel } from "../../../domain/models/batchModel";
+import moment from "moment";
 import { RawMaterialInBatch } from "../../../domain/types/rawMaterialInBatch";
 import { RawMaterialModel } from "../../../domain/models/rawMaterialModel";
-import { FinishProductionBatchUsecase } from "../../../domain/usecases/production/finishProductionBatchUsecase";
-import moment from "moment";
-
-const { Option } = Select;
 
 interface MaterialInfo {
     id: number;
@@ -30,11 +27,9 @@ function FinishAllotmentPage() {
 
     const loadInitialData = useCallback(async () => {
         try {
-            const { batchId, rotulo } = location.state as { batchId: number, rotulo: string };
-            
-            const viewProductionBatchesUsecase = Injector.getInstance().getViewProductionBatchesUsecase();
-            const batches = await viewProductionBatchesUsecase.execute();
-            const batch = batches.find(b => b.getId() === batchId);
+            let { batch, rotulo } = location.state;
+
+            batch = BatchModel.fromJSON(batch);
             
             if (!batch) {
                 messageApi.error({
@@ -46,33 +41,6 @@ function FinishAllotmentPage() {
             }
 
             setBatchData(batch);
-
-            const viewRawMaterialInventoryUsecase = Injector.getInstance().getViewRawMaterialInventoryUsecase();
-            const inventory = await viewRawMaterialInventoryUsecase.execute();
-            const materialsList = batch.getRawMaterialList() || [];
-            
-            const materialsInfo = materialsList.map(material => {
-                const rawMaterial = inventory.find(rm => rm.getId() === material.getRawMaterialId());
-                if (rawMaterial) {
-                    return {
-                        id: rawMaterial.getId(),
-                        name: rawMaterial.getName(),
-                        quantity: material.getQuantity(),
-                        unit: rawMaterial.getUnit()
-                    };
-                }
-                return null;
-            }).filter((info): info is MaterialInfo => info !== null);
-
-            setMaterialsInfo(materialsInfo);
-            
-            form.setFieldsValue({
-                dataTermino: moment(),
-                insumos: materialsInfo.map(material => ({
-                    id: material.id,
-                    quantidade: material.quantity
-                }))
-            });
         } catch (error: any) {
             console.error('Erro ao carregar dados do lote:', error);
             messageApi.error({
@@ -89,8 +57,10 @@ function FinishAllotmentPage() {
                 throw new Error("ID do lote não encontrado.");
             }
 
+            const finishDate = moment(values.dataTermino);
+
             const finishProductionBatchUsecase = Injector.getInstance().getFinishProductionBatchUsecase();
-            await finishProductionBatchUsecase.execute(batchData.getId() as number);
+            await finishProductionBatchUsecase.execute(batchData, finishDate);
 
             messageApi.success({
                 type: 'success',
@@ -151,7 +121,7 @@ function FinishAllotmentPage() {
                                     size="large"
                                 />
                             </Form.Item>
-                            <Form.Item
+                            {/*<Form.Item
                                 label="Quantidade dos insumos"
                                 name="insumos"
                                 required
@@ -166,7 +136,7 @@ function FinishAllotmentPage() {
                                         />
                                     </Line>
                                 ))}
-                            </Form.Item>
+                            </Form.Item>*/}
                         </div>
                     </FormStyled>
                 </Content>

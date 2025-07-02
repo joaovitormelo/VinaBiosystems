@@ -70,4 +70,12 @@ export class BatchDataMock implements BatchDataContract {
             this.batches[idx] = batch;
         }
     }
+
+    async updateEndDateOfBatch(batchId: number, endDate: moment.Moment): Promise<void> {
+        const batch = this.batches.find(b => b.getId() === batchId);
+        if (!batch) {
+            throw new Error(`Batch com ID ${batchId} não encontrado!`);
+        }
+        batch.setEndDate(endDate);
+    }
 }

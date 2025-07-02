@@ -20,7 +20,10 @@ function fillFields(form: FormInstance<any>, product: ProductModel) {
 
 function NewProductPage({title = "Novo Produto"} : NewSupplyPageProp){
     const location = useLocation();
-    const editingProduct = ProductModel.fromJson(location.state?.product);
+    let editingProduct: ProductModel | null = null;
+    if (location?.state?.product) {
+        editingProduct = ProductModel.fromJson(location.state.product);
+    }
 
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();

@@ -8,4 +8,5 @@ export interface BatchDataContract {
     createBatch(batch: BatchModel): Promise<number>;
     getAllBatches(): Promise<Array<BatchModel>>;
     updateBatch(batch: BatchModel): Promise<void>;
+    updateEndDateOfBatch(batchId: number, endDate: moment.Moment): Promise<void>;
 }

@@ -2,9 +2,9 @@ import { Router } from "express";
 import { createTables } from "./controllers/createTables.js";
 import { insertUser, updateUser, selectUserByEmail, selectUsers, deleteUser } from './controllers/UserController.js'
 import { selectRawMaterialByName, selectRawMaterialById, insertRawMaterial, selecRawMaterials, updateRawMaterial, isRawMaterialBeingUsedInABatch, deleteRawMaterial, removeRawMaterialQuantityFromInventoy } from './controllers/RawMaterialController.js'
-import { updateBatch, updateBatchSituation, insertBatch, selectBatches, addRawMaterialToBatch, getRawMaterialListByBatchId, deleteBatchById } from './controllers/BatchController.js'
+import { updateBatch, updateBatchSituation, insertBatch, selectBatches, addRawMaterialToBatch, getRawMaterialListByBatchId, deleteBatchById, updateEndDateOfBatch } from './controllers/BatchController.js'
 import { selectSamplingResultsByBatchId, insertSamplingResults, deleteSamplingResults} from './controllers/SamplingResultsController.js'
-import { selectProducts, selectProductById, insertProduct, updateProduct, deleteProduct} from './controllers/ProductController.js'
+import { selectProducts, selectProductById, insertProduct, updateProduct, deleteProduct, addToProductQuantity} from './controllers/ProductController.js'
 
 createTables();
 
@@ -39,6 +39,7 @@ router.put('/addRawMaterialToBatch', addRawMaterialToBatch);
 router.get('/getRawMaterialListByBatchId', getRawMaterialListByBatchId);
 router.delete('/deleteBatchById', deleteBatchById);
 router.put('/updateBatch', updateBatch);
+router.put("/updateEndDateOfBatch", updateEndDateOfBatch);
 
 router.get('/selectSamplingResultsByBatchId', selectSamplingResultsByBatchId);
 router.post('/insertSamplingResults', insertSamplingResults);
@@ -49,5 +50,6 @@ router.get('/selectProductById', selectProductById);
 router.post('/insertProduct', insertProduct);
 router.put('/updateProduct', updateProduct);
 router.delete('/deleteProduct', deleteProduct);
+router.put('/addToProductQuantity', addToProductQuantity);
 
 export default router;
